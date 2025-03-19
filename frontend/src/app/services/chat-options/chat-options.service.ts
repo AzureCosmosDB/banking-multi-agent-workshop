@@ -12,7 +12,7 @@ export class ChatOptionsService {
 
   setSubjectSelected(subject: string) {
     this.subjectSelected = subject;
-    console.log(this.subjectSelected);
+ 
   }
 
   getSubjectSelected(): string {

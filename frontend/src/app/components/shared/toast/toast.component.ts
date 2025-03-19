@@ -16,7 +16,7 @@ export class ToastComponent implements OnChanges {
   ngOnChanges(changes: SimpleChanges) {
     if (changes['show'] && this.show) {
       // Log to see if the properties are updating
-      console.log('Toast is showing:', this.message, this.type);
+ 
     }
   }
 }

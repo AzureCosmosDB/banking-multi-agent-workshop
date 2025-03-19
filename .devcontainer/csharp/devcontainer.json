@@ -2,21 +2,27 @@
     "name": "C# Development Container",
     "image": "mcr.microsoft.com/devcontainers/dotnet:8.0",
     "features": {
-        "ghcr.io/devcontainers/features/azure-cli:1": {
-            "version": "latest",
-            "installBicep": true
-        },
-        "ghcr.io/azure/azure-dev/azd:latest": {}
+      "ghcr.io/devcontainers/features/azure-cli:1": {
+        "version": "latest",
+        "installBicep": true
+      },
+      "ghcr.io/azure/azure-dev/azd:latest": {},
+      "ghcr.io/devcontainers/features/node:1": {
+        "version": "20" // Use the Node.js version compatible with your Angular app
+      }
     },
     "customizations": {
-        "vscode": {
-            "extensions": [
-                "ms-dotnettools.csharp",
-                "ms-dotnettools.csdevkit",
-                "ms-azuretools.vscode-cosmosdb",
-                "esbenp.prettier-vscode"
-            ]
-        }
+      "vscode": {
+        "extensions": [
+          "ms-dotnettools.csharp",
+          "ms-dotnettools.csdevkit",
+          "ms-azuretools.vscode-cosmosdb",
+          "esbenp.prettier-vscode",
+          "angular.ng-template" // Angular language service extension
+        ]
+      }
     },
+    "postCreateCommand": "npm install -g @angular/cli", // Install Angular CLI globally
     "remoteUser": "vscode"
-}
+  }
+   

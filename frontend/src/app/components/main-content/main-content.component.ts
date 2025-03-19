@@ -112,8 +112,7 @@ export class MainContentComponent implements OnInit, AfterViewChecked {
          this.dataService.sessionData$.subscribe((data) => {
             if (data) {
                 this.currentSession = data.filter((t: Session) => t.sessionId === this.sessionId)[0];
-                data =  data.filter((t: Session) => t.sessionId === this.sessionId)[0].name = response;
-                console.log( "###sessionData after update", data);
+                data =  data.filter((t: Session) => t.sessionId === this.sessionId)[0].name = response;            
             }
           } );
           
@@ -178,7 +177,7 @@ export class MainContentComponent implements OnInit, AfterViewChecked {
         width: '600px',
         data: response.propertyBag
       });
-      console.log(message);
+ 
     });
   }
 
@@ -195,32 +194,40 @@ export class MainContentComponent implements OnInit, AfterViewChecked {
       return
     }
     this.conversationHistory = [];
-    this.sessionService.getChatSession(this.dataService.loggedInTenant, this.dataService.loggedInUser, sessionId).subscribe((response: any) => {
-      response.forEach((message: any) => {
-        const newMessage = new Message();
-        newMessage.id = message.id;
-        newMessage.type = message.type;
-        newMessage.tenantId = message.tenantId;
-        newMessage.userId = message.userId;
-        newMessage.sessionId = message.sessionId;
-        newMessage.timeStamp = new Date(message.timeStamp);
-        newMessage.prompt = message.text;
-        newMessage.senderRole = message.senderRole;
-        newMessage.sender = message.sender;
-        newMessage.debugLogId = message.debugLogId;
-        newMessage.promptTokens = message.promptTokens;
-        newMessage.completion = message.text;
-        newMessage.completionTokens = message.completionTokens;
-        newMessage.generationTokens = message.generationTokens;
-        newMessage.cacheHit = message.cacheHit;
-        newMessage.elapsedMilliseconds = message.elapsedMilliseconds;
-        this.conversationHistory.push(newMessage);
-        if (newMessage.sender === 'Cordinator') {
-          this.getDebugInfo(newMessage);
-        }
-      })
-      this.loadingService.hide();
-      this.currentSession = response;
+    this.sessionService.getChatSession(this.dataService.loggedInTenant, this.dataService.loggedInUser, sessionId).subscribe({
+      next: (response: any) => {
+        response.forEach((message: any) => {
+          const newMessage = new Message();
+          newMessage.id = message.id;
+          newMessage.type = message.type;
+          newMessage.tenantId = message.tenantId;
+          newMessage.userId = message.userId;
+          newMessage.sessionId = message.sessionId;
+          newMessage.timeStamp = new Date(message.timeStamp);
+          newMessage.prompt = message.text;
+          newMessage.senderRole = message.senderRole;
+          newMessage.sender = message.sender;
+          newMessage.debugLogId = message.debugLogId;
+          newMessage.promptTokens = message.promptTokens;
+          newMessage.completion = message.text;
+          newMessage.completionTokens = message.completionTokens;
+          newMessage.generationTokens = message.generationTokens;
+          newMessage.cacheHit = message.cacheHit;
+          newMessage.elapsedMilliseconds = message.elapsedMilliseconds;
+          this.conversationHistory.push(newMessage);
+          
+          if (newMessage.sender === 'Cordinator') {
+            this.getDebugInfo(newMessage);
+          }
+        });
+        
+        this.loadingService.hide(); // Hide loading when the response is successfully processed
+        this.currentSession = response;
+      },
+      error: (error) => {
+        console.error('An error occurred:', error);
+        this.loadingService.hide(); // Hide loading when an error occurs
+      }
     });
   }
 
@@ -233,7 +240,7 @@ export class MainContentComponent implements OnInit, AfterViewChecked {
 
   navigateToProfile() {
     // Logic to navigate to the profile page
-    console.log('Navigating to profile...');
+ 
   }
 
 

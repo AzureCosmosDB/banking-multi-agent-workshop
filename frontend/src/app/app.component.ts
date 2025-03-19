@@ -18,12 +18,12 @@ export class AppComponent implements OnInit{
   constructor(private loadingService: LoadingService , private toastService: ToastService, private cdr: ChangeDetectorRef) {}
 
   makeRequest() {
-    console.log('Making API request...');
+ 
     this.loadingService.show();  // Manually show loading spinner
 
     // Simulate an HTTP request
     setTimeout(() => {
-      console.log('API Response simulated.');
+ 
       this.loadingService.hide();  // Hide spinner after the request
     }, 2000); // Simulating 2 seconds request
   }

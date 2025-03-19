@@ -25,13 +25,12 @@ export class SidebarComponent implements OnInit {
     private toastService: ToastService,
     private cdr: ChangeDetectorRef
   ) {
-    
+
   }
   ngOnInit() {
     this.getSessions();
     this.dataService.sessionData$.subscribe((data) => {
       this.sessionData = data;
-      console.log("###sessionData", this.sessionData);
     });
   }
 
@@ -57,7 +56,7 @@ export class SidebarComponent implements OnInit {
       this.sessionHistory = response;
       const updatedSessionList = [...this.sessionHistory];  // Assuming you have the latest array of sessions
       this.dataService.updateSession(updatedSessionList);
-      console.log("###sessionHistory", this.sessionHistory);
+ 
       if (this.sessionHistory.length == 0) {
         this.router.navigate(['/chat', '']);
       }
@@ -71,7 +70,7 @@ export class SidebarComponent implements OnInit {
   }
 
 
-  removeSession(session : Session) {
+  removeSession(session: Session) {
     this.loadingSpinnerService.show();
     this.sessionService.removeSession(this.dataService.loggedInTenant, this.dataService.loggedInUser, session.sessionId).subscribe((response: any) => {
       this.getSessions();

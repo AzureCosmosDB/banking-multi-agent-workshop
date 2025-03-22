@@ -45,65 +45,11 @@ This solution is initially organized with the following three projects.
 
 Here is what the structure of this solution appears like in Visual Studio. Spend a few moments to familiarize yourself with the structure as it will help you navigate as we go through the activities.
 
-![Solution Files](./media/module-01/solution-files.png)
+![Solution Files](./media/module-01/solution-files.png) [TBD update Image]
 
-
-### Add SemanticKernelServiceSettings Config
-
-The solution already has a configuration class for Cosmos DB runtime values. In this section we will do the same and get the runtime environment variables for the Azure OpenAI service that is consumed by the Semantic Kernel Agent Framework.
-
-In your IDE, navigate to `\Common\Models\Configuration\`
-
-Create a new class, **AzureOpenAISettings.cs**
-
-Replace the contents of the new class with the code below. *Note: this class stores a key but the workshop and sample use Entra ID so Keys aren't used.*
-
-```csharp
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace MultiAgentCopilot.Common.Models.Configuration
-{
-    public record AzureOpenAISettings
-    {
-        public required string Endpoint { get; init; }
-
-        public  string? Key { get; init; }           
-
-        public required string CompletionsDeployment { get; init; }
-
-        public required string EmbeddingsDeployment { get; init; }
-        
-        public required string UserAssignedIdentityClientID { get; init; }
-    }
-}
-
-```
-
-Next we will create a configuration class that stores the configuration values for both Cosmos DB and OpenAI. 
-
-Within the same folder, create a new class **SemanticKernelServiceSettings.cs**
-
-Replace the contents of the new class with the code below.
-
-```csharp
-
-namespace MultiAgentCopilot.Common.Models.Configuration
-{
-    public record SemanticKernelServiceSettings
-    {
-        public required AzureOpenAISettings AzureOpenAISettings { get; init; }
-        public required CosmosDBSettings CosmosDBVectorStoreSettings { get; init; }
-    }
-}
-
-```
 ### Implement the SemanticKernelService
 
-We are next going to define an interface and the service layer for the Semantic Kernel Agent Framework that is central to our workshop. This interface defines the main functionality for this multi-agent service. 
+We are going to define an interface and the service layer for the Semantic Kernel Agent Framework that is central to our workshop. This interface defines the main functionality for this multi-agent service. 
 
 - **GetResponse()** is the function that is entry point called by the front end to interact with the multi-agent service. Everything happens behind this function.
 - **Summarize()** is used to summarize the conversations users are having with the agent service.

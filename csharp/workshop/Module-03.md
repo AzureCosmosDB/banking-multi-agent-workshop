@@ -34,31 +34,13 @@ In this session we will dive into how to create Semantic Kernel Agent Framework 
 
 After the session in Activity 1, you should understand the need and importance for agent specialization and have a basic grasp of how to build and integrate them. For the remainder of this module we will do just that for our banking scenario.
 
-When working with any kidn of data we need to define data models that define its schema. So to enable agents to operate on your data, let's define data models that the LLM can understand.
+When working with any kind of data we need to define data models that define its schema. So to enable agents to operate on your data, let's define data models that the LLM can understand.
 
 To begin, navigate to the `Common` project and navigate to the `/Models' folder.
 
-The project and folder structure should look like the following:
+The project and folder structure should look like the following:[TBD Update image]
 
 ![Models folder](./media/module-03/solution-models-folder.png)
-
-In your IDE, create a new folder, `/Banking` in the `/Models` folder.
-
-Next create a new class, `AccountType.cs`.
-
-Replace the code with this code below for creating an enum for AccountType.
-
-```csharp
-namespace MultiAgentCopilot.Common.Models.Banking
-{    
-    public enum AccountType
-    {
-        Savings,
-        CreditCard,
-        Locker
-    }
-}
-```
 
 Next create a new class, `ServiceRequestType.cs`.
 
@@ -74,27 +56,6 @@ namespace MultiAgentCopilot.Common.Models.Banking
         FundTransfer,
         Fulfilment,
         TeleBankerCallBack
-    }
-}
-```
-
-Next create a new class, `BankAccount.cs` 
-
-Replace the code with this code below for creating a BankAccount class
-
-```csharp
-namespace MultiAgentCopilot.Common.Models.Banking
-{
-    public class BankAccount
-    {
-        public required string Id { get; set; } = string.Empty;
-        public required string TenantId { get; set; } = string.Empty;
-        public required string Name { get; set; } = string.Empty;
-        public required AccountType AccountType { get; set; }
-        public required long Balance { get; set; }
-        public required long Limit { get; set; }
-        public required int InterestRate { get; set; }
-        public required string ShortDescription { get; set; }
     }
 }
 ```
@@ -581,263 +542,111 @@ Replace the code for both `GetAgentName()` and `GetAgentPrompts()` with the code
 
 ## Activity 4: Integrating Bank Domain Functions as Plugins
 
-All banking domain code is encapsulated in a separate `BankingServices` project. Let's add it to the main solution to make it available to the agents. In this step we will add a new project, then add a reference to it to the `ChatInfrastructure` project in this solution.
+All banking domain code is encapsulated in a separate `BankingServices` project. Let's update it make banking domain functions available to the agent plugins. For simplicity in this workshop, all functions reference BankingServices. However, kernel functions can be any managed code that enables the LLM to interact with the outside world. The Base plugin, inherited by all plugins, contains common code for all plugins.
 
-To begin open a new or existing terminal.
+In your IDE, navigate to the **ChatInfrastructure** project in the solution.
 
-Navigate to the `/csharp` folder.
+Then navigate to the `ChatInfrastructure\AgentPlugins\` folder within it.
 
-Execute the following dotnet cli commands:
+Add the below listed functions into \ChatInfrastructure\AgentPlugins\BasePlugin.cs
 
-```dotnetcli
+```csharp
 
-    dotnet sln /workspaces/banking-multi-agent-workshop/csharp/src/MultiAgentCopilot.sln add /workspaces/banking-multi-agent-workshop/csharp/src/BankingAPI/BankingServices.csproj
+    public BasePlugin(ILogger<BasePlugin> logger, IBankDataService bankService, string tenantId, string userId)
+    {
+        _logger = logger;
+        _tenantId = tenantId;
+        _userId = userId;
+        _bankService = bankService;
+    }
+
+
+    [KernelFunction("GetLoggedInUser")]
+    [Description("Get the current logged-in BankUser")]
+    public async Task<BankUser> GetLoggedInUser()
+    {
+        _logger.LogTrace($"Get Logged In User for Tenant:{_tenantId}  User:{_userId}");
+        return await _bankService.GetUserAsync(_tenantId, _userId);
+
+    }
+
+
+    [KernelFunction("GetCurrentDateTime")]
+    [Description("Get the current date time in UTC")]
+    public DateTime GetCurrentDateTime()
+    {
+        _logger.LogTrace($"Get Datetime: {System.DateTime.Now.ToUniversalTime()}");
+        return System.DateTime.Now.ToUniversalTime();
+    }
+
+    [KernelFunction("GetUserRegisteredAccounts")]
+    [Description("Get user registered accounts")]
+    public async Task<List<BankAccount>> GetUserRegisteredAccounts()
+    {
+        _logger.LogTrace($"Fetching accounts for Tenant: {_tenantId} User ID: {_userId}");
+        return await _bankService.GetUserRegisteredAccountsAsync(_tenantId, _userId);
+    } 
+
+```
+
+Update SalesPlugin.cs , add the  `GetOfferDetailsByName` function into \ChatInfrastructure\AgentPlugins\SalesPlugin.cs
+
+```csharp
+
+    [KernelFunction]
+    [Description("Search an offer by name")]
+    public async Task<Offer> GetOfferDetailsByName(string offerName)
+    {
+        _logger.LogTrace($"Fetching Offer by name");
+        return await _bankService.GetOfferDetailsByNameAsync(_tenantId, offerName);
+    }
+
+
+```
+
+Update TransactionPlugin.cs , add the `GetTransactionHistory` functions into \ChatInfrastructure\AgentPlugins\SalesPlugin.cs
+
+```csharp
+
+    [KernelFunction]
+    [Description("Get the transactions history between 2 dates")]
+    public async Task<List<BankTransaction>> GetTransactionHistory(string accountId, DateTime startDate, DateTime endDate)
+    {
+        _logger.LogTrace("Fetching AccountTransaction history for Account: {AccountId}, From: {StartDate} To: {EndDate}", accountId, startDate, endDate);
+        return await _bankService.GetTransactionsAsync(_tenantId, accountId, startDate, endDate);
     
-    dotnet add /workspaces/banking-multi-agent-workshop/csharp/src/ChatInfrastructure/ChatInfrastructure.csproj reference /workspaces/banking-multi-agent-workshop/csharp/src/BankingAPI/BankingServices.csproj
+    }  
 
 ```
 
+Add the below listed functions into  ChatInfrastructure\AgentPlugins\CustomerSupportPlugin.cs
 
-Add BasePlugin.cs in ChatInfrastructure\AgentPlugins
+```csharp               
 
-The Base plugin, inherited by all plugins, contains common code. We will list the kernel functions available in the Base plugin. For simplicity in this workshop, all functions reference BankingServices. However, kernel functions can be any managed code that enables the LLM to interact with the outside world.
-
-```csharp
-
-using Microsoft.Azure.Cosmos;
-using Microsoft.Extensions.Logging;
-using Microsoft.SemanticKernel;
-using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using MultiAgentCopilot.Common.Models.Banking;
-using BankingServices.Interfaces;
-
-namespace MultiAgentCopilot.ChatInfrastructure.Plugins
-{
-
-    public class BasePlugin
+    [KernelFunction("IsAccountRegisteredToUser")]
+    [Description("Check if account is registered to user")]
+    public async Task<bool> IsAccountRegisteredToUser(string accountId)
     {
-        protected readonly ILogger<BasePlugin> _logger;
-        protected readonly IBankDataService _bankService;
-        protected readonly string _userId;
-        protected readonly string _tenantId;
-
-        public BasePlugin(ILogger<BasePlugin> logger, IBankDataService bankService, string tenantId, string userId)
-        {
-            _logger = logger;
-            _tenantId = tenantId;
-            _userId = userId;
-            _bankService = bankService;
-        }
-
-
-        [KernelFunction("GetLoggedInUser")]
-        [Description("Get the current logged-in BankUser")]
-        public async Task<BankUser> GetLoggedInUser()
-        {
-            _logger.LogTrace($"Get Logged In User for Tenant:{_tenantId}  User:{_userId}");
-            return await _bankService.GetUserAsync(_tenantId, _userId);
-
-        }
-
-
-        [KernelFunction("GetCurrentDateTime")]
-        [Description("Get the current date time in UTC")]
-        public DateTime GetCurrentDateTime()
-        {
-            _logger.LogTrace($"Get Datetime: {System.DateTime.Now.ToUniversalTime()}");
-            return System.DateTime.Now.ToUniversalTime();
-        }
-
-        [KernelFunction("GetUserRegisteredAccounts")]
-        [Description("Get user registered accounts")]
-        public async Task<List<BankAccount>> GetUserRegisteredAccounts()
-        {
-            _logger.LogTrace($"Fetching accounts for Tenant: {_tenantId} User ID: {_userId}");
-            return await _bankService.GetUserRegisteredAccountsAsync(_tenantId, _userId);
-        }
+        _logger.LogTrace($"Validating account for Tenant: {_tenantId} User ID: {_userId}- {accountId}");
+        var accountDetails = await _bankService.GetAccountDetailsAsync(_tenantId, _userId, accountId);
+        return accountDetails != null;
     }
-} 
-
-```
-
-Add CoordinatorPlugin.cs in ChatInfrastructure\AgentPlugins
-
-We will list the kernel functions available in the Coordinator plugin. For simplicity in this workshop, all functions reference BankingServices. However, kernel functions can be any managed code that enables the LLM to interact with the outside world.
-
-```csharp
-
-using BankingServices.Interfaces;
-using Microsoft.Extensions.Logging;
-using Microsoft.SemanticKernel;
-using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Linq;
-using System.Security.AccessControl;
-using System.Text;
-using System.Threading.Tasks;
 
 
-namespace MultiAgentCopilot.ChatInfrastructure.Plugins
-{
-    public class CoordinatorPlugin: BasePlugin
+    [KernelFunction]
+    [Description("Create new complaint")]
+    public async Task<ServiceRequest> CreateComplaint(string accountId, string requestAnnotation)
     {
+        _logger.LogTrace($"Adding new service request for Tenant: {_tenantId} User: {_userId}, Account: {accountId}");
 
-        public CoordinatorPlugin(ILogger<BasePlugin> logger, IBankDataService bankService, string tenantId, string userId )
-           : base(logger, bankService, tenantId, userId)
-        {
-        }             
-
+        return await _bankService.CreateComplaintAsync(_tenantId, accountId, _userId, requestAnnotation);
     }
-}
-
-```
-
-Add SalesPlugin.cs in ChatInfrastructure\AgentPlugins
-
-We will list the kernel functions available in the Sales plugin. For simplicity in this workshop, all functions reference BankingServices. However, kernel functions can be any managed code that enables the LLM to interact with the outside world.
-
-```csharp
-
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Microsoft.SemanticKernel;
-using System.ComponentModel;
-using Microsoft.Extensions.Logging;
-using MultiAgentCopilot.Common.Models.Banking;
-using BankingServices.Interfaces;
-
-namespace MultiAgentCopilot.ChatInfrastructure.Plugins
-{
-    internal class SalesPlugin : BasePlugin
-    {
-        public SalesPlugin(ILogger<BasePlugin> logger, IBankDataService bankService, string tenantId, string userId )
-            : base(logger, bankService, tenantId, userId)
-        {
-        }
-        
-
-        [KernelFunction]
-        [Description("Search an offer by name")]
-        public async Task<Offer> GetOfferDetailsByName(string offerName)
-        {
-            _logger.LogTrace($"Fetching Offer by name");
-            return await _bankService.GetOfferDetailsByNameAsync(_tenantId, offerName);
-        }
-
-    }
-}
-
-
-```
-
-Add TransactionPlugin.cs in ChatInfrastructure\AgentPlugins
-
-We will list the kernel functions available in the Transaction plugin. For simplicity in this workshop, all functions reference BankingServices. However, kernel functions can be any managed code that enables the LLM to interact with the outside world.
-
-```csharp
-using Microsoft.Extensions.Logging;
-using Microsoft.SemanticKernel;
-using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Transactions;
-using MultiAgentCopilot.Common.Models.Banking;
-using BankingServices.Interfaces;
-
-namespace MultiAgentCopilot.ChatInfrastructure.Plugins
-{
-    public class TransactionPlugin : BasePlugin
-    {
-        public TransactionPlugin(ILogger<BasePlugin> logger, IBankDataService bankService, string tenantId, string userId)
-         : base(logger, bankService, tenantId, userId)
-        {
-        }
-        
-        [KernelFunction]
-        [Description("Get the transactions history between 2 dates")]
-        public async Task<List<BankTransaction>> GetTransactionHistory(string accountId, DateTime startDate, DateTime endDate)
-        {
-            _logger.LogTrace("Fetching AccountTransaction history for Account: {AccountId}, From: {StartDate} To: {EndDate}", accountId, startDate, endDate);
-            return await _bankService.GetTransactionsAsync(_tenantId, accountId, startDate, endDate);
-        
-        }
-
-    }
-}
-
-```
-
-Add  CustomerSupportPlugin.cs in ChatInfrastructure\AgentPlugins
-
-We will list the kernel functions available in the CustomerSupport plugin. For simplicity in this workshop, all functions reference BankingServices. However, kernel functions can be any managed code that enables the LLM to interact with the outside world.
-
-
-```csharp
-
-using Microsoft.Extensions.Logging;
-using Microsoft.SemanticKernel;
-using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using MultiAgentCopilot.Common.Models.Banking;
-using BankingServices.Interfaces;
-using Microsoft.Identity.Client;
-
-
-namespace MultiAgentCopilot.ChatInfrastructure.Plugins
-{
-    public class CustomerSupportPlugin: BasePlugin
-    {
-
-        public CustomerSupportPlugin(ILogger<BasePlugin> logger, IBankDataService bankService, string tenantId, string userId )
-          : base(logger, bankService, tenantId, userId)
-        {
-        }
-               
-
-        [KernelFunction("IsAccountRegisteredToUser")]
-        [Description("Check if account is registered to user")]
-        public async Task<bool> IsAccountRegisteredToUser(string accountId)
-        {
-            _logger.LogTrace($"Validating account for Tenant: {_tenantId} User ID: {_userId}- {accountId}");
-            var accountDetails = await _bankService.GetAccountDetailsAsync(_tenantId, _userId, accountId);
-            return accountDetails != null;
-        }
-
-
-        [KernelFunction]
-        [Description("Create new complaint")]
-        public async Task<ServiceRequest> CreateComplaint(string accountId, string requestAnnotation)
-        {
-            _logger.LogTrace($"Adding new service request for Tenant: {_tenantId} User: {_userId}, Account: {accountId}");
-
-            return await _bankService.CreateComplaintAsync(_tenantId, accountId, _userId, requestAnnotation);
-        }
-
-      
-    }
-}
 
 ```
 
 ## Activity 5: Developing a Plugin Factory
 
-The `PluginFactory` dynamically generates a plugin based on the agent type.
+Next we will create a  `PluginFactory` that dynamically generates a plugin based on the agent type.
 
 Add PluginFactory.cs in ChatInfrastructure\Factories
 

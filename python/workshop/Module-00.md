@@ -40,7 +40,7 @@ Complete the following tasks in order to prepare your environment for this works
 
   #### Checking Azure OpenAI quota limits
 
-  For this sample to deploy successfully, there needs to be enough Azure OpenAI quota for the models used by this sample within your subscription. This sample deploys a new Azure OpenAI account with two models, **gpt-4o-mini with 10K tokens** per minute and **text-3-embedding-small with 5k tokens** per minute. For more information on how to check your model quota and change it, see [Manage Azure OpenAI Service Quota](https://learn.microsoft.com/azure/ai-services/openai/how-to/quota)
+  For this sample to deploy successfully, there needs to be enough Azure OpenAI quota for the models used by this sample within your subscription. This sample deploys a new Azure OpenAI account with two models, **gpt-4o-mini with 10K tokens** per minute and **text-3-large with 5k tokens** per minute. For more information on how to check your model quota and change it, see [Manage Azure OpenAI Service Quota](https://learn.microsoft.com/azure/ai-services/openai/how-to/quota)
 
   #### Azure Subscription Permission Requirements
 
@@ -58,12 +58,18 @@ Complete the following tasks in order to prepare your environment for this works
 1. To run the workshop locally on your machine, install the following prerequisites:
 
     - Common pre-requisites:
-      - [Docker Desktop](https://docs.docker.com/desktop/) Note: ensure docker is running.
+      - [Docker Desktop](https://docs.docker.com/desktop/) Note: ensure docker is running before attempting this workshop.
       - [Git](https://git-scm.com/downloads)
       - [Azure Developer CLI (azd)](https://aka.ms/install-azd)
+  
+    Then either of the following depending on which sample you want to explore
+
     - LangGraph Sample
       - [Python 3.12+](https://www.python.org/downloads/)
       - Your Python IDE or [VS Code](https://code.visualstudio.com/Download) with [Python Extension](https://marketplace.visualstudio.com/items?itemName=ms-python.python)
+    - Semantic Kernel Agent Sample
+      - [.NET 9](https://dotnet.microsoft.com/downloads/)
+      - [Visual Studio](https://visualstudio.microsoft.com/downloads/) or [VS Code](https://code.visualstudio.com/Download) with [C# Dev Kit](https://marketplace.visualstudio.com/items?itemName=ms-dotnettools.csdevkit)
     - Frontend
       - [Node.js](https://nodejs.org/en/download/)
       - [Angular CLI](https://angular.io/guide/setup-local)
@@ -107,10 +113,7 @@ You can run this sample app and workshop virtually by using GitHub Codespaces. T
    azd up
    ```
 
-This step will take approximately 10-15 minutes. 
-
-> [!IMPORTANT]
-> If you encounter any errors during the deployment, rerun `azd up` to continue the deployment from where it left off. This will not create duplicate resources, and tends to resolve most issues.
+This step will take approximately 10-15 minutes. If you encounter an error during step, first rerun `azd up`. This tends to correct most errors.
 
 When the resources are finally deployed, you will see a message in the terminal like below:
 
@@ -131,9 +134,14 @@ Adding dummy data is optional and can be skipped, but we recommend loading the d
 You can click on the FrontendApp endpoint to see the deployed application, but if you try chatting to it, you will see that it is not yet implemented. This is because we have not yet built the agents that will be served by the API layer.
 
 
+
+> [!IMPORTANT]
+> If you encounter any errors during the deployment, rerun `azd up` to continue the deployment from where it left off. This will not create duplicate resources, and tends to resolve most issues.
+
 ## Activity 3: Workshop Structure and Overview Session
 
 While the Azure Services are deploying we will have a presentation to cover on the structure for this workshop for today as well as provide an introduction and overview of multi-agent sytems.
+
 
 
 ## Activity 4: Configure Environment Variables
@@ -145,20 +153,28 @@ When you deploy this solution it automatically injects endpoints and configurati
 But you will still need to install dependencies to run the solution locally.
 
 1. Navigate to the python folder of the project.
-2. Create and activate a virtual environment (Linux/Mac):
+
+2. Create a virtual environment:
 
     ```shell
     python -m venv .venv
-    source .venv/bin/activate
     ```
-   
-    For Windows:
 
-    ```shell
-    python -m venv .venv
-    .venv\Scripts\Activate.ps1
-    ```
-3. Install the required dependencies for the project.
+3. Activate the virtual evironment:
+    1. Linux/Mac:
+
+        ```shell
+        python -m venv .venv
+        source .venv/bin/activate
+        ```
+
+    2. Windows (PowerShell):
+
+        ```shell
+        . .\.venv\Scripts\Activate.ps1
+        ```
+
+4. Install the required dependencies for the project.
 
     ```shell
     pip install -r src/app/requirements.txt
@@ -169,7 +185,7 @@ But you will still need to install dependencies to run the solution locally.
 
 ### Running the solution
  
-1. Navigate to the python folder of the project.
+1. Navigate to the python folder of the project (if you're not there already).
 2. Start the fastapi server.
 
     ```shell
@@ -179,9 +195,9 @@ But you will still need to install dependencies to run the solution locally.
 The API will be available at `http://localhost:8000/docs`. This has been pre-built with boilerplate code that will create chat sessions and store the chat history in Cosmos DB. 
 
 To run the frontend
-- Navigate to the `frontend` folder
+- In your IDE, navigate to the `frontend` folder located in the base folder of this project. 
 - update the `apiUrl` values in `src/environments/environment.ts` file with the API endpoint (http://localhost:8000/)
-- In a separate terminal window from the one running FastAPI server, Run the following command (make sure you have Node.js and Angular CLI installed - see the prerequisites section above):
+- In a separate terminal window from the one running FastAPI server, run the following command (make sure you have Node.js and Angular CLI installed - see the prerequisites section above):
 
 ```shell
 npm i
@@ -228,9 +244,9 @@ Use the steps below to validate that the solution was deployed successfully.
   - Ensure your subscription has access to Azure OpenAI
   - Check regional availability
 1. Python environment issues:
-  - Ensure correct Python version
+  - Ensure the correct Python version is installed
   - Verify all dependencies are installed
-1. 
+  - Ensure your venv is activated before running any code in the following Modules
 
 
 ## Success Criteria

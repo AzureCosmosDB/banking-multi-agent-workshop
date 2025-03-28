@@ -39,12 +39,3 @@ services:
         language: python
         docker:
             path: ./Dockerfile
-    FrontendApp:
-        project: ../frontend  # Move up one level to access frontend
-        host: containerapp
-        image: frontend  # Specify image name to avoid needing a language
-        docker:
-            path: ../frontend/Dockerfile  # Move up to correct Dockerfile path
-            context: ../frontend
-            includeFiles:
-              - entrypoint.sh

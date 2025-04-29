@@ -10,28 +10,18 @@ body {
   overflow: hidden;
 }
 
-/* Main Content Container */
 .main-content-container {
   display: flex;
   flex-direction: column;
-  flex-grow: 1;
-  height: calc(100vh - 64px);
+  height: 100vh;
   overflow: hidden;
 }
 
-/* Fixed Toolbar */
 .fixed-toolbar {
   position: sticky;
   top: 0;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  background-color: #0078d4;
-  color: white;
-  height: 64px;
-  padding: 0 16px;
   z-index: 1000;
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+  height: 64px;
 }
 
 .toolbar-title {
@@ -73,21 +63,19 @@ body {
   margin: 0;
 }
 
-/* Main Content */
 .main-content {
   display: flex;
   flex-direction: column;
   flex-grow: 1;
   overflow: hidden;
-  height: calc(100vh - 64px);
 }
 
-/* Messages Wrapper */
 .messages-wrapper {
   flex-grow: 1;
   overflow-y: auto;
   max-height: 100%;
 }
+
 
 .messages-wrapper::-webkit-scrollbar {
   width: 8px;
@@ -144,25 +132,23 @@ body {
 .message.assistant .message-content {
   background-color: #e6f0ff;
 }
-
+ 
+/* INPUT container is now part of layout */
 .input-container {
-  position: fixed;
-  bottom: 0;
-  left: 0;
-  width: 100%;
   background-color: white;
   box-shadow: 0 -2px 6px rgba(0, 0, 0, 0.1);
   display: flex;
   justify-content: center;
-  z-index: 1000;
+  padding: 12px 5%;
 }
 
 .input-wrapper {
   display: flex;
   align-items: center;
-  width: 70%;
+  width: 100%;
+  max-width: 100%;
   gap: 10px;
-  padding-left: 10%;
+  box-sizing: border-box;
 }
 
 .input-container input {
@@ -179,6 +165,11 @@ body {
   border-color: #0078d4;
 }
 
+.send-icon {
+  cursor: pointer;
+  color: #0078d4;
+  font-size: 1.5rem;
+}
 .send-icon {
   cursor: pointer;
   color: #0078d4;
@@ -241,4 +232,16 @@ body {
 
 .top-menu-bar button mat-icon {
   color: #0078d4;
+}
+
+.toolbar-title-container {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.toolbar-title {
+  margin: 0;
+  font-size: 1.2rem;
+  font-weight: 500;
 }

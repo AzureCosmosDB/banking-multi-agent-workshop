@@ -1,8 +1,15 @@
 <mat-sidenav-container class="dashboard-container">
-  <mat-sidenav mode="side" opened class="sidebar">
+  <mat-sidenav #sidenav mode="over" [(opened)]="isSidebarOpened" class="sidebar">
     <app-sidebar></app-sidebar>
   </mat-sidenav>
-  <mat-sidenav-content class="main-content">
-    <app-main-content></app-main-content>
+
+  <mat-sidenav-content
+    [ngClass]="{
+      'content-expanded': isSidebarOpened,
+      'content-collapsed': !isSidebarOpened
+    }"
+    class="main-content"
+  >
+   <app-main-content (sidebarToggle)="toggleSidebar()"></app-main-content>
   </mat-sidenav-content>
 </mat-sidenav-container>

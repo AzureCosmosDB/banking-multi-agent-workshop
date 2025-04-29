@@ -1,6 +1,12 @@
+<!-- inside your main layout component -->
 <div class="main-content-container">
   <mat-toolbar color="primary" class="fixed-toolbar">
-    <h5 class="toolbar-title">Banking Assistant</h5>
+    <div class="toolbar-title-container">
+      <button mat-icon-button (click)="toggleSidebar()">
+        <mat-icon>menu</mat-icon>
+      </button>
+      <h5 class="toolbar-title">Banking Assistant</h5>
+    </div>
     <span class="toolbar-spacer"></span>
     <div class="custom-container">
       <button mat-icon-button class="custom-button" [matMenuTriggerFor]="userMenu">
@@ -23,12 +29,11 @@
         <mat-icon>close</mat-icon>
       </button>
     </mat-toolbar>
+
     <div class="messages-wrapper">
       <app-chat-options *ngIf="conversationHistory.length == 0"></app-chat-options>
 
       <div class="conversations-container">
-      
-
         <div class="conversations">
           <div class="conversation-container" *ngFor="let conversation of conversationHistory">
             <div class="message user" *ngIf="conversation.sender === 'User'">
@@ -72,15 +77,21 @@
         </div>
       </div>
     </div>
-  </div>
 
-  <div class="input-container" *ngIf="sessionId != ''">
-    <div class="input-wrapper">
-      <input type="text" [(ngModel)]="userInput" (keyup.enter)="initCompletion()" placeholder="Ask your question here"
-        [maxlength]="maxInputLength" />
-      <span class="send-icon" (click)="initCompletion()">
-        <i class="fa fa-paper-plane"></i>
-      </span>
+    <!-- INPUT container is now part of .main-content -->
+    <div class="input-container" *ngIf="sessionId != ''">
+      <div class="input-wrapper">
+        <input
+          type="text"
+          [(ngModel)]="userInput"
+          (keyup.enter)="initCompletion()"
+          placeholder="Ask your question here"
+          [maxlength]="maxInputLength"
+        />
+        <span class="send-icon" (click)="initCompletion()">
+          <i class="fa fa-paper-plane"></i>
+        </span>
+      </div>
     </div>
   </div>
 </div>

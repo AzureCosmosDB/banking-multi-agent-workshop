@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild, ElementRef, AfterViewChecked, QueryList, ViewChildren } from '@angular/core';
+import { Component, OnInit, ViewChild, ElementRef, AfterViewChecked, QueryList, ViewChildren, Output, EventEmitter } from '@angular/core';
 import { Session } from '../../models/session';
 import { Message } from '../../models/message';
 import { ChatOptionsService } from '../../services/chat-options/chat-options.service';
@@ -17,6 +17,7 @@ import { LogPopupComponent } from '../log-popup/log-popup.component';
 })
 export class MainContentComponent implements OnInit, AfterViewChecked {
   @ViewChildren('latestMessage') latestMessages!: QueryList<ElementRef>;
+  @Output() sidebarToggle = new EventEmitter<void>();
   //@ts-ignorets-ignore
   @ViewChild('mainContent') private mainContent: ElementRef;
   message = '';
@@ -52,6 +53,9 @@ export class MainContentComponent implements OnInit, AfterViewChecked {
     this.imagePath = `../assets/${this.loggedInUser}.jpg`;
   }
 
+  toggleSidebar() {
+    this.sidebarToggle.emit();
+  }
   ngOnInit(): void {
     this.dataService.currentMessage.subscribe(message => this.sessionId = message);
     this.route.paramMap.subscribe(params => {

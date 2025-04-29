@@ -15,6 +15,8 @@ import { Router } from '@angular/router';
 export class SidebarComponent implements OnInit {
   sessionData: any;
   sessionHistory: Session[] = [];
+  isSidebarOpen: boolean = false;
+
   isEditing = false;
   currentEditingSession: Session | null = null;
   constructor(private loadingSpinnerService: LoadingService,
@@ -33,6 +35,9 @@ export class SidebarComponent implements OnInit {
       this.sessionData = data;
     
     });
+  }
+  toggleSidebar() {
+    this.isSidebarOpen = !this.isSidebarOpen;
   }
 
 

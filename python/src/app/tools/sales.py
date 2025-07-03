@@ -7,7 +7,7 @@ from langsmith import traceable
 from src.app.services.azure_cosmos_db import vector_search, create_account_record, \
     fetch_latest_account_number
 from src.app.services.azure_open_ai import generate_embedding
-
+# from src.app.services.local_model import generate_embedding  # Use local model
 
 @tool
 @traceable

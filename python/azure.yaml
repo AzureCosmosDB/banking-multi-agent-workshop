@@ -1,4 +1,4 @@
-name: MultiAgentBankingPython
+name: multiagent-zava-rewards-python
 metadata:
     template: azd-init@1.5.1
 hooks:

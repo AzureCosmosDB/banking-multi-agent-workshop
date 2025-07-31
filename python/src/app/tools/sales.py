@@ -24,7 +24,7 @@ def get_offer_information(user_prompt: str, accountType: str) -> list[dict[str, 
 @traceable
 def create_account(account_holder: str, balance: float, config: RunnableConfig) -> str:
     """
-    Create a new bank account for a user.
+    Create a new rewards account for a user.
 
     This function retrieves the latest account number, increments it, and creates a new account record
     in Cosmos DB associated with a specific user and tenant.

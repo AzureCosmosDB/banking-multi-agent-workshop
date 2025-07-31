@@ -9456,7 +9456,7 @@
     "tenantId": "Contoso",
     "offerId": "Offer1",
     "name": "SmartSaver Plus",
-    "text": "To open a SmartSaver Plus account, applicants must provide a valid government-issued proof of identity, such as a passport or driver\u2019s license. This verification step ensures security and compliance with banking regulations, safeguarding your account from unauthorized access and providing a trusted banking experience with complete peace of mind.",
+    "text": "To open a SmartSaver Plus account, applicants must provide a valid government-issued proof of identity, such as a passport or driver\u2019s license. This verification step ensures security and compliance with financial regulations, safeguarding your account from unauthorized access and providing a trusted rewards experience with complete peace of mind.",
     "type": "Term",
     "accountType": "Savings",
     "vector": [
@@ -40396,7 +40396,7 @@
     "tenantId": "Contoso",
     "offerId": "Offer2",
     "name": "Credit Boost Card",
-    "text": "To apply for the Credit Boost Card, applicants must submit a valid government-issued ID, such as a passport or driver\u2019s license. This verification step ensures security and compliance with banking regulations, preventing fraud and unauthorized access while providing customers with a safe and trustworthy credit experience.",
+    "text": "To apply for the Credit Boost Card, applicants must submit a valid government-issued ID, such as a passport or driver\u2019s license. This verification step ensures security and compliance with financial regulations, preventing fraud and unauthorized access while providing customers with a safe and trustworthy credit experience.",
     "type": "Term",
     "accountType": "CreditCard",
     "vector": [

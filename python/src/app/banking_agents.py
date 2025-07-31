@@ -32,7 +32,7 @@ def load_prompt(agent_name):
             return file.read().strip()
     except FileNotFoundError:
         print(f"Prompt file not found for {agent_name}, using default placeholder.")
-        return "You are an AI banking assistant."  # Fallback default prompt
+        return "You are an AI rewards assistant."  # Fallback default prompt
 
 
 coordinator_agent_tools = [
@@ -184,7 +184,7 @@ def interactive_chat():
     thread_config = {"configurable": {"thread_id": str(uuid.uuid4()), "userId": "Mark", "tenantId": "Contoso"}}
     global local_interactive_mode
     local_interactive_mode = True
-    print("Welcome to the interactive multi-agent shopping assistant.")
+    print("Welcome to the Zava Rewards Assistant.")
     print("Type 'exit' to end the conversation.\n")
 
     user_input = input("You: ")

@@ -29,7 +29,7 @@ def bank_transfer(config: RunnableConfig, toAccount: str, fromAccount: str, amou
 
 def bank_transaction(config: RunnableConfig, account_number: str, amount: float, credit_account: float,
                      debit_account: float) -> str:
-    """Transfer to bank agent"""
+    """Transfer to rewards agent"""
     global new_balance
     tenantId = config["configurable"].get("tenantId", "UNKNOWN_TENANT_ID")
     userId = config["configurable"].get("userId", "UNKNOWN_USER_ID")
@@ -58,7 +58,7 @@ def bank_transaction(config: RunnableConfig, account_number: str, amount: float,
                 "debitAmount": debit_account,
                 "creditAmount": credit_account,
                 "accountBalance": new_balance,
-                "details": "Bank Transfer",
+                "details": "Rewards Transfer",
                 "transactionDateTime": datetime.utcnow().isoformat() + "Z"
             }
 
@@ -97,7 +97,7 @@ def get_transaction_history(accountId: str, startDate: datetime, endDate: dateti
 @tool
 @traceable
 def bank_balance(config: RunnableConfig, account_number: str) -> str:
-    """Retrieve the balance for a specific bank account."""
+    """Retrieve the balance for a specific rewards account."""
     tenantId = config["configurable"].get("tenantId", "UNKNOWN_TENANT_ID")
     userId = config["configurable"].get("userId", "UNKNOWN_USER_ID")
 

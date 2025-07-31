@@ -1,13 +1,13 @@
 <div class="login-page">
 <mat-card>
-  <mat-card-title class="card-title">Multi Agent Banking App</mat-card-title>
+  <mat-card-title class="card-title">Zava Rewards App</mat-card-title>
   <mat-card-content>
     <div class="logo-container">
       <img   src="../assets/logo.svg" class="logo" />
     </div>
     <form [formGroup]="form" (ngSubmit)="submit()">
       <div class="input-group">
-     
+
           <mat-form-field appearance="fill">
             <mat-label>Select a user</mat-label>
             <mat-select [(value)]="selectedUser" (selectionChange)="onSelectionChangeUser($event)">
@@ -17,7 +17,7 @@
               <mat-option value="Sandeep">Sandeep</mat-option>
             </mat-select>
           </mat-form-field>
-       
+
       </div>
 
       <div class="input-group">

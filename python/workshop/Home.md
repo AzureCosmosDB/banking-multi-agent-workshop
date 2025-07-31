@@ -4,7 +4,7 @@
 
 ## Introduction
 
-Thank you for participating in the Banking Multi-Agent Workshop. Over this series of modules you'll learn how to build a multi-agent AI application.
+Thank you for participating in the Zava Rewards Multi-Agent Workshop. Over this series of modules you'll learn how to build a multi-agent AI application.
 
 ---set up business scenario
 

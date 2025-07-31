@@ -1,4 +1,4 @@
-# MultiAgentApp
+# Zava Rewards App
 
 ## PreRequisites
 

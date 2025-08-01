@@ -177,7 +177,7 @@ module ChatAPI './app/ChatAPI.bicep' = {
       }
 	  {
         name: 'CosmosDBSettings__Database'
-        value: 'MultiAgentRewards'
+        value: 'MultiAgentZavaRewards'
       }
 	  {
         name: 'CosmosDBSettings__ChatDataContainer'
@@ -193,7 +193,7 @@ module ChatAPI './app/ChatAPI.bicep' = {
       }	
       {
         name: 'RewardsCosmosDBSettings__Database'
-        value: 'MultiAgentRewards'
+        value: 'MultiAgentZavaRewards'
       }
 	  {
         name: 'RewardsCosmosDBSettings__AccountsContainer'

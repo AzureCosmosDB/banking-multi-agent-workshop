@@ -25,12 +25,12 @@
         },
         {
             "id": "Acc102",
-            "type": "Business Rewards",
+            "type": "Personal Rewards",
             "accountId": "Acc102",
-            "tenantId": "Zava Business",
+            "tenantId": "Zava Personal",
             "userId": "kim.lambert",
             "name": "Zava Pro Rewards",
-            "accountType": "Business",
+            "accountType": "Personal",
             "rewardsBalance": 19800,
             "loyaltyTier": "Platinum",
             "lastRedemptionDate": "2025-06-30"

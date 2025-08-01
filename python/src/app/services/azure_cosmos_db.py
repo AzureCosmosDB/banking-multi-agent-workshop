@@ -13,7 +13,7 @@ logging.basicConfig(level=logging.ERROR)
 load_dotenv(override=False)
 # Azure Cosmos DB configuration
 COSMOS_DB_URL = os.getenv("COSMOSDB_ENDPOINT")
-DATABASE_NAME = "MultiAgentRewards"
+DATABASE_NAME = "MultiAgentZavaRewards"
 
 cosmos_client = None
 database = None
@@ -268,10 +268,10 @@ def fetch_latest_transaction_number(account_number):
         print(f"[ERROR] Error fetching latest transaction number: {e}")
         raise e
 
-
+ 
 def fetch_account_by_number(account_number, tenantId, userId):
     try:
-        query = f"SELECT * FROM c WHERE (c.accountType = 'Personal' OR c.accountType = 'Business')  AND c.accountId = '{account_number}' AND c.tenantId = '{tenantId}' AND c.userId = '{userId}'"
+        query = f"SELECT * FROM c WHERE c.accountId = '{account_number}' AND c.tenantId = '{tenantId}' AND c.userId = '{userId}'"
         items = list(account_container.query_items(query=query, enable_cross_partition_query=True))
 
         if items:

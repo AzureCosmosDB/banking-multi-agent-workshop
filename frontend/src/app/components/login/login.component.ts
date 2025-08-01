@@ -16,10 +16,10 @@ export class LoginComponent  {
     username: new FormControl(''),
     password: new FormControl(''),
   });
- 
-  constructor(private router: Router , private dataService: DataService) { 
+
+  constructor(private router: Router , private dataService: DataService) {
       this.selectedCompany = 'Contoso';
-      this.selectedUser ='Mark';
+      this.selectedUser ='Kim Lambert';
       dataService.updateLoggedinUser( this.selectedUser);
       dataService.updateLoggedinTenant( this.selectedCompany);
   }
@@ -35,7 +35,7 @@ export class LoginComponent  {
      this.selectedUser = event.value;
      this.dataService.updateLoggedinUser( event.value);
   }
-  
+
   onSelectionChangeCompany(event: any): void {
     this.selectedCompany = event.value;
     this.dataService.updateLoggedinTenant( event.value);
@@ -43,5 +43,5 @@ export class LoginComponent  {
   @Input() error: string | null = null;
 
   @Output() submitEM = new EventEmitter();
- 
+
 }

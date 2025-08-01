@@ -106,5 +106,5 @@ def account_balance(config: RunnableConfig, account_number: str) -> str:
     if not account:
         return f"Account {account_number} not found for tenant {tenantId} and user {userId}"
 
-    balance = account.get("balance", 0)
-    return f"The balance for account number {account_number} is ${balance}"
+    balance = account.get("rewardsBalance", 0)
+    return f"The rewards balance for account number {account_number} is {balance} points"

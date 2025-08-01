@@ -12,7 +12,7 @@ from src.app.services.azure_open_ai import model
 from src.app.services.azure_cosmos_db import DATABASE_NAME, checkpoint_container, chat_container, \
     update_chat_container, patch_active_agent
 from src.app.tools.sales import get_offer_information, calculate_monthly_payment, create_account
-from src.app.tools.transactions import bank_balance, bank_transfer, get_transaction_history
+from src.app.tools.transactions import account_balance, account_transfer, get_transaction_history
 from src.app.tools.support import service_request, get_branch_location
 from src.app.tools.coordinator import create_agent_transfer
 
@@ -59,8 +59,8 @@ customer_support_agent = create_react_agent(
 )
 
 transactions_agent_tools = [
-    bank_balance,
-    bank_transfer,
+    account_balance,
+    account_transfer,
     get_transaction_history,
     create_agent_transfer(agent_name="customer_support_agent"),
 ]

@@ -12,22 +12,22 @@ from src.app.services.azure_cosmos_db import fetch_latest_transaction_number, fe
 
 @tool
 @traceable
-def bank_transfer(config: RunnableConfig, toAccount: str, fromAccount: str, amount: float) -> str:
+def account_transfer(config: RunnableConfig, toAccount: str, fromAccount: str, amount: float) -> str:
     """Wrapper function to handle the transfer of funds between two accounts."""
     # Debit the amount from the fromAccount
-    debit_result = bank_transaction(config, fromAccount, amount, credit_account=0, debit_account=amount)
+    debit_result = account_transaction(config, fromAccount, amount, credit_account=0, debit_account=amount)
     if "Failed" in debit_result:
         return f"Failed to debit amount from {fromAccount}: {debit_result}"
 
     # Credit the amount to the toAccount
-    credit_result = bank_transaction(config, toAccount, amount, credit_account=amount, debit_account=0)
+    credit_result = account_transaction(config, toAccount, amount, credit_account=amount, debit_account=0)
     if "Failed" in credit_result:
         return f"Failed to credit amount to {toAccount}: {credit_result}"
 
     return f"Successfully transferred ${amount} from account {fromAccount} to account {toAccount}"
 
 
-def bank_transaction(config: RunnableConfig, account_number: str, amount: float, credit_account: float,
+def account_transaction(config: RunnableConfig, account_number: str, amount: float, credit_account: float,
                      debit_account: float) -> str:
     """Transfer to rewards agent"""
     global new_balance
@@ -54,7 +54,7 @@ def bank_transaction(config: RunnableConfig, account_number: str, amount: float,
                 "id": transaction_id,
                 "tenantId": tenantId,
                 "accountId": account["accountId"],
-                "type": "BankTransaction",
+                "type": "RewardsTransaction",
                 "debitAmount": debit_account,
                 "creditAmount": credit_account,
                 "accountBalance": new_balance,
@@ -96,7 +96,7 @@ def get_transaction_history(accountId: str, startDate: datetime, endDate: dateti
 
 @tool
 @traceable
-def bank_balance(config: RunnableConfig, account_number: str) -> str:
+def account_balance(config: RunnableConfig, account_number: str) -> str:
     """Retrieve the balance for a specific rewards account."""
     tenantId = config["configurable"].get("tenantId", "UNKNOWN_TENANT_ID")
     userId = config["configurable"].get("userId", "UNKNOWN_USER_ID")

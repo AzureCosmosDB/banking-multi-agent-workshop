@@ -13,7 +13,7 @@ logging.basicConfig(level=logging.ERROR)
 load_dotenv(override=False)
 # Azure Cosmos DB configuration
 COSMOS_DB_URL = os.getenv("COSMOSDB_ENDPOINT")
-DATABASE_NAME = "MultiAgentBanking"
+DATABASE_NAME = "MultiAgentRewards"
 
 cosmos_client = None
 database = None
@@ -223,7 +223,7 @@ def create_service_request_record(account_data):
 
 def fetch_latest_account_number():
     try:
-        query = "SELECT c.accountId FROM c WHERE c.type = 'BankAccount'"
+        query = "SELECT c.accountId FROM c WHERE (c.accountType = 'Personal' OR c.accountType = 'Business')"
         items = list(account_container.query_items(query=query, enable_cross_partition_query=True))
 
         print(f"[DEBUG] Fetched {len(items)} account numbers")
@@ -252,7 +252,8 @@ def fetch_latest_account_number():
 
 def fetch_latest_transaction_number(account_number):
     try:
-        query = f"SELECT c.id FROM c WHERE c.type = 'BankTransaction' AND c.accountId = '{account_number}' ORDER BY c._ts DESC"
+        query = f"SELECT c.id FROM c WHERE c.type = 'RewardsTransaction' " \
+                f"AND c.accountId = '{account_number}' ORDER BY c._ts DESC"
         items = list(account_container.query_items(query=query, enable_cross_partition_query=True))
 
         if items:
@@ -270,7 +271,7 @@ def fetch_latest_transaction_number(account_number):
 
 def fetch_account_by_number(account_number, tenantId, userId):
     try:
-        query = f"SELECT * FROM c WHERE c.type = 'BankAccount' AND c.accountId = '{account_number}' AND c.tenantId = '{tenantId}' AND c.userId = '{userId}'"
+        query = f"SELECT * FROM c WHERE (c.accountType = 'Personal' OR c.accountType = 'Business')  AND c.accountId = '{account_number}' AND c.tenantId = '{tenantId}' AND c.userId = '{userId}'"
         items = list(account_container.query_items(query=query, enable_cross_partition_query=True))
 
         if items:
@@ -295,7 +296,7 @@ def fetch_transactions_by_date_range(accountId: str, startDate: datetime, endDat
     query = """
     SELECT * FROM c
     WHERE c.accountId = @accountId AND c.transactionDateTime >= @startDate AND c.transactionDateTime <= @endDate
-    AND c.type = "BankTransaction"
+    AND c.type = "RewardsTransaction"
     ORDER BY c.transactionDateTime ASC
     """
     parameters = [

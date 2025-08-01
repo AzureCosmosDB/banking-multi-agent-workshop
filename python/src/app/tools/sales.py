@@ -49,7 +49,7 @@ def create_account(account_holder: str, balance: float, config: RunnableConfig) 
             "tenantId": tenantId,
             "userId": userId,
             "name": "Account",
-            "type": "BankAccount",
+            "type": "RewardsAccount",
             "accountName": account_holder,
             "balance": balance,
             "startDate": "01-01-2025",

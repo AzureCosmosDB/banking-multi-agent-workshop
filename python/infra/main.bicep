@@ -177,7 +177,7 @@ module ChatAPI './app/ChatAPI.bicep' = {
       }
 	  {
         name: 'CosmosDBSettings__Database'
-        value: 'MultiAgentBanking'
+        value: 'MultiAgentRewards'
       }
 	  {
         name: 'CosmosDBSettings__ChatDataContainer'
@@ -188,27 +188,27 @@ module ChatAPI './app/ChatAPI.bicep' = {
         value: 'Users'
       }
       {
-        name: 'BankingCosmosDBSettings__CosmosUri'
+        name: 'RewardsCosmosDBSettings__CosmosUri'
         value: cosmos.outputs.endpoint
       }	
       {
-        name: 'BankingCosmosDBSettings__Database'
-        value: 'MultiAgentBanking'
+        name: 'RewardsCosmosDBSettings__Database'
+        value: 'MultiAgentRewards'
       }
 	  {
-        name: 'BankingCosmosDBSettings__AccountsContainer'
+        name: 'RewardsCosmosDBSettings__AccountsContainer'
         value: 'AccountsData'
       }
 	  {
-        name: 'BankingCosmosDBSettings__UserDataContainer'
+        name: 'RewardsCosmosDBSettings__UserDataContainer'
         value: 'Users'
       }
 	  {
-        name: 'BankingCosmosDBSettings__RequestDataContainer'
+        name: 'RewardsCosmosDBSettings__RequestDataContainer'
         value: 'AccountsData'
       }
 	  {
-        name: 'BankingCosmosDBSettings__OfferDataContainer'
+        name: 'RewardsCosmosDBSettings__OfferDataContainer'
         value: 'OffersData'
       }
       {

@@ -1,10 +1,10 @@
 [
     {
-        "id": "kim.lambert",
+        "id": "serena.ribeiro",
         "tenantId": "Zava Personal",
-        "name": "Kim Lambert",
+        "name": "Serena Ribeiro",
         "type": "User",
-        "email": "kim.lambert@zava.com",
+        "email": "serena.ribeiro@zava.com",
         "phoneNumber": "555-1234",
         "attributes": {
             "loyaltyTier": "Platinum",
@@ -13,11 +13,11 @@
         }
     },
     {
-        "id": "charlotte.nguyen",
+        "id": "elvia.atkins",
         "tenantId": "Zava Business",
-        "name": "Charlotte Nguyen",
+        "name": "Elvia Atkins",
         "type": "BusinessUser",
-        "email": "charlotte.nguyen@zava.com",
+        "email": "elvia.atkins@zava.com",
         "phoneNumber": "555-5678",
         "attributes": {
             "loyaltyTier": "Gold",

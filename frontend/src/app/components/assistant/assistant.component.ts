@@ -3,7 +3,7 @@ import { Component, ViewChild } from '@angular/core';
 import { MatSidenav } from '@angular/material/sidenav';
 import { DataService } from '../../services/data.service';
 import { Router } from '@angular/router';
- 
+
 @Component({
   selector: 'app-assistant',
   standalone: false,
@@ -13,15 +13,17 @@ import { Router } from '@angular/router';
 export class AssistantComponent {
   @ViewChild('sidenav') sidenav!: MatSidenav;
   isSidebarOpened: boolean = true;
-  loggedInUser: string;
+  loggedInUserName: string;
+  loggedInUserId: string;
   imagePath: string = '';
   toggleSidebar() {
     this.sidenav.toggle();
     this.isSidebarOpened = !this.isSidebarOpened;  // Track state change
   }
   constructor(private http: HttpClient ,  private dataService: DataService, private router: Router) {
-    this.loggedInUser = this.dataService.loggedInUser;
-    this.imagePath = `../assets/${this.loggedInUser}.jpg`;
+  this.loggedInUserName = this.dataService.loggedInUserName || this.dataService.loggedInUserId;
+  this.loggedInUserId = this.dataService.loggedInUserId;
+  this.imagePath = `../assets/${this.loggedInUserId}.jpg`;
    } // Inject HttpClient in the constructor
 
    logout() {

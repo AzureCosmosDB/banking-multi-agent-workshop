@@ -27,13 +27,13 @@ export class SidebarComponent implements OnInit {
     private toastService: ToastService,
     private cdr: ChangeDetectorRef
   ) {
-    
+
   }
   ngOnInit() {
     this.getSessions();
     this.dataService.sessionData$.subscribe((data) => {
       this.sessionData = data;
-    
+
     });
   }
   toggleSidebar() {
@@ -50,7 +50,7 @@ export class SidebarComponent implements OnInit {
   stopEditing(session: Session): void {
     this.isEditing = false;
     this.currentEditingSession = null;
-    this.sessionService.renameSession(this.dataService.loggedInTenant, this.dataService.loggedInUser, session.sessionId, session.name).subscribe((response: any) => {
+  this.sessionService.renameSession(this.dataService.loggedInTenant, this.dataService.loggedInUserId, session.sessionId, session.name).subscribe((response: any) => {
       this.toastService.showMessage('Session renamed successfully!', 'success');
       this.getSessions();
     });
@@ -58,7 +58,7 @@ export class SidebarComponent implements OnInit {
 
   getSessions() {
     this.loadingSpinnerService.show();
-    this.sessionService.getChatSessions(this.dataService.loggedInTenant, this.dataService.loggedInUser).subscribe((response: any) => {
+  this.sessionService.getChatSessions(this.dataService.loggedInTenant, this.dataService.loggedInUserId).subscribe((response: any) => {
       this.sessionHistory = response;
       const updatedSessionList = [...this.sessionHistory];  // Assuming you have the latest array of sessions
       this.dataService.updateSession(updatedSessionList);
@@ -77,7 +77,7 @@ export class SidebarComponent implements OnInit {
 
   removeSession(session : Session) {
     this.loadingSpinnerService.show();
-    this.sessionService.removeSession(this.dataService.loggedInTenant, this.dataService.loggedInUser, session.sessionId).subscribe((response: any) => {
+  this.sessionService.removeSession(this.dataService.loggedInTenant, this.dataService.loggedInUserId, session.sessionId).subscribe((response: any) => {
       this.getSessions();
       this.router.navigate(['/chat', '']);
       this.loadingSpinnerService.hide();

@@ -8,13 +8,16 @@ export class DataService {
   private sessionData = new BehaviorSubject<any>(null);
   sessionData$ = this.sessionData.asObservable();
   private messageSource = new BehaviorSubject<string>("Default Message");
-  public loggedInUser: string = '';
+  // Store user id (technical identifier) and user display name separately
+  public loggedInUserId: string = '';
+  public loggedInUserName: string = '';
   public loggedInTenant: string = '';
   currentMessage = this.messageSource.asObservable();
 
   constructor(private ngZone: NgZone) {
     // Load the logged in user and tenant from localStorage if they exist
-    this.loggedInUser = localStorage.getItem('loggedInUser') || '';
+  this.loggedInUserId = localStorage.getItem('loggedInUserId') || '';
+  this.loggedInUserName = localStorage.getItem('loggedInUserName') || '';
     this.loggedInTenant = localStorage.getItem('loggedInTenant') || '';
   }
 
@@ -22,13 +25,15 @@ export class DataService {
     this.messageSource.next(message);
   }
 
-  updateSession(data: any) {     
+  updateSession(data: any) {
       this.sessionData.next(data);
   }
 
-  updateLoggedinUser(data: any) {
-    this.loggedInUser = data;
-    localStorage.setItem('loggedInUser', data);  // Persist user to localStorage
+  updateLoggedinUser(user: { id: string; name: string }) {
+    this.loggedInUserId = user.id;
+    this.loggedInUserName = user.name;
+    localStorage.setItem('loggedInUserId', user.id);
+    localStorage.setItem('loggedInUserName', user.name);
   }
 
   updateLoggedinTenant(data: any) {

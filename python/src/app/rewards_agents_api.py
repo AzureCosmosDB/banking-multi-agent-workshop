@@ -24,7 +24,7 @@ from src.app.services.azure_cosmos_db import update_chat_container, patch_active
     fetch_chat_container_by_tenant_and_user, \
     fetch_chat_container_by_session, delete_userdata_item, debug_container, update_users_container, \
     update_account_container, update_offers_container, store_chat_history, update_active_agent_in_latest_message, \
-    chat_container, fetch_chat_history_by_session, delete_chat_history_by_session
+    chat_container, fetch_chat_history_by_session, delete_chat_history_by_session, fetch_all_users, fetch_distinct_tenants, fetch_user_name
 import logging
 
 # Setup logging
@@ -56,6 +56,19 @@ app = fastapi.FastAPI(
     openapi_url="/cosmos-multi-agent-api.json"
 )
 
+
+@app.get("/meta/users", tags=["Meta"])
+def list_users():
+    """Return list of users (id, name, tenantId) for dropdown population."""
+    return fetch_all_users()
+
+
+@app.get("/meta/tenants", tags=["Meta"])
+def list_tenants():
+    """Return distinct tenants for dropdown population."""
+    return fetch_distinct_tenants()
+
+
 app.add_middleware(
     CORSMiddleware,
     allow_origins=["*"],
@@ -63,14 +76,6 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
-
-
-class DebugLog(BaseModel):
-    id: str
-    sessionId: str
-    tenantId: str
-    userId: str
-    details: str
 
 
 class Session(BaseModel):
@@ -190,7 +195,8 @@ def store_debug_log(sessionId, tenantId, userId, response_data):
 
 def create_thread(tenantId: str, userId: str):
     sessionId = str(uuid.uuid4())
-    name = userId
+    # Get friendly display name if exists, else fallback to id
+    name = fetch_user_name(userId)
     age = 30
     address = "123 Main St"
     activeAgent = "unknown"

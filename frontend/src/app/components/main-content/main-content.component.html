@@ -12,7 +12,7 @@
       <button mat-icon-button class="custom-button" [matMenuTriggerFor]="userMenu">
         <img [src]="imagePath" alt="custom icon" />
       </button>
-      <h6>{{ loggedInUser }}</h6>
+  <h6>{{ loggedInUserName }}</h6>
 
       <mat-menu #userMenu="matMenu">
         <button mat-menu-item (click)="navigateToProfile()">Profile</button>

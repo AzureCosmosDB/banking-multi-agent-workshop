@@ -15,7 +15,7 @@ import { LoadingService } from '../../services/loading.service';
   styleUrl: './chat-options.component.css'
 })
 export class ChatOptionsComponent {
-  loggedInUser: string;
+  loggedInUserName: string;
   Subject = Subject;
   currentSession!: Session;
   sessionHistory: Session[] = [];
@@ -30,10 +30,10 @@ export class ChatOptionsComponent {
       if (data) {
         this.currentSession = data;
       }else
-      { this.currentSession = new Session(this.dataService.loggedInTenant, this.dataService.loggedInUser,'' );
+  { this.currentSession = new Session(this.dataService.loggedInTenant, this.dataService.loggedInUserId,'' );
       }
     });
-     this.loggedInUser = this.dataService.loggedInUser;
+     this.loggedInUserName = this.dataService.loggedInUserName || this.dataService.loggedInUserId;
 
 
   }
@@ -48,7 +48,7 @@ export class ChatOptionsComponent {
 
   createNewSession(): void {
     this.loadingService.show();
-    this.sessionService.createChatSession(this.dataService.loggedInTenant,this.dataService.loggedInUser, ).subscribe((response: any) => {
+  this.sessionService.createChatSession(this.dataService.loggedInTenant,this.dataService.loggedInUserId, ).subscribe((response: any) => {
       this.currentSession = response;
        this.getSessions() ;
       this.toastService.showMessage('Session created successfully!', 'success');
@@ -57,10 +57,10 @@ export class ChatOptionsComponent {
     });
   }
 
-  
+
   getSessions() {
     this.loadingService.show();
-    this.sessionService.getChatSessions(this.dataService.loggedInTenant, this.dataService.loggedInUser).subscribe((response: any) => {
+  this.sessionService.getChatSessions(this.dataService.loggedInTenant, this.dataService.loggedInUserId).subscribe((response: any) => {
       this.sessionHistory = response;
       const updatedSessionList = [...this.sessionHistory];  // Assuming you have the latest array of sessions
       this.dataService.updateSession(updatedSessionList);

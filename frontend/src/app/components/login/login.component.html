@@ -11,11 +11,10 @@
           <mat-form-field appearance="fill">
             <mat-label>Select a user</mat-label>
             <mat-select [(value)]="selectedUser" (selectionChange)="onSelectionChangeUser($event)">
-              <mat-option value="kim.lambert">Kim Lambert</mat-option>
-              <mat-option value="charlotte.nguyen">Charlotte Nguyen</mat-option>
-              <mat-option value="miguel.garcia">Miguel Garcia</mat-option>
-              <mat-option value="krystal.mckinney">Krystal McKinney</mat-option>
-              <mat-option value="tim.de.boer">Tim De Boer</mat-option>
+              <mat-option *ngIf="loadingUsers" disabled>Loading users...</mat-option>
+              <ng-container *ngIf="!loadingUsers">
+                <mat-option *ngFor="let u of users" [value]="u.id">{{u.name}}</mat-option>
+              </ng-container>
             </mat-select>
           </mat-form-field>
 
@@ -25,15 +24,16 @@
         <mat-form-field appearance="fill">
           <mat-label>Select a program</mat-label>
           <mat-select [(value)]="selectedCompany" (selectionChange)="onSelectionChangeCompany($event)">
-            <mat-option value="Zava Personal">Zava Personal</mat-option>
-            <mat-option value="Zava Business">Zava Business</mat-option>
+            <mat-option *ngIf="loadingTenants" disabled>Loading programs...</mat-option>
+            <ng-container *ngIf="!loadingTenants">
+              <mat-option *ngFor="let t of tenants" [value]="t">{{t}}</mat-option>
+            </ng-container>
           </mat-select>
         </mat-form-field>
       </div>
 
-      <p *ngIf="error" class="error">
-        {{ error }}
-      </p>
+  <p *ngIf="error" class="error">{{ error }}</p>
+  <p *ngIf="loadError" class="error">{{ loadError }}</p>
 
       <div class="button">
         <button type="submit" mat-button>  Login</button>

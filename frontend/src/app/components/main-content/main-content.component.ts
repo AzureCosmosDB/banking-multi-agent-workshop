@@ -22,7 +22,8 @@ export class MainContentComponent implements OnInit, AfterViewChecked {
   @ViewChild('mainContent') private mainContent: ElementRef;
   message = '';
   showToast = false;
-  loggedInUser: string;
+  loggedInUserName: string;
+  loggedInUserId: string;
   completion: string = "";
   userInput: string = "";
   conversationHistory: Message[] = [];
@@ -49,8 +50,9 @@ export class MainContentComponent implements OnInit, AfterViewChecked {
     private toastService: ToastService
   ) {
 
-    this.loggedInUser = this.dataService.loggedInUser;
-    this.imagePath = `../assets/${this.loggedInUser}.jpg`;
+  this.loggedInUserName = this.dataService.loggedInUserName || this.dataService.loggedInUserId;
+  this.loggedInUserId = this.dataService.loggedInUserId;
+  this.imagePath = `../assets/${this.loggedInUserId}.png`;
   }
 
   toggleSidebar() {
@@ -111,7 +113,7 @@ export class MainContentComponent implements OnInit, AfterViewChecked {
       }
       const summaryInput = this.convertToJSON(this.conversationContext);
 
-      this.sessionService.summarizeName(this.dataService.loggedInTenant, this.dataService.loggedInUser, this.sessionId, summaryInput).subscribe({
+  this.sessionService.summarizeName(this.dataService.loggedInTenant, this.dataService.loggedInUserId, this.sessionId, summaryInput).subscribe({
         next: (response: any) => {
           console.log("Summarize name method called", response)
           this.summarisedName = response;
@@ -120,12 +122,12 @@ export class MainContentComponent implements OnInit, AfterViewChecked {
           this.sessionRenamed = true;
           this.dataService.sessionData$.subscribe((data) => {
             if (data) {
-              data = data.map((t: Session) => 
+              data = data.map((t: Session) =>
                 t.sessionId === this.sessionId ? { ...t, name: response } : t
               );
               sessionData = data;
             }
-          });         
+          });
           this.dataService.updateSession(sessionData);
         },
         error: (err: any) => {
@@ -137,7 +139,7 @@ export class MainContentComponent implements OnInit, AfterViewChecked {
         }
       });
     }
-    this.sessionService.postCompletion(question, this.dataService.loggedInTenant, this.dataService.loggedInUser, this.sessionId)
+  this.sessionService.postCompletion(question, this.dataService.loggedInTenant, this.dataService.loggedInUserId, this.sessionId)
       .subscribe({
         next: (response: any) => {
           this.isLoading = false;
@@ -177,7 +179,7 @@ export class MainContentComponent implements OnInit, AfterViewChecked {
         }
       });
 
-    
+
   }
 
   convertToJSON(malformedString: string): any | null {
@@ -195,7 +197,7 @@ export class MainContentComponent implements OnInit, AfterViewChecked {
   }
 
   getDebugInfo(message: Message) {
-    this.sessionService.getCompletionDetails(this.dataService.loggedInTenant, this.dataService.loggedInUser, this.sessionId, message.debugLogId).subscribe((response: any) => {
+  this.sessionService.getCompletionDetails(this.dataService.loggedInTenant, this.dataService.loggedInUserId, this.sessionId, message.debugLogId).subscribe((response: any) => {
       message.debugInfo = response.propertyBag;
       this.dialog.open(LogPopupComponent, {
         width: '600px',
@@ -218,7 +220,7 @@ export class MainContentComponent implements OnInit, AfterViewChecked {
       return
     }
     this.conversationHistory = [];
-    this.sessionService.getChatSession(this.dataService.loggedInTenant, this.dataService.loggedInUser, sessionId).subscribe((response: any) => {
+  this.sessionService.getChatSession(this.dataService.loggedInTenant, this.dataService.loggedInUserId, sessionId).subscribe((response: any) => {
       response.forEach((message: any) => {
         const newMessage = new Message();
         newMessage.id = message.id;

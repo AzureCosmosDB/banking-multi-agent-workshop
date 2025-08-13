@@ -122,6 +122,46 @@ def update_users_container(data):
         raise e
 
 
+# Lookup helpers
+def fetch_all_users():
+    """Return list of users with id, name and tenantId."""
+    try:
+        query = "SELECT c.id, c.name, c.tenantId FROM c"
+        items = list(users_container.query_items(query=query, enable_cross_partition_query=True))
+        return items
+    except Exception as e:
+        print(f"[ERROR] Error fetching users: {e}")
+        return []
+
+
+def fetch_distinct_tenants():
+    """Return distinct tenantIds from AccountsData container."""
+    try:
+        query = "SELECT DISTINCT VALUE c.tenantId FROM c WHERE IS_DEFINED(c.tenantId)"
+        items = list(account_container.query_items(query=query, enable_cross_partition_query=True))
+        # filter out null/empty
+        tenants = sorted({t for t in items if t})
+        return tenants
+    except Exception as e:
+        print(f"[ERROR] Error fetching tenants: {e}")
+        return []
+
+
+def fetch_user_name(user_id: str) -> str:
+    """Return the friendly display name for a user id, or the id if not found."""
+    try:
+        query = "SELECT c.name FROM c WHERE c.id = @id"
+        parameters = [{"name": "@id", "value": user_id}]
+        items = list(users_container.query_items(query=query, parameters=parameters, enable_cross_partition_query=True))
+        if items:
+            name_val = items[0].get("name")
+            if name_val:
+                return name_val
+    except Exception as e:
+        print(f"[ERROR] Error fetching user name for {user_id}: {e}")
+    return user_id
+
+
 # fetch the user data from the container by tenantId, userId
 def fetch_chat_container_by_tenant_and_user(tenantId, userId):
     try:

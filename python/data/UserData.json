@@ -13,11 +13,11 @@
         }
     },
     {
-        "id": "elvia.atkins",
+        "id": "kian.lambert",
         "tenantId": "Zava Business",
-        "name": "Elvia Atkins",
+        "name": "Kian Lambert",
         "type": "BusinessUser",
-        "email": "elvia.atkins@zava.com",
+        "email": "kian.lambert@zava.com",
         "phoneNumber": "555-5678",
         "attributes": {
             "loyaltyTier": "Gold",

@@ -1,10 +1,10 @@
-# Multi Agent Workshop
+# Multi Agent Demo (AI Tour)
 
-Welcome to our multi-agent sample and workshop for a retail banking scenario. Implemented in both C# using Semantic Kernel Agents and Python using LangGraph.
+This AI Tour sample originates from the banking scenario found on main. Implemented in both C# using Semantic Kernel Agents and Python using LangGraph.
 
 ## Build a Multi-Agent AI application using Semantic Kernel Agents or LangGraph
 
-This sample application and full-day workshop shows how to build a multi-tenant, multi-agent, banking application with containerized applications built using two multi-agent frameworks
+This sample application and full-day workshop shows how to build a multi-tenant, multi-agent, rewards management application with containerized applications built using two multi-agent frameworks.
 
 - Semantic Kernel Agents in C#
 - LangGraph in Python
@@ -21,12 +21,9 @@ Here’s the deployment architecture and components of the workshop!
 
 https://github.com/user-attachments/assets/0e943130-13c5-4bb5-a40b-51b6c85dd58c
 
-## Complete the Workshop Exercises
+## Workshop
 
-The workshop for this sample is on the [Start branch](https://github.com/AzureCosmosDB/banking-multi-agent-workshop/tree/start) in this repository. To navigate and complete this workshop select one of the following:
-
-- Navigate to the [LangGraph Python Workshop](https://github.com/AzureCosmosDB/banking-multi-agent-workshop/blob/start/python/workshop/Module-00.md)
-- Navigate to the [Semantic Kernel Csharp Workshop](https://github.com/AzureCosmosDB/banking-multi-agent-workshop/blob/start/csharp/workshop/Module-00.md)
+Refer to the documentation on main for the full workshop of the original sample.
 
 ## Explore the Complete Samples
 

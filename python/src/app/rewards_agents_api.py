@@ -43,7 +43,7 @@ agent_mapping = {
     "coordinator_agent": "Coordinator",
     "customer_support_agent": "CustomerSupport",
     "transactions_agent": "Transactions",
-    "sales_agent": "Sales"
+    "redemption_agent": "Redemption"
 }
 
 

@@ -10,22 +10,6 @@ from src.app.services.azure_cosmos_db import fetch_latest_transaction_number, fe
     patch_account_record, fetch_transactions_by_date_range
 
 
-@tool
-@traceable
-def account_transfer(config: RunnableConfig, toAccount: str, fromAccount: str, amount: float) -> str:
-    """Wrapper function to handle the transfer of funds between two accounts."""
-    # Debit the amount from the fromAccount
-    debit_result = account_transaction(config, fromAccount, amount, credit_account=0, debit_account=amount)
-    if "Failed" in debit_result:
-        return f"Failed to debit amount from {fromAccount}: {debit_result}"
-
-    # Credit the amount to the toAccount
-    credit_result = account_transaction(config, toAccount, amount, credit_account=amount, debit_account=0)
-    if "Failed" in credit_result:
-        return f"Failed to credit amount to {toAccount}: {credit_result}"
-
-    return f"Successfully transferred ${amount} from account {fromAccount} to account {toAccount}"
-
 
 def account_transaction(config: RunnableConfig, account_number: str, amount: float, credit_account: float,
                      debit_account: float) -> str:

@@ -11,8 +11,8 @@ from langsmith import traceable
 from src.app.services.azure_open_ai import model
 from src.app.services.azure_cosmos_db import DATABASE_NAME, checkpoint_container, chat_container, \
     update_chat_container, patch_active_agent
-from src.app.tools.sales import get_offer_information, calculate_monthly_payment, create_account
-from src.app.tools.transactions import account_balance, account_transfer, get_transaction_history
+from src.app.tools.sales import get_offer_information
+from src.app.tools.transactions import account_balance, get_transaction_history
 from src.app.tools.support import service_request, get_branch_location
 from src.app.tools.coordinator import create_agent_transfer
 
@@ -37,7 +37,8 @@ def load_prompt(agent_name):
 
 coordinator_agent_tools = [
     create_agent_transfer(agent_name="customer_support_agent"),
-    create_agent_transfer(agent_name="sales_agent"),
+    create_agent_transfer(agent_name="redemption_agent"),
+    create_agent_transfer(agent_name="transactions_agent"),
 ]
 
 coordinator_agent = create_react_agent(
@@ -49,7 +50,7 @@ coordinator_agent = create_react_agent(
 customer_support_agent_tools = [
     get_branch_location,
     service_request,
-    create_agent_transfer(agent_name="sales_agent"),
+    create_agent_transfer(agent_name="redemption_agent"),
     create_agent_transfer(agent_name="transactions_agent"),
 ]
 customer_support_agent = create_react_agent(
@@ -60,7 +61,6 @@ customer_support_agent = create_react_agent(
 
 transactions_agent_tools = [
     account_balance,
-    account_transfer,
     get_transaction_history,
     create_agent_transfer(agent_name="customer_support_agent"),
 ]
@@ -70,18 +70,16 @@ transactions_agent = create_react_agent(
     state_modifier=load_prompt("transactions_agent"),
 )
 
-sales_agent_tools = [
+redemption_agent_tools = [
     get_offer_information,
-    calculate_monthly_payment,
-    create_account,
     create_agent_transfer(agent_name="customer_support_agent"),
     create_agent_transfer(agent_name="transactions_agent"),
 ]
 
-sales_agent = create_react_agent(
+redemption_agent = create_react_agent(
     model,
-    sales_agent_tools,
-    state_modifier=load_prompt("sales_agent"),
+    redemption_agent_tools,
+    state_modifier=load_prompt("redemption_agent"),
 )
 
 
@@ -139,12 +137,12 @@ def call_customer_support_agent(state: MessagesState, config) -> Command[Literal
 
 
 @traceable(run_type="llm")
-def call_sales_agent(state: MessagesState, config) -> Command[Literal["sales_agent", "human"]]:
+def call_redemption_agent(state: MessagesState, config) -> Command[Literal["redemption_agent", "human"]]:
     thread_id = config["configurable"].get("thread_id", "UNKNOWN_THREAD_ID")
     if local_interactive_mode:
         patch_active_agent(tenantId="cli-test", userId="cli-test", sessionId=thread_id,
-                           activeAgent="sales_agent")
-    response = sales_agent.invoke(state, config)  # Invoke sales agent with state
+                           activeAgent="redemption_agent")
+    response = redemption_agent.invoke(state, config)  # Invoke redemption agent with state
     return Command(update=response, goto="human")
 
 
@@ -170,7 +168,7 @@ def human_node(state: MessagesState, config) -> None:
 builder = StateGraph(MessagesState)
 builder.add_node("coordinator_agent", call_coordinator_agent)
 builder.add_node("customer_support_agent", call_customer_support_agent)
-builder.add_node("sales_agent", call_sales_agent)
+builder.add_node("redemption_agent", call_redemption_agent)
 builder.add_node("transactions_agent", call_transactions_agent)
 builder.add_node("human", human_node)
 

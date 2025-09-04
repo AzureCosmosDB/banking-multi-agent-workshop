@@ -53,7 +53,7 @@ except Exception as e:
     raise e
 
 
-def vector_search(vectors, accountType):
+def vector_search(vectors, accountType, region):
     print("accountType: ", accountType)
     print("vectors: ", vectors)
     # Execute the query
@@ -62,13 +62,15 @@ def vector_search(vectors, accountType):
         SELECT TOP 10 c.offerId, c.text, c.name
                         FROM c
                         WHERE c.type = 'Term'
+                        and c.region = @region
                         AND c.accountType = @accountType
                         AND VectorDistance(c.vector, @referenceVector)> 0.075
                         ORDER BY VectorDistance(c.vector, @referenceVector) 
         ''',
         parameters=[
             {"name": "@accountType", "value": accountType},
-            {"name": "@referenceVector", "value": vectors}
+            {"name": "@referenceVector", "value": vectors},
+            {"name": "@region", "value": region}
         ],
         enable_cross_partition_query=True, populate_query_metrics=True)
     print("Executed vector search in Azure Cosmos DB... \n")

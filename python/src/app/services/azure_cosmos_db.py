@@ -53,26 +53,33 @@ except Exception as e:
     raise e
 
 
-def vector_search(vectors, accountType, region):
-    print("accountType: ", accountType)
-    print("vectors: ", vectors)
+def vector_search(vectors, tenantId, region):
+    print("tenantId: ", tenantId)
+    print("region: ", region)
     # Execute the query
-    results = offers_container.query_items(
-        query='''
+    query = '''
         SELECT TOP 10 c.offerId, c.text, c.name
-                        FROM c
-                        WHERE c.type = 'Term'
-                        and c.region = @region
-                        AND c.accountType = @accountType
-                        AND VectorDistance(c.vector, @referenceVector)> 0.075
-                        ORDER BY VectorDistance(c.vector, @referenceVector) 
-        ''',
-        parameters=[
-            {"name": "@accountType", "value": accountType},
-            {"name": "@referenceVector", "value": vectors},
-            {"name": "@region", "value": region}
-        ],
-        enable_cross_partition_query=True, populate_query_metrics=True)
+        FROM c
+        WHERE c.type = 'Term'
+        AND c.tenantId = @tenantId
+        AND VectorDistance(c.vector, @referenceVector) > 0.075
+    '''
+    parameters = [
+        {"name": "@tenantId", "value": tenantId},
+        {"name": "@referenceVector", "value": vectors}
+    ]
+
+    if region:
+        query += " AND ARRAY_CONTAINS(c.region, @region)"
+        parameters.append({"name": "@region", "value": region})
+
+    query += " ORDER BY VectorDistance(c.vector, @referenceVector)"
+    results = offers_container.query_items(
+        query=query,
+        parameters=parameters,
+        enable_cross_partition_query=True,
+        populate_query_metrics=True
+    )
     print("Executed vector search in Azure Cosmos DB... \n")
     print("Results: ", results)
     try:

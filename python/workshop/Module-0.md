@@ -124,8 +124,8 @@ cd C:\Users\LabUser\multi-agent-hol\frontend
 1. Run the following to install npm and start the application:
 
 ```shell
-npm install
-npm start
+ng build
+ng serve
 ```
 
 ### Start a Conversation

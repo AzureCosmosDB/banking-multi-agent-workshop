@@ -9,6 +9,7 @@ from langgraph.types import Command, interrupt
 from langgraph_checkpoint_cosmosdb import CosmosDBSaver
 from langsmith import traceable
 from src.app.services.azure_open_ai import model
+# from src.app.services.local_model import model  # Use local model
 from src.app.services.azure_cosmos_db import DATABASE_NAME, checkpoint_container, chat_container, \
     update_chat_container, patch_active_agent
 from src.app.tools.sales import get_offer_information, calculate_monthly_payment, create_account

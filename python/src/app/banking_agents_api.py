@@ -6,7 +6,7 @@ from dotenv import load_dotenv
 
 from datetime import datetime
 from fastapi import BackgroundTasks
-from azure.monitor.opentelemetry import configure_azure_monitor
+#from azure.monitor.opentelemetry import configure_azure_monitor
 
 
 from azure.cosmos.exceptions import CosmosHttpResponseError
@@ -16,6 +16,7 @@ from langchain_core.messages import HumanMessage, ToolMessage
 from pydantic import BaseModel
 from typing import List, Dict
 from src.app.services.azure_open_ai import model
+# from src.app.services.local_model import model  # Use local model
 from langgraph_checkpoint_cosmosdb import CosmosDBSaver
 from langgraph.graph.state import CompiledStateGraph
 from starlette.middleware.cors import CORSMiddleware
@@ -32,7 +33,7 @@ logging.basicConfig(level=logging.ERROR)
 
 load_dotenv(override=False)
 
-configure_azure_monitor()
+#configure_azure_monitor()
 
 
 endpointTitle = "ChatEndpoints"
@@ -134,25 +135,29 @@ def store_debug_log(sessionId, tenantId, userId, response_data):
             if "messages" in details:
                 for msg in details["messages"]:
                     if hasattr(msg, "response_metadata"):
-                        metadata = msg.response_metadata
-                        finish_reason = metadata.get("finish_reason", finish_reason)
-                        model_name = metadata.get("model_name", model_name)
-                        system_fingerprint = metadata.get("system_fingerprint", system_fingerprint)
-                        input_tokens = metadata.get("token_usage", {}).get("prompt_tokens", input_tokens)
-                        output_tokens = metadata.get("token_usage", {}).get("completion_tokens", output_tokens)
-                        total_tokens = metadata.get("token_usage", {}).get("total_tokens", total_tokens)
-                        cached_tokens = metadata.get("token_usage", {}).get("prompt_tokens_details", {}).get(
-                            "cached_tokens", cached_tokens)
-                        logprobs = metadata.get("logprobs", logprobs)
-                        content_filter_results = metadata.get("content_filter_results", content_filter_results)
+                        metadata = getattr(msg, "response_metadata", None)
+                        if metadata:
+                            finish_reason = metadata.get("finish_reason", finish_reason)
+                            model_name = metadata.get("model_name", model_name)
+                            system_fingerprint = metadata.get("system_fingerprint", system_fingerprint)
 
-                        if "tool_calls" in msg.additional_kwargs:
-                            tool_calls.extend(msg.additional_kwargs["tool_calls"])
-                            transfer_success = any(
-                                call.get("name", "").startswith("transfer_to_") for call in tool_calls)
-                            previous_agent = agent_selected
-                            agent_selected = tool_calls[-1].get("name", "").replace("transfer_to_",
-                                                                                    "") if tool_calls else agent_selected
+                            token_usage = metadata.get("token_usage", {}) or {}
+                            input_tokens = token_usage.get("prompt_tokens", input_tokens)
+                            output_tokens = token_usage.get("completion_tokens", output_tokens)
+                            total_tokens = token_usage.get("total_tokens", total_tokens)
+
+                            prompt_details = token_usage.get("prompt_tokens_details", {}) or {}
+                            cached_tokens = prompt_details.get("cached_tokens", cached_tokens)
+
+                            logprobs = metadata.get("logprobs", logprobs)
+                            content_filter_results = metadata.get("content_filter_results", content_filter_results)
+
+                            if "tool_calls" in msg.additional_kwargs:
+                                tool_calls.extend(msg.additional_kwargs["tool_calls"])
+                                transfer_success = any(
+                                    call.get("name", "").startswith("transfer_to_") for call in tool_calls)
+                                previous_agent = agent_selected
+                                agent_selected = tool_calls[-1].get("name", "").replace("transfer_to_", "") if tool_calls else agent_selected
 
     property_bag = [
         {"key": "agent_selected", "value": agent_selected, "timeStamp": timestamp},

@@ -5,5 +5,5 @@ export const environment = {
   production: false,
   apiUrl: codespaceName
     ? `https://${codespaceName}-8000.app.github.dev/`
-    : 'http://localhost:63280/',
+    : 'http://localhost:8000/',
 };

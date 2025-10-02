@@ -16,6 +16,10 @@
     "ghcr.io/devcontainers/features/powershell:latest": {},
     "ghcr.io/devcontainers/features/node:1": {
       "version": "20"
+    },
+    "ghcr.io/devcontainers/features/dotnet:2": {
+      "version": "8.0",
+      "installUsingApt": true
     }
   },
   "customizations": {
@@ -25,11 +29,12 @@
         "ms-python.vscode-pylance",
         "ms-python.flake8",
         "ms-azuretools.vscode-cosmosdb",
-        "esbenp.prettier-vscode"
+        "esbenp.prettier-vscode",
+        "ms-dotnettools.csharp"
       ]
     }
   },
-  "postCreateCommand": "npm install -g @angular/cli && echo 'Updating API URL in environment.ts...' && if [ -n '$CODESPACE_NAME' ]; then sed -i 's|http://localhost:63280/|https://$CODESPACE_NAME-8000.app.github.dev/|g' /workspaces/banking-multi-agent-workshop/01_exercises/frontend/src/environments/environment.ts; else sed -i 's|http://localhost:63280/|http://localhost:8000/|g' /workspaces/banking-multi-agent-workshop/01_exercises/frontend/src/environments/environment.ts; fi",
+  "postCreateCommand": "npm install -g @angular/cli && echo 'Updating API URL in environment.ts...' && ENV_FILE=$(find /workspaces -name 'environment.ts' -path '*/01_exercises/frontend/src/environments/*' 2>/dev/null | head -1) && if [ -n \"$ENV_FILE\" ]; then if [ -n \"$CODESPACE_NAME\" ]; then sed -i 's|http://localhost:63280/|https://$CODESPACE_NAME-8000.app.github.dev/|g' \"$ENV_FILE\"; else sed -i 's|http://localhost:63280/|http://localhost:8000/|g' \"$ENV_FILE\"; fi; echo 'Updated environment.ts'; else echo 'environment.ts not found'; fi",
   "remoteUser": "vscode",
   "forwardPorts": [8000, 8080, 4200],
   "portsAttributes": {

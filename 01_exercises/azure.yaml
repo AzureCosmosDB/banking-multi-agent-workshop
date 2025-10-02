@@ -61,7 +61,7 @@ hooks:
                 ""CompletionsDeployment"": ""$env:AZURE_OPENAI_COMPLETIONSDEPLOYMENTID""
               }
             }
-          }" > ./csharp/src/MultiAgentCopilot/appsettings.development.json
+          }" > ../csharp/src/MultiAgentCopilot/appsettings.development.json
 
           echo "export const environment = {
             production: false,

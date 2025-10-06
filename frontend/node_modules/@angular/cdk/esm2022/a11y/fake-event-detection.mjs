@@ -1,0 +1,29 @@
+/**
+ * @license
+ * Copyright Google LLC All Rights Reserved.
+ *
+ * Use of this source code is governed by an MIT-style license that can be
+ * found in the LICENSE file at https://angular.io/license
+ */
+/** Gets whether an event could be a faked `mousedown` event dispatched by a screen reader. */
+export function isFakeMousedownFromScreenReader(event) {
+    // Some screen readers will dispatch a fake `mousedown` event when pressing enter or space on
+    // a clickable element. We can distinguish these events when `event.buttons` is zero, or
+    // `event.detail` is zero depending on the browser:
+    // - `event.buttons` works on Firefox, but fails on Chrome.
+    // - `detail` works on Chrome, but fails on Firefox.
+    return event.buttons === 0 || event.detail === 0;
+}
+/** Gets whether an event could be a faked `touchstart` event dispatched by a screen reader. */
+export function isFakeTouchstartFromScreenReader(event) {
+    const touch = (event.touches && event.touches[0]) || (event.changedTouches && event.changedTouches[0]);
+    // A fake `touchstart` can be distinguished from a real one by looking at the `identifier`
+    // which is typically >= 0 on a real device versus -1 from a screen reader. Just to be safe,
+    // we can also look at `radiusX` and `radiusY`. This behavior was observed against a Windows 10
+    // device with a touch screen running NVDA v2020.4 and Firefox 85 or Chrome 88.
+    return (!!touch &&
+        touch.identifier === -1 &&
+        (touch.radiusX == null || touch.radiusX === 1) &&
+        (touch.radiusY == null || touch.radiusY === 1));
+}
+//# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoiZmFrZS1ldmVudC1kZXRlY3Rpb24uanMiLCJzb3VyY2VSb290IjoiIiwic291cmNlcyI6WyIuLi8uLi8uLi8uLi8uLi8uLi9zcmMvY2RrL2ExMXkvZmFrZS1ldmVudC1kZXRlY3Rpb24udHMiXSwibmFtZXMiOltdLCJtYXBwaW5ncyI6IkFBQUE7Ozs7OztHQU1HO0FBRUgsOEZBQThGO0FBQzlGLE1BQU0sVUFBVSwrQkFBK0IsQ0FBQyxLQUFpQjtJQUMvRCw2RkFBNkY7SUFDN0Ysd0ZBQXdGO0lBQ3hGLG1EQUFtRDtJQUNuRCwyREFBMkQ7SUFDM0Qsb0RBQW9EO0lBQ3BELE9BQU8sS0FBSyxDQUFDLE9BQU8sS0FBSyxDQUFDLElBQUksS0FBSyxDQUFDLE1BQU0sS0FBSyxDQUFDLENBQUM7QUFDbkQsQ0FBQztBQUVELCtGQUErRjtBQUMvRixNQUFNLFVBQVUsZ0NBQWdDLENBQUMsS0FBaUI7SUFDaEUsTUFBTSxLQUFLLEdBQ1QsQ0FBQyxLQUFLLENBQUMsT0FBTyxJQUFJLEtBQUssQ0FBQyxPQUFPLENBQUMsQ0FBQyxDQUFDLENBQUMsSUFBSSxDQUFDLEtBQUssQ0FBQyxjQUFjLElBQUksS0FBSyxDQUFDLGNBQWMsQ0FBQyxDQUFDLENBQUMsQ0FBQyxDQUFDO0lBRTNGLDBGQUEwRjtJQUMxRiw0RkFBNEY7SUFDNUYsK0ZBQStGO0lBQy9GLCtFQUErRTtJQUMvRSxPQUFPLENBQ0wsQ0FBQyxDQUFDLEtBQUs7UUFDUCxLQUFLLENBQUMsVUFBVSxLQUFLLENBQUMsQ0FBQztRQUN2QixDQUFDLEtBQUssQ0FBQyxPQUFPLElBQUksSUFBSSxJQUFJLEtBQUssQ0FBQyxPQUFPLEtBQUssQ0FBQyxDQUFDO1FBQzlDLENBQUMsS0FBSyxDQUFDLE9BQU8sSUFBSSxJQUFJLElBQUksS0FBSyxDQUFDLE9BQU8sS0FBSyxDQUFDLENBQUMsQ0FDL0MsQ0FBQztBQUNKLENBQUMiLCJzb3VyY2VzQ29udGVudCI6WyIvKipcbiAqIEBsaWNlbnNlXG4gKiBDb3B5cmlnaHQgR29vZ2xlIExMQyBBbGwgUmlnaHRzIFJlc2VydmVkLlxuICpcbiAqIFVzZSBvZiB0aGlzIHNvdXJjZSBjb2RlIGlzIGdvdmVybmVkIGJ5IGFuIE1JVC1zdHlsZSBsaWNlbnNlIHRoYXQgY2FuIGJlXG4gKiBmb3VuZCBpbiB0aGUgTElDRU5TRSBmaWxlIGF0IGh0dHBzOi8vYW5ndWxhci5pby9saWNlbnNlXG4gKi9cblxuLyoqIEdldHMgd2hldGhlciBhbiBldmVudCBjb3VsZCBiZSBhIGZha2VkIGBtb3VzZWRvd25gIGV2ZW50IGRpc3BhdGNoZWQgYnkgYSBzY3JlZW4gcmVhZGVyLiAqL1xuZXhwb3J0IGZ1bmN0aW9uIGlzRmFrZU1vdXNlZG93bkZyb21TY3JlZW5SZWFkZXIoZXZlbnQ6IE1vdXNlRXZlbnQpOiBib29sZWFuIHtcbiAgLy8gU29tZSBzY3JlZW4gcmVhZGVycyB3aWxsIGRpc3BhdGNoIGEgZmFrZSBgbW91c2Vkb3duYCBldmVudCB3aGVuIHByZXNzaW5nIGVudGVyIG9yIHNwYWNlIG9uXG4gIC8vIGEgY2xpY2thYmxlIGVsZW1lbnQuIFdlIGNhbiBkaXN0aW5ndWlzaCB0aGVzZSBldmVudHMgd2hlbiBgZXZlbnQuYnV0dG9uc2AgaXMgemVybywgb3JcbiAgLy8gYGV2ZW50LmRldGFpbGAgaXMgemVybyBkZXBlbmRpbmcgb24gdGhlIGJyb3dzZXI6XG4gIC8vIC0gYGV2ZW50LmJ1dHRvbnNgIHdvcmtzIG9uIEZpcmVmb3gsIGJ1dCBmYWlscyBvbiBDaHJvbWUuXG4gIC8vIC0gYGRldGFpbGAgd29ya3Mgb24gQ2hyb21lLCBidXQgZmFpbHMgb24gRmlyZWZveC5cbiAgcmV0dXJuIGV2ZW50LmJ1dHRvbnMgPT09IDAgfHwgZXZlbnQuZGV0YWlsID09PSAwO1xufVxuXG4vKiogR2V0cyB3aGV0aGVyIGFuIGV2ZW50IGNvdWxkIGJlIGEgZmFrZWQgYHRvdWNoc3RhcnRgIGV2ZW50IGRpc3BhdGNoZWQgYnkgYSBzY3JlZW4gcmVhZGVyLiAqL1xuZXhwb3J0IGZ1bmN0aW9uIGlzRmFrZVRvdWNoc3RhcnRGcm9tU2NyZWVuUmVhZGVyKGV2ZW50OiBUb3VjaEV2ZW50KTogYm9vbGVhbiB7XG4gIGNvbnN0IHRvdWNoOiBUb3VjaCB8IHVuZGVmaW5lZCA9XG4gICAgKGV2ZW50LnRvdWNoZXMgJiYgZXZlbnQudG91Y2hlc1swXSkgfHwgKGV2ZW50LmNoYW5nZWRUb3VjaGVzICYmIGV2ZW50LmNoYW5nZWRUb3VjaGVzWzBdKTtcblxuICAvLyBBIGZha2UgYHRvdWNoc3RhcnRgIGNhbiBiZSBkaXN0aW5ndWlzaGVkIGZyb20gYSByZWFsIG9uZSBieSBsb29raW5nIGF0IHRoZSBgaWRlbnRpZmllcmBcbiAgLy8gd2hpY2ggaXMgdHlwaWNhbGx5ID49IDAgb24gYSByZWFsIGRldmljZSB2ZXJzdXMgLTEgZnJvbSBhIHNjcmVlbiByZWFkZXIuIEp1c3QgdG8gYmUgc2FmZSxcbiAgLy8gd2UgY2FuIGFsc28gbG9vayBhdCBgcmFkaXVzWGAgYW5kIGByYWRpdXNZYC4gVGhpcyBiZWhhdmlvciB3YXMgb2JzZXJ2ZWQgYWdhaW5zdCBhIFdpbmRvd3MgMTBcbiAgLy8gZGV2aWNlIHdpdGggYSB0b3VjaCBzY3JlZW4gcnVubmluZyBOVkRBIHYyMDIwLjQgYW5kIEZpcmVmb3ggODUgb3IgQ2hyb21lIDg4LlxuICByZXR1cm4gKFxuICAgICEhdG91Y2ggJiZcbiAgICB0b3VjaC5pZGVudGlmaWVyID09PSAtMSAmJlxuICAgICh0b3VjaC5yYWRpdXNYID09IG51bGwgfHwgdG91Y2gucmFkaXVzWCA9PT0gMSkgJiZcbiAgICAodG91Y2gucmFkaXVzWSA9PSBudWxsIHx8IHRvdWNoLnJhZGl1c1kgPT09IDEpXG4gICk7XG59XG4iXX0=

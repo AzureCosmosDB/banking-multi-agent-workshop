@@ -1,0 +1,33 @@
+/**
+ * @license
+ * Copyright Google LLC All Rights Reserved.
+ *
+ * Use of this source code is governed by an MIT-style license that can be
+ * found in the LICENSE file at https://angular.io/license
+ */
+import { DOCUMENT } from '@angular/common';
+import { inject, InjectionToken } from '@angular/core';
+/**
+ * Injection token used to inject the document into Directionality.
+ * This is used so that the value can be faked in tests.
+ *
+ * We can't use the real document in tests because changing the real `dir` causes geometry-based
+ * tests in Safari to fail.
+ *
+ * We also can't re-provide the DOCUMENT token from platform-browser because the unit tests
+ * themselves use things like `querySelector` in test code.
+ *
+ * This token is defined in a separate file from Directionality as a workaround for
+ * https://github.com/angular/angular/issues/22559
+ *
+ * @docs-private
+ */
+export const DIR_DOCUMENT = new InjectionToken('cdk-dir-doc', {
+    providedIn: 'root',
+    factory: DIR_DOCUMENT_FACTORY,
+});
+/** @docs-private */
+export function DIR_DOCUMENT_FACTORY() {
+    return inject(DOCUMENT);
+}
+//# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoiZGlyLWRvY3VtZW50LXRva2VuLmpzIiwic291cmNlUm9vdCI6IiIsInNvdXJjZXMiOlsiLi4vLi4vLi4vLi4vLi4vLi4vc3JjL2Nkay9iaWRpL2Rpci1kb2N1bWVudC10b2tlbi50cyJdLCJuYW1lcyI6W10sIm1hcHBpbmdzIjoiQUFBQTs7Ozs7O0dBTUc7QUFFSCxPQUFPLEVBQUMsUUFBUSxFQUFDLE1BQU0saUJBQWlCLENBQUM7QUFDekMsT0FBTyxFQUFDLE1BQU0sRUFBRSxjQUFjLEVBQUMsTUFBTSxlQUFlLENBQUM7QUFFckQ7Ozs7Ozs7Ozs7Ozs7O0dBY0c7QUFDSCxNQUFNLENBQUMsTUFBTSxZQUFZLEdBQUcsSUFBSSxjQUFjLENBQVcsYUFBYSxFQUFFO0lBQ3RFLFVBQVUsRUFBRSxNQUFNO0lBQ2xCLE9BQU8sRUFBRSxvQkFBb0I7Q0FDOUIsQ0FBQyxDQUFDO0FBRUgsb0JBQW9CO0FBQ3BCLE1BQU0sVUFBVSxvQkFBb0I7SUFDbEMsT0FBTyxNQUFNLENBQUMsUUFBUSxDQUFDLENBQUM7QUFDMUIsQ0FBQyIsInNvdXJjZXNDb250ZW50IjpbIi8qKlxuICogQGxpY2Vuc2VcbiAqIENvcHlyaWdodCBHb29nbGUgTExDIEFsbCBSaWdodHMgUmVzZXJ2ZWQuXG4gKlxuICogVXNlIG9mIHRoaXMgc291cmNlIGNvZGUgaXMgZ292ZXJuZWQgYnkgYW4gTUlULXN0eWxlIGxpY2Vuc2UgdGhhdCBjYW4gYmVcbiAqIGZvdW5kIGluIHRoZSBMSUNFTlNFIGZpbGUgYXQgaHR0cHM6Ly9hbmd1bGFyLmlvL2xpY2Vuc2VcbiAqL1xuXG5pbXBvcnQge0RPQ1VNRU5UfSBmcm9tICdAYW5ndWxhci9jb21tb24nO1xuaW1wb3J0IHtpbmplY3QsIEluamVjdGlvblRva2VufSBmcm9tICdAYW5ndWxhci9jb3JlJztcblxuLyoqXG4gKiBJbmplY3Rpb24gdG9rZW4gdXNlZCB0byBpbmplY3QgdGhlIGRvY3VtZW50IGludG8gRGlyZWN0aW9uYWxpdHkuXG4gKiBUaGlzIGlzIHVzZWQgc28gdGhhdCB0aGUgdmFsdWUgY2FuIGJlIGZha2VkIGluIHRlc3RzLlxuICpcbiAqIFdlIGNhbid0IHVzZSB0aGUgcmVhbCBkb2N1bWVudCBpbiB0ZXN0cyBiZWNhdXNlIGNoYW5naW5nIHRoZSByZWFsIGBkaXJgIGNhdXNlcyBnZW9tZXRyeS1iYXNlZFxuICogdGVzdHMgaW4gU2FmYXJpIHRvIGZhaWwuXG4gKlxuICogV2UgYWxzbyBjYW4ndCByZS1wcm92aWRlIHRoZSBET0NVTUVOVCB0b2tlbiBmcm9tIHBsYXRmb3JtLWJyb3dzZXIgYmVjYXVzZSB0aGUgdW5pdCB0ZXN0c1xuICogdGhlbXNlbHZlcyB1c2UgdGhpbmdzIGxpa2UgYHF1ZXJ5U2VsZWN0b3JgIGluIHRlc3QgY29kZS5cbiAqXG4gKiBUaGlzIHRva2VuIGlzIGRlZmluZWQgaW4gYSBzZXBhcmF0ZSBmaWxlIGZyb20gRGlyZWN0aW9uYWxpdHkgYXMgYSB3b3JrYXJvdW5kIGZvclxuICogaHR0cHM6Ly9naXRodWIuY29tL2FuZ3VsYXIvYW5ndWxhci9pc3N1ZXMvMjI1NTlcbiAqXG4gKiBAZG9jcy1wcml2YXRlXG4gKi9cbmV4cG9ydCBjb25zdCBESVJfRE9DVU1FTlQgPSBuZXcgSW5qZWN0aW9uVG9rZW48RG9jdW1lbnQ+KCdjZGstZGlyLWRvYycsIHtcbiAgcHJvdmlkZWRJbjogJ3Jvb3QnLFxuICBmYWN0b3J5OiBESVJfRE9DVU1FTlRfRkFDVE9SWSxcbn0pO1xuXG4vKiogQGRvY3MtcHJpdmF0ZSAqL1xuZXhwb3J0IGZ1bmN0aW9uIERJUl9ET0NVTUVOVF9GQUNUT1JZKCk6IERvY3VtZW50IHtcbiAgcmV0dXJuIGluamVjdChET0NVTUVOVCk7XG59XG4iXX0=

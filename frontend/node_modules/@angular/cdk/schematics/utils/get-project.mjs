@@ -1,0 +1,28 @@
+"use strict";
+/**
+ * @license
+ * Copyright Google LLC All Rights Reserved.
+ *
+ * Use of this source code is governed by an MIT-style license that can be
+ * found in the LICENSE file at https://angular.io/license
+ */
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.getProjectFromWorkspace = getProjectFromWorkspace;
+const schematics_1 = require("@angular-devkit/schematics");
+/**
+ * Finds the specified project configuration in the workspace. Throws an error if the project
+ * couldn't be found.
+ */
+function getProjectFromWorkspace(workspace, projectName) {
+    if (!projectName) {
+        // TODO(crisbeto): some schematics APIs have the project name as optional so for now it's
+        // simpler to allow undefined and checking it at runtime. Eventually we should clean this up.
+        throw new schematics_1.SchematicsException('Project name is required.');
+    }
+    const project = workspace.projects.get(projectName);
+    if (!project) {
+        throw new schematics_1.SchematicsException(`Could not find project in workspace: ${projectName}`);
+    }
+    return project;
+}
+//# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoiZ2V0LXByb2plY3QuanMiLCJzb3VyY2VSb290IjoiIiwic291cmNlcyI6WyIuLi8uLi8uLi8uLi8uLi8uLi8uLi9zcmMvY2RrL3NjaGVtYXRpY3MvdXRpbHMvZ2V0LXByb2plY3QudHMiXSwibmFtZXMiOltdLCJtYXBwaW5ncyI6IjtBQUFBOzs7Ozs7R0FNRzs7QUFTSCwwREFpQkM7QUF2QkQsMkRBQStEO0FBRS9EOzs7R0FHRztBQUNILFNBQWdCLHVCQUF1QixDQUNyQyxTQUF5QyxFQUN6QyxXQUErQjtJQUUvQixJQUFJLENBQUMsV0FBVyxFQUFFLENBQUM7UUFDakIseUZBQXlGO1FBQ3pGLDZGQUE2RjtRQUM3RixNQUFNLElBQUksZ0NBQW1CLENBQUMsMkJBQTJCLENBQUMsQ0FBQztJQUM3RCxDQUFDO0lBRUQsTUFBTSxPQUFPLEdBQUcsU0FBUyxDQUFDLFFBQVEsQ0FBQyxHQUFHLENBQUMsV0FBVyxDQUFDLENBQUM7SUFFcEQsSUFBSSxDQUFDLE9BQU8sRUFBRSxDQUFDO1FBQ2IsTUFBTSxJQUFJLGdDQUFtQixDQUFDLHdDQUF3QyxXQUFXLEVBQUUsQ0FBQyxDQUFDO0lBQ3ZGLENBQUM7SUFFRCxPQUFPLE9BQU8sQ0FBQztBQUNqQixDQUFDIiwic291cmNlc0NvbnRlbnQiOlsiLyoqXG4gKiBAbGljZW5zZVxuICogQ29weXJpZ2h0IEdvb2dsZSBMTEMgQWxsIFJpZ2h0cyBSZXNlcnZlZC5cbiAqXG4gKiBVc2Ugb2YgdGhpcyBzb3VyY2UgY29kZSBpcyBnb3Zlcm5lZCBieSBhbiBNSVQtc3R5bGUgbGljZW5zZSB0aGF0IGNhbiBiZVxuICogZm91bmQgaW4gdGhlIExJQ0VOU0UgZmlsZSBhdCBodHRwczovL2FuZ3VsYXIuaW8vbGljZW5zZVxuICovXG5cbmltcG9ydCB7d29ya3NwYWNlc30gZnJvbSAnQGFuZ3VsYXItZGV2a2l0L2NvcmUnO1xuaW1wb3J0IHtTY2hlbWF0aWNzRXhjZXB0aW9ufSBmcm9tICdAYW5ndWxhci1kZXZraXQvc2NoZW1hdGljcyc7XG5cbi8qKlxuICogRmluZHMgdGhlIHNwZWNpZmllZCBwcm9qZWN0IGNvbmZpZ3VyYXRpb24gaW4gdGhlIHdvcmtzcGFjZS4gVGhyb3dzIGFuIGVycm9yIGlmIHRoZSBwcm9qZWN0XG4gKiBjb3VsZG4ndCBiZSBmb3VuZC5cbiAqL1xuZXhwb3J0IGZ1bmN0aW9uIGdldFByb2plY3RGcm9tV29ya3NwYWNlKFxuICB3b3Jrc3BhY2U6IHdvcmtzcGFjZXMuV29ya3NwYWNlRGVmaW5pdGlvbixcbiAgcHJvamVjdE5hbWU6IHN0cmluZyB8IHVuZGVmaW5lZCxcbik6IHdvcmtzcGFjZXMuUHJvamVjdERlZmluaXRpb24ge1xuICBpZiAoIXByb2plY3ROYW1lKSB7XG4gICAgLy8gVE9ETyhjcmlzYmV0byk6IHNvbWUgc2NoZW1hdGljcyBBUElzIGhhdmUgdGhlIHByb2plY3QgbmFtZSBhcyBvcHRpb25hbCBzbyBmb3Igbm93IGl0J3NcbiAgICAvLyBzaW1wbGVyIHRvIGFsbG93IHVuZGVmaW5lZCBhbmQgY2hlY2tpbmcgaXQgYXQgcnVudGltZS4gRXZlbnR1YWxseSB3ZSBzaG91bGQgY2xlYW4gdGhpcyB1cC5cbiAgICB0aHJvdyBuZXcgU2NoZW1hdGljc0V4Y2VwdGlvbignUHJvamVjdCBuYW1lIGlzIHJlcXVpcmVkLicpO1xuICB9XG5cbiAgY29uc3QgcHJvamVjdCA9IHdvcmtzcGFjZS5wcm9qZWN0cy5nZXQocHJvamVjdE5hbWUpO1xuXG4gIGlmICghcHJvamVjdCkge1xuICAgIHRocm93IG5ldyBTY2hlbWF0aWNzRXhjZXB0aW9uKGBDb3VsZCBub3QgZmluZCBwcm9qZWN0IGluIHdvcmtzcGFjZTogJHtwcm9qZWN0TmFtZX1gKTtcbiAgfVxuXG4gIHJldHVybiBwcm9qZWN0O1xufVxuIl19

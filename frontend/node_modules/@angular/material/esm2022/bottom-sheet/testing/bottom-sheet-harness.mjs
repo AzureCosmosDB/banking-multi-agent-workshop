@@ -1,0 +1,35 @@
+/**
+ * @license
+ * Copyright Google LLC All Rights Reserved.
+ *
+ * Use of this source code is governed by an MIT-style license that can be
+ * found in the LICENSE file at https://angular.io/license
+ */
+import { ContentContainerComponentHarness, HarnessPredicate, TestKey } from '@angular/cdk/testing';
+/** Harness for interacting with a standard MatBottomSheet in tests. */
+export class MatBottomSheetHarness extends ContentContainerComponentHarness {
+    // Developers can provide a custom component or template for the
+    // bottom sheet. The canonical parent is the ".mat-bottom-sheet-container".
+    static { this.hostSelector = '.mat-bottom-sheet-container'; }
+    /**
+     * Gets a `HarnessPredicate` that can be used to search for a bottom sheet with
+     * specific attributes.
+     * @param options Options for narrowing the search.
+     * @return a `HarnessPredicate` configured with the given options.
+     */
+    static with(options = {}) {
+        return new HarnessPredicate(MatBottomSheetHarness, options);
+    }
+    /** Gets the value of the bottom sheet's "aria-label" attribute. */
+    async getAriaLabel() {
+        return (await this.host()).getAttribute('aria-label');
+    }
+    /**
+     * Dismisses the bottom sheet by pressing escape. Note that this method cannot
+     * be used if "disableClose" has been set to true via the config.
+     */
+    async dismiss() {
+        await (await this.host()).sendKeys(TestKey.ESCAPE);
+    }
+}
+//# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoiYm90dG9tLXNoZWV0LWhhcm5lc3MuanMiLCJzb3VyY2VSb290IjoiIiwic291cmNlcyI6WyIuLi8uLi8uLi8uLi8uLi8uLi8uLi9zcmMvbWF0ZXJpYWwvYm90dG9tLXNoZWV0L3Rlc3RpbmcvYm90dG9tLXNoZWV0LWhhcm5lc3MudHMiXSwibmFtZXMiOltdLCJtYXBwaW5ncyI6IkFBQUE7Ozs7OztHQU1HO0FBRUgsT0FBTyxFQUFDLGdDQUFnQyxFQUFFLGdCQUFnQixFQUFFLE9BQU8sRUFBQyxNQUFNLHNCQUFzQixDQUFDO0FBR2pHLHVFQUF1RTtBQUN2RSxNQUFNLE9BQU8scUJBQXNCLFNBQVEsZ0NBQXdDO0lBQ2pGLGdFQUFnRTtJQUNoRSwyRUFBMkU7YUFDcEUsaUJBQVksR0FBRyw2QkFBNkIsQ0FBQztJQUVwRDs7Ozs7T0FLRztJQUNILE1BQU0sQ0FBQyxJQUFJLENBQUMsVUFBcUMsRUFBRTtRQUNqRCxPQUFPLElBQUksZ0JBQWdCLENBQUMscUJBQXFCLEVBQUUsT0FBTyxDQUFDLENBQUM7SUFDOUQsQ0FBQztJQUVELG1FQUFtRTtJQUNuRSxLQUFLLENBQUMsWUFBWTtRQUNoQixPQUFPLENBQUMsTUFBTSxJQUFJLENBQUMsSUFBSSxFQUFFLENBQUMsQ0FBQyxZQUFZLENBQUMsWUFBWSxDQUFDLENBQUM7SUFDeEQsQ0FBQztJQUVEOzs7T0FHRztJQUNILEtBQUssQ0FBQyxPQUFPO1FBQ1gsTUFBTSxDQUFDLE1BQU0sSUFBSSxDQUFDLElBQUksRUFBRSxDQUFDLENBQUMsUUFBUSxDQUFDLE9BQU8sQ0FBQyxNQUFNLENBQUMsQ0FBQztJQUNyRCxDQUFDIiwic291cmNlc0NvbnRlbnQiOlsiLyoqXG4gKiBAbGljZW5zZVxuICogQ29weXJpZ2h0IEdvb2dsZSBMTEMgQWxsIFJpZ2h0cyBSZXNlcnZlZC5cbiAqXG4gKiBVc2Ugb2YgdGhpcyBzb3VyY2UgY29kZSBpcyBnb3Zlcm5lZCBieSBhbiBNSVQtc3R5bGUgbGljZW5zZSB0aGF0IGNhbiBiZVxuICogZm91bmQgaW4gdGhlIExJQ0VOU0UgZmlsZSBhdCBodHRwczovL2FuZ3VsYXIuaW8vbGljZW5zZVxuICovXG5cbmltcG9ydCB7Q29udGVudENvbnRhaW5lckNvbXBvbmVudEhhcm5lc3MsIEhhcm5lc3NQcmVkaWNhdGUsIFRlc3RLZXl9IGZyb20gJ0Bhbmd1bGFyL2Nkay90ZXN0aW5nJztcbmltcG9ydCB7Qm90dG9tU2hlZXRIYXJuZXNzRmlsdGVyc30gZnJvbSAnLi9ib3R0b20tc2hlZXQtaGFybmVzcy1maWx0ZXJzJztcblxuLyoqIEhhcm5lc3MgZm9yIGludGVyYWN0aW5nIHdpdGggYSBzdGFuZGFyZCBNYXRCb3R0b21TaGVldCBpbiB0ZXN0cy4gKi9cbmV4cG9ydCBjbGFzcyBNYXRCb3R0b21TaGVldEhhcm5lc3MgZXh0ZW5kcyBDb250ZW50Q29udGFpbmVyQ29tcG9uZW50SGFybmVzczxzdHJpbmc+IHtcbiAgLy8gRGV2ZWxvcGVycyBjYW4gcHJvdmlkZSBhIGN1c3RvbSBjb21wb25lbnQgb3IgdGVtcGxhdGUgZm9yIHRoZVxuICAvLyBib3R0b20gc2hlZXQuIFRoZSBjYW5vbmljYWwgcGFyZW50IGlzIHRoZSBcIi5tYXQtYm90dG9tLXNoZWV0LWNvbnRhaW5lclwiLlxuICBzdGF0aWMgaG9zdFNlbGVjdG9yID0gJy5tYXQtYm90dG9tLXNoZWV0LWNvbnRhaW5lcic7XG5cbiAgLyoqXG4gICAqIEdldHMgYSBgSGFybmVzc1ByZWRpY2F0ZWAgdGhhdCBjYW4gYmUgdXNlZCB0byBzZWFyY2ggZm9yIGEgYm90dG9tIHNoZWV0IHdpdGhcbiAgICogc3BlY2lmaWMgYXR0cmlidXRlcy5cbiAgICogQHBhcmFtIG9wdGlvbnMgT3B0aW9ucyBmb3IgbmFycm93aW5nIHRoZSBzZWFyY2guXG4gICAqIEByZXR1cm4gYSBgSGFybmVzc1ByZWRpY2F0ZWAgY29uZmlndXJlZCB3aXRoIHRoZSBnaXZlbiBvcHRpb25zLlxuICAgKi9cbiAgc3RhdGljIHdpdGgob3B0aW9uczogQm90dG9tU2hlZXRIYXJuZXNzRmlsdGVycyA9IHt9KTogSGFybmVzc1ByZWRpY2F0ZTxNYXRCb3R0b21TaGVldEhhcm5lc3M+IHtcbiAgICByZXR1cm4gbmV3IEhhcm5lc3NQcmVkaWNhdGUoTWF0Qm90dG9tU2hlZXRIYXJuZXNzLCBvcHRpb25zKTtcbiAgfVxuXG4gIC8qKiBHZXRzIHRoZSB2YWx1ZSBvZiB0aGUgYm90dG9tIHNoZWV0J3MgXCJhcmlhLWxhYmVsXCIgYXR0cmlidXRlLiAqL1xuICBhc3luYyBnZXRBcmlhTGFiZWwoKTogUHJvbWlzZTxzdHJpbmcgfCBudWxsPiB7XG4gICAgcmV0dXJuIChhd2FpdCB0aGlzLmhvc3QoKSkuZ2V0QXR0cmlidXRlKCdhcmlhLWxhYmVsJyk7XG4gIH1cblxuICAvKipcbiAgICogRGlzbWlzc2VzIHRoZSBib3R0b20gc2hlZXQgYnkgcHJlc3NpbmcgZXNjYXBlLiBOb3RlIHRoYXQgdGhpcyBtZXRob2QgY2Fubm90XG4gICAqIGJlIHVzZWQgaWYgXCJkaXNhYmxlQ2xvc2VcIiBoYXMgYmVlbiBzZXQgdG8gdHJ1ZSB2aWEgdGhlIGNvbmZpZy5cbiAgICovXG4gIGFzeW5jIGRpc21pc3MoKTogUHJvbWlzZTx2b2lkPiB7XG4gICAgYXdhaXQgKGF3YWl0IHRoaXMuaG9zdCgpKS5zZW5kS2V5cyhUZXN0S2V5LkVTQ0FQRSk7XG4gIH1cbn1cbiJdfQ==

@@ -1,0 +1,14 @@
+/**
+ * @license
+ * Copyright Google LLC All Rights Reserved.
+ *
+ * Use of this source code is governed by an MIT-style license that can be
+ * found in the LICENSE file at https://angular.io/license
+ */
+export * from './module';
+export * from './autocomplete';
+export * from './autocomplete-origin';
+export * from './autocomplete-trigger';
+// Re-export these since they're required to be used together with `mat-autocomplete`.
+export { MatOption, MatOptgroup } from '@angular/material/core';
+//# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoicHVibGljLWFwaS5qcyIsInNvdXJjZVJvb3QiOiIiLCJzb3VyY2VzIjpbIi4uLy4uLy4uLy4uLy4uLy4uL3NyYy9tYXRlcmlhbC9hdXRvY29tcGxldGUvcHVibGljLWFwaS50cyJdLCJuYW1lcyI6W10sIm1hcHBpbmdzIjoiQUFBQTs7Ozs7O0dBTUc7QUFFSCxjQUFjLFVBQVUsQ0FBQztBQUN6QixjQUFjLGdCQUFnQixDQUFDO0FBQy9CLGNBQWMsdUJBQXVCLENBQUM7QUFDdEMsY0FBYyx3QkFBd0IsQ0FBQztBQUV2QyxzRkFBc0Y7QUFDdEYsT0FBTyxFQUFDLFNBQVMsRUFBRSxXQUFXLEVBQUMsTUFBTSx3QkFBd0IsQ0FBQyIsInNvdXJjZXNDb250ZW50IjpbIi8qKlxuICogQGxpY2Vuc2VcbiAqIENvcHlyaWdodCBHb29nbGUgTExDIEFsbCBSaWdodHMgUmVzZXJ2ZWQuXG4gKlxuICogVXNlIG9mIHRoaXMgc291cmNlIGNvZGUgaXMgZ292ZXJuZWQgYnkgYW4gTUlULXN0eWxlIGxpY2Vuc2UgdGhhdCBjYW4gYmVcbiAqIGZvdW5kIGluIHRoZSBMSUNFTlNFIGZpbGUgYXQgaHR0cHM6Ly9hbmd1bGFyLmlvL2xpY2Vuc2VcbiAqL1xuXG5leHBvcnQgKiBmcm9tICcuL21vZHVsZSc7XG5leHBvcnQgKiBmcm9tICcuL2F1dG9jb21wbGV0ZSc7XG5leHBvcnQgKiBmcm9tICcuL2F1dG9jb21wbGV0ZS1vcmlnaW4nO1xuZXhwb3J0ICogZnJvbSAnLi9hdXRvY29tcGxldGUtdHJpZ2dlcic7XG5cbi8vIFJlLWV4cG9ydCB0aGVzZSBzaW5jZSB0aGV5J3JlIHJlcXVpcmVkIHRvIGJlIHVzZWQgdG9nZXRoZXIgd2l0aCBgbWF0LWF1dG9jb21wbGV0ZWAuXG5leHBvcnQge01hdE9wdGlvbiwgTWF0T3B0Z3JvdXB9IGZyb20gJ0Bhbmd1bGFyL21hdGVyaWFsL2NvcmUnO1xuIl19

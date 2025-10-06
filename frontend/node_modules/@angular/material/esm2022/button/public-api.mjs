@@ -1,0 +1,13 @@
+/**
+ * @license
+ * Copyright Google LLC All Rights Reserved.
+ *
+ * Use of this source code is governed by an MIT-style license that can be
+ * found in the LICENSE file at https://angular.io/license
+ */
+export * from './button';
+export * from './fab';
+export * from './icon-button';
+export * from './module';
+export { MAT_BUTTON_CONFIG } from './button-base';
+//# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoicHVibGljLWFwaS5qcyIsInNvdXJjZVJvb3QiOiIiLCJzb3VyY2VzIjpbIi4uLy4uLy4uLy4uLy4uLy4uL3NyYy9tYXRlcmlhbC9idXR0b24vcHVibGljLWFwaS50cyJdLCJuYW1lcyI6W10sIm1hcHBpbmdzIjoiQUFBQTs7Ozs7O0dBTUc7QUFFSCxjQUFjLFVBQVUsQ0FBQztBQUN6QixjQUFjLE9BQU8sQ0FBQztBQUN0QixjQUFjLGVBQWUsQ0FBQztBQUM5QixjQUFjLFVBQVUsQ0FBQztBQUN6QixPQUFPLEVBQUMsaUJBQWlCLEVBQWtCLE1BQU0sZUFBZSxDQUFDIiwic291cmNlc0NvbnRlbnQiOlsiLyoqXG4gKiBAbGljZW5zZVxuICogQ29weXJpZ2h0IEdvb2dsZSBMTEMgQWxsIFJpZ2h0cyBSZXNlcnZlZC5cbiAqXG4gKiBVc2Ugb2YgdGhpcyBzb3VyY2UgY29kZSBpcyBnb3Zlcm5lZCBieSBhbiBNSVQtc3R5bGUgbGljZW5zZSB0aGF0IGNhbiBiZVxuICogZm91bmQgaW4gdGhlIExJQ0VOU0UgZmlsZSBhdCBodHRwczovL2FuZ3VsYXIuaW8vbGljZW5zZVxuICovXG5cbmV4cG9ydCAqIGZyb20gJy4vYnV0dG9uJztcbmV4cG9ydCAqIGZyb20gJy4vZmFiJztcbmV4cG9ydCAqIGZyb20gJy4vaWNvbi1idXR0b24nO1xuZXhwb3J0ICogZnJvbSAnLi9tb2R1bGUnO1xuZXhwb3J0IHtNQVRfQlVUVE9OX0NPTkZJRywgTWF0QnV0dG9uQ29uZmlnfSBmcm9tICcuL2J1dHRvbi1iYXNlJztcbiJdfQ==

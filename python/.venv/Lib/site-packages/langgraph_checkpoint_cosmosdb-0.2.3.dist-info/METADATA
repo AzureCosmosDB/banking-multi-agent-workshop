@@ -1,0 +1,69 @@
+Metadata-Version: 2.4
+Name: langgraph_checkpoint_cosmosdb
+Version: 0.2.3
+Summary: Azure CosmosDB checkpoint saver implementation for LangGraph
+Author-email: Kamal <skamalj@github.com>
+Classifier: License :: OSI Approved :: MIT License
+Classifier: Operating System :: OS Independent
+Classifier: Programming Language :: Python :: 3
+Requires-Python: >=3.9
+Requires-Dist: azure-cosmos
+Requires-Dist: azure-identity
+Requires-Dist: langchain-core
+Requires-Dist: langgraph
+Provides-Extra: dev
+Requires-Dist: black; extra == 'dev'
+Requires-Dist: isort; extra == 'dev'
+Requires-Dist: mypy; extra == 'dev'
+Requires-Dist: pytest-cov; extra == 'dev'
+Requires-Dist: pytest>=7.0; extra == 'dev'
+Description-Content-Type: text/markdown
+
+# LangGraph Checkpoint CosmosDB
+
+This project provides an implementation of a checkpoint saver for LangGraph using Azure CosmosDB. 
+
+## Features
+- Save and retrieve langgraph checkpoints in Azure CosmosDB.
+
+## Installation
+
+To install the package, ensure you have Python 3.9 or higher, and run:
+
+```pip install langgraph-checkpoint-cosmosdb```
+
+## Usage
+
+### Setting Up Environment
+
+To use the `CosmosDBSaver`
+- You need to set CosmosDB endpoint and key if you want it to create your specified database and container.
+```
+export COSMOSDB_ENDPOINT='your_cosmosdb_endpoint'
+export COSMOSDB_KEY='your_cosmosdb_key'
+```
+- If database and container already exists then this can work via default RBAC credentials. Ex. az login or by setting TENANT_ID, CLIENT_ID and CLIENT_SECRET in environment. 
+    - Note that in this case error will be thrown if database and container do not exist.  
+
+
+## Import
+
+```
+from langgraph_checkpoint_cosmosdb import CosmosDBSaver
+```
+
+## Initialize the saver
+Database and Container is created if it does not exists
+```
+saver = CosmosDBSaver(database_name='your_database', container_name='your_container')
+```
+
+## Limitations
+List function does not support filters. You can only pass config on thread id to get the list.
+
+```
+print(list(memory.list(config=config)))
+```
+## License
+
+This project is licensed under the MIT License.

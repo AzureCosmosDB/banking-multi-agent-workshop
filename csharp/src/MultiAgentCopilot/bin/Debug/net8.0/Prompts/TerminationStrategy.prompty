@@ -1,0 +1,8 @@
+Determine if agent has requested user input or has responded to the user's query.
+Respond with the word NO (without explanation) if agent has requested user input.
+Otherwise, respond with the word YES (without explanation) if any the following conditions are met:
+- An action is pending by an agent.
+- Further participation from an agent is required
+- The information requested by the user was not provided by the current agent.
+
+

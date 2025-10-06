@@ -1,0 +1,18 @@
+/**
+ * @license
+ * Copyright Google LLC All Rights Reserved.
+ *
+ * Use of this source code is governed by an MIT-style license that can be
+ * found in the LICENSE file at https://angular.io/license
+ */
+/**
+ * Asserts that a particular node is an element.
+ * @param node Node to be checked.
+ * @param name Name to attach to the error message.
+ */
+export function assertElementNode(node, name) {
+    if (node.nodeType !== 1) {
+        throw Error(`${name} must be attached to an element node. ` + `Currently attached to "${node.nodeName}".`);
+    }
+}
+//# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoiYXNzZXJ0aW9ucy5qcyIsInNvdXJjZVJvb3QiOiIiLCJzb3VyY2VzIjpbIi4uLy4uLy4uLy4uLy4uLy4uLy4uL3NyYy9jZGsvZHJhZy1kcm9wL2RpcmVjdGl2ZXMvYXNzZXJ0aW9ucy50cyJdLCJuYW1lcyI6W10sIm1hcHBpbmdzIjoiQUFBQTs7Ozs7O0dBTUc7QUFFSDs7OztHQUlHO0FBQ0gsTUFBTSxVQUFVLGlCQUFpQixDQUFDLElBQVUsRUFBRSxJQUFZO0lBQ3hELElBQUksSUFBSSxDQUFDLFFBQVEsS0FBSyxDQUFDLEVBQUUsQ0FBQztRQUN4QixNQUFNLEtBQUssQ0FDVCxHQUFHLElBQUksd0NBQXdDLEdBQUcsMEJBQTBCLElBQUksQ0FBQyxRQUFRLElBQUksQ0FDOUYsQ0FBQztJQUNKLENBQUM7QUFDSCxDQUFDIiwic291cmNlc0NvbnRlbnQiOlsiLyoqXG4gKiBAbGljZW5zZVxuICogQ29weXJpZ2h0IEdvb2dsZSBMTEMgQWxsIFJpZ2h0cyBSZXNlcnZlZC5cbiAqXG4gKiBVc2Ugb2YgdGhpcyBzb3VyY2UgY29kZSBpcyBnb3Zlcm5lZCBieSBhbiBNSVQtc3R5bGUgbGljZW5zZSB0aGF0IGNhbiBiZVxuICogZm91bmQgaW4gdGhlIExJQ0VOU0UgZmlsZSBhdCBodHRwczovL2FuZ3VsYXIuaW8vbGljZW5zZVxuICovXG5cbi8qKlxuICogQXNzZXJ0cyB0aGF0IGEgcGFydGljdWxhciBub2RlIGlzIGFuIGVsZW1lbnQuXG4gKiBAcGFyYW0gbm9kZSBOb2RlIHRvIGJlIGNoZWNrZWQuXG4gKiBAcGFyYW0gbmFtZSBOYW1lIHRvIGF0dGFjaCB0byB0aGUgZXJyb3IgbWVzc2FnZS5cbiAqL1xuZXhwb3J0IGZ1bmN0aW9uIGFzc2VydEVsZW1lbnROb2RlKG5vZGU6IE5vZGUsIG5hbWU6IHN0cmluZyk6IGFzc2VydHMgbm9kZSBpcyBIVE1MRWxlbWVudCB7XG4gIGlmIChub2RlLm5vZGVUeXBlICE9PSAxKSB7XG4gICAgdGhyb3cgRXJyb3IoXG4gICAgICBgJHtuYW1lfSBtdXN0IGJlIGF0dGFjaGVkIHRvIGFuIGVsZW1lbnQgbm9kZS4gYCArIGBDdXJyZW50bHkgYXR0YWNoZWQgdG8gXCIke25vZGUubm9kZU5hbWV9XCIuYCxcbiAgICApO1xuICB9XG59XG4iXX0=

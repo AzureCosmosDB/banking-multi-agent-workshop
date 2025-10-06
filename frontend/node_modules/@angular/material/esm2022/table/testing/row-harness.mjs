@@ -1,0 +1,84 @@
+/**
+ * @license
+ * Copyright Google LLC All Rights Reserved.
+ *
+ * Use of this source code is governed by an MIT-style license that can be
+ * found in the LICENSE file at https://angular.io/license
+ */
+import { ComponentHarness, HarnessPredicate, parallel, } from '@angular/cdk/testing';
+import { MatCellHarness, MatFooterCellHarness, MatHeaderCellHarness, } from './cell-harness';
+export class _MatRowHarnessBase extends ComponentHarness {
+    /** Gets a list of `MatCellHarness` for all cells in the row. */
+    async getCells(filter = {}) {
+        return this.locatorForAll(this._cellHarness.with(filter))();
+    }
+    /** Gets the text of the cells in the row. */
+    async getCellTextByIndex(filter = {}) {
+        const cells = await this.getCells(filter);
+        return parallel(() => cells.map(cell => cell.getText()));
+    }
+    /** Gets the text inside the row organized by columns. */
+    async getCellTextByColumnName() {
+        const output = {};
+        const cells = await this.getCells();
+        const cellsData = await parallel(() => cells.map(cell => {
+            return parallel(() => [cell.getColumnName(), cell.getText()]);
+        }));
+        cellsData.forEach(([columnName, text]) => (output[columnName] = text));
+        return output;
+    }
+}
+/** Harness for interacting with an Angular Material table row. */
+export class MatRowHarness extends _MatRowHarnessBase {
+    constructor() {
+        super(...arguments);
+        this._cellHarness = MatCellHarness;
+    }
+    /** The selector for the host element of a `MatRowHarness` instance. */
+    static { this.hostSelector = '.mat-mdc-row'; }
+    /**
+     * Gets a `HarnessPredicate` that can be used to search for a table row with specific attributes.
+     * @param options Options for narrowing the search
+     * @return a `HarnessPredicate` configured with the given options.
+     */
+    static with(options = {}) {
+        return new HarnessPredicate(this, options);
+    }
+}
+/** Harness for interacting with an Angular Material table header row. */
+export class MatHeaderRowHarness extends _MatRowHarnessBase {
+    constructor() {
+        super(...arguments);
+        this._cellHarness = MatHeaderCellHarness;
+    }
+    /** The selector for the host element of a `MatHeaderRowHarness` instance. */
+    static { this.hostSelector = '.mat-mdc-header-row'; }
+    /**
+     * Gets a `HarnessPredicate` that can be used to search for a table header row with specific
+     * attributes.
+     * @param options Options for narrowing the search
+     * @return a `HarnessPredicate` configured with the given options.
+     */
+    static with(options = {}) {
+        return new HarnessPredicate(this, options);
+    }
+}
+/** Harness for interacting with an Angular Material table footer row. */
+export class MatFooterRowHarness extends _MatRowHarnessBase {
+    constructor() {
+        super(...arguments);
+        this._cellHarness = MatFooterCellHarness;
+    }
+    /** The selector for the host element of a `MatFooterRowHarness` instance. */
+    static { this.hostSelector = '.mat-mdc-footer-row'; }
+    /**
+     * Gets a `HarnessPredicate` that can be used to search for a table footer row cell with specific
+     * attributes.
+     * @param options Options for narrowing the search
+     * @return a `HarnessPredicate` configured with the given options.
+     */
+    static with(options = {}) {
+        return new HarnessPredicate(this, options);
+    }
+}
+//# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoicm93LWhhcm5lc3MuanMiLCJzb3VyY2VSb290IjoiIiwic291cmNlcyI6WyIuLi8uLi8uLi8uLi8uLi8uLi8uLi9zcmMvbWF0ZXJpYWwvdGFibGUvdGVzdGluZy9yb3ctaGFybmVzcy50cyJdLCJuYW1lcyI6W10sIm1hcHBpbmdzIjoiQUFBQTs7Ozs7O0dBTUc7QUFFSCxPQUFPLEVBQ0wsZ0JBQWdCLEVBRWhCLGdCQUFnQixFQUNoQixRQUFRLEdBQ1QsTUFBTSxzQkFBc0IsQ0FBQztBQUM5QixPQUFPLEVBRUwsY0FBYyxFQUNkLG9CQUFvQixFQUNwQixvQkFBb0IsR0FDckIsTUFBTSxnQkFBZ0IsQ0FBQztBQVF4QixNQUFNLE9BQWdCLGtCQUtwQixTQUFRLGdCQUFnQjtJQUd4QixnRUFBZ0U7SUFDaEUsS0FBSyxDQUFDLFFBQVEsQ0FBQyxTQUE2QixFQUFFO1FBQzVDLE9BQU8sSUFBSSxDQUFDLGFBQWEsQ0FBQyxJQUFJLENBQUMsWUFBWSxDQUFDLElBQUksQ0FBQyxNQUFNLENBQUMsQ0FBQyxFQUFFLENBQUM7SUFDOUQsQ0FBQztJQUVELDZDQUE2QztJQUM3QyxLQUFLLENBQUMsa0JBQWtCLENBQUMsU0FBNkIsRUFBRTtRQUN0RCxNQUFNLEtBQUssR0FBRyxNQUFNLElBQUksQ0FBQyxRQUFRLENBQUMsTUFBTSxDQUFDLENBQUM7UUFDMUMsT0FBTyxRQUFRLENBQUMsR0FBRyxFQUFFLENBQUMsS0FBSyxDQUFDLEdBQUcsQ0FBQyxJQUFJLENBQUMsRUFBRSxDQUFDLElBQUksQ0FBQyxPQUFPLEVBQUUsQ0FBQyxDQUFDLENBQUM7SUFDM0QsQ0FBQztJQUVELHlEQUF5RDtJQUN6RCxLQUFLLENBQUMsdUJBQXVCO1FBQzNCLE1BQU0sTUFBTSxHQUE2QixFQUFFLENBQUM7UUFDNUMsTUFBTSxLQUFLLEdBQUcsTUFBTSxJQUFJLENBQUMsUUFBUSxFQUFFLENBQUM7UUFDcEMsTUFBTSxTQUFTLEdBQUcsTUFBTSxRQUFRLENBQUMsR0FBRyxFQUFFLENBQ3BDLEtBQUssQ0FBQyxHQUFHLENBQUMsSUFBSSxDQUFDLEVBQUU7WUFDZixPQUFPLFFBQVEsQ0FBQyxHQUFHLEVBQUUsQ0FBQyxDQUFDLElBQUksQ0FBQyxhQUFhLEVBQUUsRUFBRSxJQUFJLENBQUMsT0FBTyxFQUFFLENBQUMsQ0FBQyxDQUFDO1FBQ2hFLENBQUMsQ0FBQyxDQUNILENBQUM7UUFDRixTQUFTLENBQUMsT0FBTyxDQUFDLENBQUMsQ0FBQyxVQUFVLEVBQUUsSUFBSSxDQUFDLEVBQUUsRUFBRSxDQUFDLENBQUMsTUFBTSxDQUFDLFVBQVUsQ0FBQyxHQUFHLElBQUksQ0FBQyxDQUFDLENBQUM7UUFDdkUsT0FBTyxNQUFNLENBQUM7SUFDaEIsQ0FBQztDQUNGO0FBRUQsa0VBQWtFO0FBQ2xFLE1BQU0sT0FBTyxhQUFjLFNBQVEsa0JBQXlEO0lBQTVGOztRQUdZLGlCQUFZLEdBQUcsY0FBYyxDQUFDO0lBYTFDLENBQUM7SUFmQyx1RUFBdUU7YUFDaEUsaUJBQVksR0FBRyxjQUFjLEFBQWpCLENBQWtCO0lBR3JDOzs7O09BSUc7SUFDSCxNQUFNLENBQUMsSUFBSSxDQUVULFVBQTZCLEVBQUU7UUFFL0IsT0FBTyxJQUFJLGdCQUFnQixDQUFDLElBQUksRUFBRSxPQUFPLENBQUMsQ0FBQztJQUM3QyxDQUFDOztBQUdILHlFQUF5RTtBQUN6RSxNQUFNLE9BQU8sbUJBQW9CLFNBQVEsa0JBR3hDO0lBSEQ7O1FBTVksaUJBQVksR0FBRyxvQkFBb0IsQ0FBQztJQWNoRCxDQUFDO0lBaEJDLDZFQUE2RTthQUN0RSxpQkFBWSxHQUFHLHFCQUFxQixBQUF4QixDQUF5QjtJQUc1Qzs7Ozs7T0FLRztJQUNILE1BQU0sQ0FBQyxJQUFJLENBRVQsVUFBNkIsRUFBRTtRQUUvQixPQUFPLElBQUksZ0JBQWdCLENBQUMsSUFBSSxFQUFFLE9BQU8sQ0FBQyxDQUFDO0lBQzdDLENBQUM7O0FBR0gseUVBQXlFO0FBQ3pFLE1BQU0sT0FBTyxtQkFBb0IsU0FBUSxrQkFHeEM7SUFIRDs7UUFNWSxpQkFBWSxHQUFHLG9CQUFvQixDQUFDO0lBY2hELENBQUM7SUFoQkMsNkVBQTZFO2FBQ3RFLGlCQUFZLEdBQUcscUJBQXFCLEFBQXhCLENBQXlCO0lBRzVDOzs7OztPQUtHO0lBQ0gsTUFBTSxDQUFDLElBQUksQ0FFVCxVQUE2QixFQUFFO1FBRS9CLE9BQU8sSUFBSSxnQkFBZ0IsQ0FBQyxJQUFJLEVBQUUsT0FBTyxDQUFDLENBQUM7SUFDN0MsQ0FBQyIsInNvdXJjZXNDb250ZW50IjpbIi8qKlxuICogQGxpY2Vuc2VcbiAqIENvcHlyaWdodCBHb29nbGUgTExDIEFsbCBSaWdodHMgUmVzZXJ2ZWQuXG4gKlxuICogVXNlIG9mIHRoaXMgc291cmNlIGNvZGUgaXMgZ292ZXJuZWQgYnkgYW4gTUlULXN0eWxlIGxpY2Vuc2UgdGhhdCBjYW4gYmVcbiAqIGZvdW5kIGluIHRoZSBMSUNFTlNFIGZpbGUgYXQgaHR0cHM6Ly9hbmd1bGFyLmlvL2xpY2Vuc2VcbiAqL1xuXG5pbXBvcnQge1xuICBDb21wb25lbnRIYXJuZXNzLFxuICBDb21wb25lbnRIYXJuZXNzQ29uc3RydWN0b3IsXG4gIEhhcm5lc3NQcmVkaWNhdGUsXG4gIHBhcmFsbGVsLFxufSBmcm9tICdAYW5ndWxhci9jZGsvdGVzdGluZyc7XG5pbXBvcnQge1xuICBfTWF0Q2VsbEhhcm5lc3NCYXNlLFxuICBNYXRDZWxsSGFybmVzcyxcbiAgTWF0Rm9vdGVyQ2VsbEhhcm5lc3MsXG4gIE1hdEhlYWRlckNlbGxIYXJuZXNzLFxufSBmcm9tICcuL2NlbGwtaGFybmVzcyc7XG5pbXBvcnQge0NlbGxIYXJuZXNzRmlsdGVycywgUm93SGFybmVzc0ZpbHRlcnN9IGZyb20gJy4vdGFibGUtaGFybmVzcy1maWx0ZXJzJztcblxuLyoqIFRleHQgZXh0cmFjdGVkIGZyb20gYSB0YWJsZSByb3cgb3JnYW5pemVkIGJ5IGNvbHVtbnMuICovXG5leHBvcnQgaW50ZXJmYWNlIE1hdFJvd0hhcm5lc3NDb2x1bW5zVGV4dCB7XG4gIFtjb2x1bW5OYW1lOiBzdHJpbmddOiBzdHJpbmc7XG59XG5cbmV4cG9ydCBhYnN0cmFjdCBjbGFzcyBfTWF0Um93SGFybmVzc0Jhc2U8XG4gIENlbGxUeXBlIGV4dGVuZHMgQ29tcG9uZW50SGFybmVzc0NvbnN0cnVjdG9yPENlbGw+ICYge1xuICAgIHdpdGg6IChvcHRpb25zPzogQ2VsbEhhcm5lc3NGaWx0ZXJzKSA9PiBIYXJuZXNzUHJlZGljYXRlPENlbGw+O1xuICB9LFxuICBDZWxsIGV4dGVuZHMgX01hdENlbGxIYXJuZXNzQmFzZSxcbj4gZXh0ZW5kcyBDb21wb25lbnRIYXJuZXNzIHtcbiAgcHJvdGVjdGVkIGFic3RyYWN0IF9jZWxsSGFybmVzczogQ2VsbFR5cGU7XG5cbiAgLyoqIEdldHMgYSBsaXN0IG9mIGBNYXRDZWxsSGFybmVzc2AgZm9yIGFsbCBjZWxscyBpbiB0aGUgcm93LiAqL1xuICBhc3luYyBnZXRDZWxscyhmaWx0ZXI6IENlbGxIYXJuZXNzRmlsdGVycyA9IHt9KTogUHJvbWlzZTxDZWxsW10+IHtcbiAgICByZXR1cm4gdGhpcy5sb2NhdG9yRm9yQWxsKHRoaXMuX2NlbGxIYXJuZXNzLndpdGgoZmlsdGVyKSkoKTtcbiAgfVxuXG4gIC8qKiBHZXRzIHRoZSB0ZXh0IG9mIHRoZSBjZWxscyBpbiB0aGUgcm93LiAqL1xuICBhc3luYyBnZXRDZWxsVGV4dEJ5SW5kZXgoZmlsdGVyOiBDZWxsSGFybmVzc0ZpbHRlcnMgPSB7fSk6IFByb21pc2U8c3RyaW5nW10+IHtcbiAgICBjb25zdCBjZWxscyA9IGF3YWl0IHRoaXMuZ2V0Q2VsbHMoZmlsdGVyKTtcbiAgICByZXR1cm4gcGFyYWxsZWwoKCkgPT4gY2VsbHMubWFwKGNlbGwgPT4gY2VsbC5nZXRUZXh0KCkpKTtcbiAgfVxuXG4gIC8qKiBHZXRzIHRoZSB0ZXh0IGluc2lkZSB0aGUgcm93IG9yZ2FuaXplZCBieSBjb2x1bW5zLiAqL1xuICBhc3luYyBnZXRDZWxsVGV4dEJ5Q29sdW1uTmFtZSgpOiBQcm9taXNlPE1hdFJvd0hhcm5lc3NDb2x1bW5zVGV4dD4ge1xuICAgIGNvbnN0IG91dHB1dDogTWF0Um93SGFybmVzc0NvbHVtbnNUZXh0ID0ge307XG4gICAgY29uc3QgY2VsbHMgPSBhd2FpdCB0aGlzLmdldENlbGxzKCk7XG4gICAgY29uc3QgY2VsbHNEYXRhID0gYXdhaXQgcGFyYWxsZWwoKCkgPT5cbiAgICAgIGNlbGxzLm1hcChjZWxsID0+IHtcbiAgICAgICAgcmV0dXJuIHBhcmFsbGVsKCgpID0+IFtjZWxsLmdldENvbHVtbk5hbWUoKSwgY2VsbC5nZXRUZXh0KCldKTtcbiAgICAgIH0pLFxuICAgICk7XG4gICAgY2VsbHNEYXRhLmZvckVhY2goKFtjb2x1bW5OYW1lLCB0ZXh0XSkgPT4gKG91dHB1dFtjb2x1bW5OYW1lXSA9IHRleHQpKTtcbiAgICByZXR1cm4gb3V0cHV0O1xuICB9XG59XG5cbi8qKiBIYXJuZXNzIGZvciBpbnRlcmFjdGluZyB3aXRoIGFuIEFuZ3VsYXIgTWF0ZXJpYWwgdGFibGUgcm93LiAqL1xuZXhwb3J0IGNsYXNzIE1hdFJvd0hhcm5lc3MgZXh0ZW5kcyBfTWF0Um93SGFybmVzc0Jhc2U8dHlwZW9mIE1hdENlbGxIYXJuZXNzLCBNYXRDZWxsSGFybmVzcz4ge1xuICAvKiogVGhlIHNlbGVjdG9yIGZvciB0aGUgaG9zdCBlbGVtZW50IG9mIGEgYE1hdFJvd0hhcm5lc3NgIGluc3RhbmNlLiAqL1xuICBzdGF0aWMgaG9zdFNlbGVjdG9yID0gJy5tYXQtbWRjLXJvdyc7XG4gIHByb3RlY3RlZCBfY2VsbEhhcm5lc3MgPSBNYXRDZWxsSGFybmVzcztcblxuICAvKipcbiAgICogR2V0cyBhIGBIYXJuZXNzUHJlZGljYXRlYCB0aGF0IGNhbiBiZSB1c2VkIHRvIHNlYXJjaCBmb3IgYSB0YWJsZSByb3cgd2l0aCBzcGVjaWZpYyBhdHRyaWJ1dGVzLlxuICAgKiBAcGFyYW0gb3B0aW9ucyBPcHRpb25zIGZvciBuYXJyb3dpbmcgdGhlIHNlYXJjaFxuICAgKiBAcmV0dXJuIGEgYEhhcm5lc3NQcmVkaWNhdGVgIGNvbmZpZ3VyZWQgd2l0aCB0aGUgZ2l2ZW4gb3B0aW9ucy5cbiAgICovXG4gIHN0YXRpYyB3aXRoPFQgZXh0ZW5kcyBNYXRSb3dIYXJuZXNzPihcbiAgICB0aGlzOiBDb21wb25lbnRIYXJuZXNzQ29uc3RydWN0b3I8VD4sXG4gICAgb3B0aW9uczogUm93SGFybmVzc0ZpbHRlcnMgPSB7fSxcbiAgKTogSGFybmVzc1ByZWRpY2F0ZTxUPiB7XG4gICAgcmV0dXJuIG5ldyBIYXJuZXNzUHJlZGljYXRlKHRoaXMsIG9wdGlvbnMpO1xuICB9XG59XG5cbi8qKiBIYXJuZXNzIGZvciBpbnRlcmFjdGluZyB3aXRoIGFuIEFuZ3VsYXIgTWF0ZXJpYWwgdGFibGUgaGVhZGVyIHJvdy4gKi9cbmV4cG9ydCBjbGFzcyBNYXRIZWFkZXJSb3dIYXJuZXNzIGV4dGVuZHMgX01hdFJvd0hhcm5lc3NCYXNlPFxuICB0eXBlb2YgTWF0SGVhZGVyQ2VsbEhhcm5lc3MsXG4gIE1hdEhlYWRlckNlbGxIYXJuZXNzXG4+IHtcbiAgLyoqIFRoZSBzZWxlY3RvciBmb3IgdGhlIGhvc3QgZWxlbWVudCBvZiBhIGBNYXRIZWFkZXJSb3dIYXJuZXNzYCBpbnN0YW5jZS4gKi9cbiAgc3RhdGljIGhvc3RTZWxlY3RvciA9ICcubWF0LW1kYy1oZWFkZXItcm93JztcbiAgcHJvdGVjdGVkIF9jZWxsSGFybmVzcyA9IE1hdEhlYWRlckNlbGxIYXJuZXNzO1xuXG4gIC8qKlxuICAgKiBHZXRzIGEgYEhhcm5lc3NQcmVkaWNhdGVgIHRoYXQgY2FuIGJlIHVzZWQgdG8gc2VhcmNoIGZvciBhIHRhYmxlIGhlYWRlciByb3cgd2l0aCBzcGVjaWZpY1xuICAgKiBhdHRyaWJ1dGVzLlxuICAgKiBAcGFyYW0gb3B0aW9ucyBPcHRpb25zIGZvciBuYXJyb3dpbmcgdGhlIHNlYXJjaFxuICAgKiBAcmV0dXJuIGEgYEhhcm5lc3NQcmVkaWNhdGVgIGNvbmZpZ3VyZWQgd2l0aCB0aGUgZ2l2ZW4gb3B0aW9ucy5cbiAgICovXG4gIHN0YXRpYyB3aXRoPFQgZXh0ZW5kcyBNYXRIZWFkZXJSb3dIYXJuZXNzPihcbiAgICB0aGlzOiBDb21wb25lbnRIYXJuZXNzQ29uc3RydWN0b3I8VD4sXG4gICAgb3B0aW9uczogUm93SGFybmVzc0ZpbHRlcnMgPSB7fSxcbiAgKTogSGFybmVzc1ByZWRpY2F0ZTxUPiB7XG4gICAgcmV0dXJuIG5ldyBIYXJuZXNzUHJlZGljYXRlKHRoaXMsIG9wdGlvbnMpO1xuICB9XG59XG5cbi8qKiBIYXJuZXNzIGZvciBpbnRlcmFjdGluZyB3aXRoIGFuIEFuZ3VsYXIgTWF0ZXJpYWwgdGFibGUgZm9vdGVyIHJvdy4gKi9cbmV4cG9ydCBjbGFzcyBNYXRGb290ZXJSb3dIYXJuZXNzIGV4dGVuZHMgX01hdFJvd0hhcm5lc3NCYXNlPFxuICB0eXBlb2YgTWF0Rm9vdGVyQ2VsbEhhcm5lc3MsXG4gIE1hdEZvb3RlckNlbGxIYXJuZXNzXG4+IHtcbiAgLyoqIFRoZSBzZWxlY3RvciBmb3IgdGhlIGhvc3QgZWxlbWVudCBvZiBhIGBNYXRGb290ZXJSb3dIYXJuZXNzYCBpbnN0YW5jZS4gKi9cbiAgc3RhdGljIGhvc3RTZWxlY3RvciA9ICcubWF0LW1kYy1mb290ZXItcm93JztcbiAgcHJvdGVjdGVkIF9jZWxsSGFybmVzcyA9IE1hdEZvb3RlckNlbGxIYXJuZXNzO1xuXG4gIC8qKlxuICAgKiBHZXRzIGEgYEhhcm5lc3NQcmVkaWNhdGVgIHRoYXQgY2FuIGJlIHVzZWQgdG8gc2VhcmNoIGZvciBhIHRhYmxlIGZvb3RlciByb3cgY2VsbCB3aXRoIHNwZWNpZmljXG4gICAqIGF0dHJpYnV0ZXMuXG4gICAqIEBwYXJhbSBvcHRpb25zIE9wdGlvbnMgZm9yIG5hcnJvd2luZyB0aGUgc2VhcmNoXG4gICAqIEByZXR1cm4gYSBgSGFybmVzc1ByZWRpY2F0ZWAgY29uZmlndXJlZCB3aXRoIHRoZSBnaXZlbiBvcHRpb25zLlxuICAgKi9cbiAgc3RhdGljIHdpdGg8VCBleHRlbmRzIE1hdEZvb3RlclJvd0hhcm5lc3M+KFxuICAgIHRoaXM6IENvbXBvbmVudEhhcm5lc3NDb25zdHJ1Y3RvcjxUPixcbiAgICBvcHRpb25zOiBSb3dIYXJuZXNzRmlsdGVycyA9IHt9LFxuICApOiBIYXJuZXNzUHJlZGljYXRlPFQ+IHtcbiAgICByZXR1cm4gbmV3IEhhcm5lc3NQcmVkaWNhdGUodGhpcywgb3B0aW9ucyk7XG4gIH1cbn1cbiJdfQ==

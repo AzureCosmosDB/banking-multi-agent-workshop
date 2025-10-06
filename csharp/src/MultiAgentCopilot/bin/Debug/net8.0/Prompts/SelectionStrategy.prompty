@@ -1,0 +1,15 @@
+Examine RESPONSE and choose the next participant.
+
+Choose only from these participants:
+- Coordinator
+- CustomerSupport
+- Sales
+- Transactions
+
+Always follow these rules when choosing the next participant:
+- Determine the nature of the user's request and route it to the appropriate agent
+- If the user is responding to an agent, select that same agent.
+- If the agent is responding after fetching or verifying data , select that same agent.
+- If unclear, select Coordinator.
+                    
+

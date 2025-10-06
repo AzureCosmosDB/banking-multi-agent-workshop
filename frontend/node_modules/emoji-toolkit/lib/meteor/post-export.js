@@ -1,0 +1,1 @@
+joypixels = module.exports;

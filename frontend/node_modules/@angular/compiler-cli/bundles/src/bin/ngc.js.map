@@ -1,0 +1,6 @@
+{
+  "version": 3,
+  "sources": ["../../../../../../../../packages/compiler-cli/src/bin/ngc.ts"],
+  "mappings": ";;;;;;;;;;;;;;;;;;;;AAUA,OAAO;AAKP,eAAe,gBAAa;AAC1B,UAAQ,QAAQ;AAChB,QAAM,OAAO,QAAQ,KAAK,MAAM,CAAC;AAEjC,gBAAc,IAAI,iBAAgB,CAAE;AAEpC,UAAQ,WAAW,KAAK,MAAM,QAAW,QAAW,QAAW,QAAW,MAAS;AACrF;AAEA,cAAa,EAAG,MAAM,CAAC,MAAK;AAC1B,UAAQ,MAAM,CAAC;AACf,UAAQ,WAAW;AACrB,CAAC;",
+  "names": []
+}

@@ -1,0 +1,22 @@
+/**
+ * @license
+ * Copyright Google LLC All Rights Reserved.
+ *
+ * Use of this source code is governed by an MIT-style license that can be
+ * found in the LICENSE file at https://angular.io/license
+ */
+/**
+ * Throws an exception when an instance of the PointerFocusTracker is not provided.
+ * @docs-private
+ */
+export function throwMissingPointerFocusTracker() {
+    throw Error('expected an instance of PointerFocusTracker to be provided');
+}
+/**
+ * Throws an exception when a reference to the parent menu is not provided.
+ * @docs-private
+ */
+export function throwMissingMenuReference() {
+    throw Error('expected a reference to the parent menu');
+}
+//# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoibWVudS1lcnJvcnMuanMiLCJzb3VyY2VSb290IjoiIiwic291cmNlcyI6WyIuLi8uLi8uLi8uLi8uLi8uLi9zcmMvY2RrL21lbnUvbWVudS1lcnJvcnMudHMiXSwibmFtZXMiOltdLCJtYXBwaW5ncyI6IkFBQUE7Ozs7OztHQU1HO0FBRUg7OztHQUdHO0FBQ0gsTUFBTSxVQUFVLCtCQUErQjtJQUM3QyxNQUFNLEtBQUssQ0FBQyw0REFBNEQsQ0FBQyxDQUFDO0FBQzVFLENBQUM7QUFFRDs7O0dBR0c7QUFDSCxNQUFNLFVBQVUseUJBQXlCO0lBQ3ZDLE1BQU0sS0FBSyxDQUFDLHlDQUF5QyxDQUFDLENBQUM7QUFDekQsQ0FBQyIsInNvdXJjZXNDb250ZW50IjpbIi8qKlxuICogQGxpY2Vuc2VcbiAqIENvcHlyaWdodCBHb29nbGUgTExDIEFsbCBSaWdodHMgUmVzZXJ2ZWQuXG4gKlxuICogVXNlIG9mIHRoaXMgc291cmNlIGNvZGUgaXMgZ292ZXJuZWQgYnkgYW4gTUlULXN0eWxlIGxpY2Vuc2UgdGhhdCBjYW4gYmVcbiAqIGZvdW5kIGluIHRoZSBMSUNFTlNFIGZpbGUgYXQgaHR0cHM6Ly9hbmd1bGFyLmlvL2xpY2Vuc2VcbiAqL1xuXG4vKipcbiAqIFRocm93cyBhbiBleGNlcHRpb24gd2hlbiBhbiBpbnN0YW5jZSBvZiB0aGUgUG9pbnRlckZvY3VzVHJhY2tlciBpcyBub3QgcHJvdmlkZWQuXG4gKiBAZG9jcy1wcml2YXRlXG4gKi9cbmV4cG9ydCBmdW5jdGlvbiB0aHJvd01pc3NpbmdQb2ludGVyRm9jdXNUcmFja2VyKCkge1xuICB0aHJvdyBFcnJvcignZXhwZWN0ZWQgYW4gaW5zdGFuY2Ugb2YgUG9pbnRlckZvY3VzVHJhY2tlciB0byBiZSBwcm92aWRlZCcpO1xufVxuXG4vKipcbiAqIFRocm93cyBhbiBleGNlcHRpb24gd2hlbiBhIHJlZmVyZW5jZSB0byB0aGUgcGFyZW50IG1lbnUgaXMgbm90IHByb3ZpZGVkLlxuICogQGRvY3MtcHJpdmF0ZVxuICovXG5leHBvcnQgZnVuY3Rpb24gdGhyb3dNaXNzaW5nTWVudVJlZmVyZW5jZSgpIHtcbiAgdGhyb3cgRXJyb3IoJ2V4cGVjdGVkIGEgcmVmZXJlbmNlIHRvIHRoZSBwYXJlbnQgbWVudScpO1xufVxuIl19

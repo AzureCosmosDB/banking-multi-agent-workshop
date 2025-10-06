@@ -1,0 +1,7 @@
+{
+  "version": 3,
+  "sources": ["../../../../../../node_modules/rxjs/dist/esm5/internal/operators/partition.js", "../../../../../../node_modules/rxjs/dist/esm5/internal/operators/race.js"],
+  "sourcesContent": ["import { not } from '../util/not';\nimport { filter } from './filter';\nexport function partition(predicate, thisArg) {\n  return function (source) {\n    return [filter(predicate, thisArg)(source), filter(not(predicate, thisArg))(source)];\n  };\n}\n", "import { __read, __spreadArray } from \"tslib\";\nimport { argsOrArgArray } from '../util/argsOrArgArray';\nimport { raceWith } from './raceWith';\nexport function race() {\n  var args = [];\n  for (var _i = 0; _i < arguments.length; _i++) {\n    args[_i] = arguments[_i];\n  }\n  return raceWith.apply(void 0, __spreadArray([], __read(argsOrArgArray(args))));\n}\n"],
+  "mappings": ";;;;;;;;;;AAEO,SAAS,UAAU,WAAW,SAAS;AAC5C,SAAO,SAAU,QAAQ;AACvB,WAAO,CAAC,OAAO,WAAW,OAAO,EAAE,MAAM,GAAG,OAAO,IAAI,WAAW,OAAO,CAAC,EAAE,MAAM,CAAC;AAAA,EACrF;AACF;;;ACHO,SAAS,OAAO;AACrB,MAAI,OAAO,CAAC;AACZ,WAAS,KAAK,GAAG,KAAK,UAAU,QAAQ,MAAM;AAC5C,SAAK,EAAE,IAAI,UAAU,EAAE;AAAA,EACzB;AACA,SAAO,SAAS,MAAM,QAAQ,cAAc,CAAC,GAAG,OAAO,eAAe,IAAI,CAAC,CAAC,CAAC;AAC/E;",
+  "names": []
+}

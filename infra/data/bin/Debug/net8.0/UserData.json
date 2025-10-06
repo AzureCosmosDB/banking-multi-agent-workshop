@@ -1,0 +1,86 @@
+[
+    {
+        "id": "Mark",
+        "tenantId": "Contoso",
+        "name": "Mark Brown",
+        "type": "BankUser",
+        "email": "markbrown@contoso.com",
+        "phoneNumber": "123-456-7890",
+        "attributes": {
+            "annualSalary": 85000,
+            "creditScore": 750,
+            "debtToIncomeRatio": 0.25,
+            "investmentPortfolioValue": 50000
+        }
+    },
+    {
+        "id": "Sandeep",
+        "tenantId": "Contoso",
+        "name": "Sandeep Nair",
+        "type": "BankUser",
+        "email": "sandeepnair@contoso.com",
+        "phoneNumber": "987-654-3210",
+        "attributes": {
+            "annualSalary": 95000,
+            "creditScore": 780,
+            "debtToIncomeRatio": 0.2,
+            "investmentPortfolioValue": 120000
+        }
+    },
+    {
+        "id": "Theo",
+        "tenantId": "Contoso",
+        "name": "Theo van Kraay",
+        "email": "theo@contoso.com",
+        "type": "BankUser",
+        "phoneNumber": "555-123-6789",
+        "attributes": {
+            "annualSalary": 65000,
+            "creditScore": 690,
+            "debtToIncomeRatio": 0.35,
+            "investmentPortfolioValue": 30000
+        }
+    },
+    {
+        "id": "Sajee",
+        "tenantId": "Fabrikan",
+        "name": "Sajeetharan Sinnathurai",
+        "email": "sajee@contoso.com",
+        "type": "BankUser",
+        "phoneNumber": "444-987-6543",
+        "attributes": {
+            "annualSalary": 120000,
+            "creditScore": 800,
+            "debtToIncomeRatio": 0.18,
+            "investmentPortfolioValue": 200000
+        }
+    },
+    {
+        "id": "Abhishek",
+        "tenantId": "Fabrikan",
+        "name": "Abhishek Gupta",
+        "email": "abhishek@fabrikan.com",
+        "type": "BankUser",
+        "phoneNumber": "222-888-7777",
+        "attributes": {
+            "annualSalary": 72000,
+            "creditScore": 710,
+            "debtToIncomeRatio": 0.28,
+            "investmentPortfolioValue": 40000
+        }
+    },
+    {
+        "id": "David",
+        "tenantId": "Fabrikan",
+        "name": "David Wilson",
+        "email": "davidw@contoso.com",
+        "type": "BankUser",
+        "phoneNumber": "666-777-8888",
+        "attributes": {
+            "annualSalary": 110000,
+            "creditScore": 770,
+            "debtToIncomeRatio": 0.22,
+            "investmentPortfolioValue": 150000
+        }
+    }
+]

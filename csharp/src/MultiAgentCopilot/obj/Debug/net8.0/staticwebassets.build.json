@@ -1,0 +1,12 @@
+{
+  "Version": 1,
+  "Hash": "xCzKCWkYy/zaKpWnAQwc5epw4EISU97d6ngRZvnDBlw=",
+  "Source": "MultiAgentCopilot",
+  "BasePath": "_content/MultiAgentCopilot",
+  "Mode": "Default",
+  "ManifestType": "Build",
+  "ReferencedProjectsConfiguration": [],
+  "DiscoveryPatterns": [],
+  "Assets": [],
+  "Endpoints": []
+}

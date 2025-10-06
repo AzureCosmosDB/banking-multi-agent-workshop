@@ -1,0 +1,51 @@
+/**
+ * @license
+ * Copyright Google LLC All Rights Reserved.
+ *
+ * Use of this source code is governed by an MIT-style license that can be
+ * found in the LICENSE file at https://angular.io/license
+ */
+import { FocusTrap } from './focus-trap';
+/**
+ * Class that allows for trapping focus within a DOM element.
+ *
+ * This class uses a strategy pattern that determines how it traps focus.
+ * See FocusTrapInertStrategy.
+ */
+export class ConfigurableFocusTrap extends FocusTrap {
+    /** Whether the FocusTrap is enabled. */
+    get enabled() {
+        return this._enabled;
+    }
+    set enabled(value) {
+        this._enabled = value;
+        if (this._enabled) {
+            this._focusTrapManager.register(this);
+        }
+        else {
+            this._focusTrapManager.deregister(this);
+        }
+    }
+    constructor(_element, _checker, _ngZone, _document, _focusTrapManager, _inertStrategy, config, injector) {
+        super(_element, _checker, _ngZone, _document, config.defer, injector);
+        this._focusTrapManager = _focusTrapManager;
+        this._inertStrategy = _inertStrategy;
+        this._focusTrapManager.register(this);
+    }
+    /** Notifies the FocusTrapManager that this FocusTrap will be destroyed. */
+    destroy() {
+        this._focusTrapManager.deregister(this);
+        super.destroy();
+    }
+    /** @docs-private Implemented as part of ManagedFocusTrap. */
+    _enable() {
+        this._inertStrategy.preventFocus(this);
+        this.toggleAnchors(true);
+    }
+    /** @docs-private Implemented as part of ManagedFocusTrap. */
+    _disable() {
+        this._inertStrategy.allowFocus(this);
+        this.toggleAnchors(false);
+    }
+}
+//# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoiY29uZmlndXJhYmxlLWZvY3VzLXRyYXAuanMiLCJzb3VyY2VSb290IjoiIiwic291cmNlcyI6WyIuLi8uLi8uLi8uLi8uLi8uLi8uLi9zcmMvY2RrL2ExMXkvZm9jdXMtdHJhcC9jb25maWd1cmFibGUtZm9jdXMtdHJhcC50cyJdLCJuYW1lcyI6W10sIm1hcHBpbmdzIjoiQUFBQTs7Ozs7O0dBTUc7QUFLSCxPQUFPLEVBQUMsU0FBUyxFQUFDLE1BQU0sY0FBYyxDQUFDO0FBSXZDOzs7OztHQUtHO0FBQ0gsTUFBTSxPQUFPLHFCQUFzQixTQUFRLFNBQVM7SUFDbEQsd0NBQXdDO0lBQ3hDLElBQWEsT0FBTztRQUNsQixPQUFPLElBQUksQ0FBQyxRQUFRLENBQUM7SUFDdkIsQ0FBQztJQUNELElBQWEsT0FBTyxDQUFDLEtBQWM7UUFDakMsSUFBSSxDQUFDLFFBQVEsR0FBRyxLQUFLLENBQUM7UUFDdEIsSUFBSSxJQUFJLENBQUMsUUFBUSxFQUFFLENBQUM7WUFDbEIsSUFBSSxDQUFDLGlCQUFpQixDQUFDLFFBQVEsQ0FBQyxJQUFJLENBQUMsQ0FBQztRQUN4QyxDQUFDO2FBQU0sQ0FBQztZQUNOLElBQUksQ0FBQyxpQkFBaUIsQ0FBQyxVQUFVLENBQUMsSUFBSSxDQUFDLENBQUM7UUFDMUMsQ0FBQztJQUNILENBQUM7SUFFRCxZQUNFLFFBQXFCLEVBQ3JCLFFBQThCLEVBQzlCLE9BQWUsRUFDZixTQUFtQixFQUNYLGlCQUFtQyxFQUNuQyxjQUFzQyxFQUM5QyxNQUFtQyxFQUNuQyxRQUFtQjtRQUVuQixLQUFLLENBQUMsUUFBUSxFQUFFLFFBQVEsRUFBRSxPQUFPLEVBQUUsU0FBUyxFQUFFLE1BQU0sQ0FBQyxLQUFLLEVBQUUsUUFBUSxDQUFDLENBQUM7UUFMOUQsc0JBQWlCLEdBQWpCLGlCQUFpQixDQUFrQjtRQUNuQyxtQkFBYyxHQUFkLGNBQWMsQ0FBd0I7UUFLOUMsSUFBSSxDQUFDLGlCQUFpQixDQUFDLFFBQVEsQ0FBQyxJQUFJLENBQUMsQ0FBQztJQUN4QyxDQUFDO0lBRUQsMkVBQTJFO0lBQ2xFLE9BQU87UUFDZCxJQUFJLENBQUMsaUJBQWlCLENBQUMsVUFBVSxDQUFDLElBQUksQ0FBQyxDQUFDO1FBQ3hDLEtBQUssQ0FBQyxPQUFPLEVBQUUsQ0FBQztJQUNsQixDQUFDO0lBRUQsNkRBQTZEO0lBQzdELE9BQU87UUFDTCxJQUFJLENBQUMsY0FBYyxDQUFDLFlBQVksQ0FBQyxJQUFJLENBQUMsQ0FBQztRQUN2QyxJQUFJLENBQUMsYUFBYSxDQUFDLElBQUksQ0FBQyxDQUFDO0lBQzNCLENBQUM7SUFFRCw2REFBNkQ7SUFDN0QsUUFBUTtRQUNOLElBQUksQ0FBQyxjQUFjLENBQUMsVUFBVSxDQUFDLElBQUksQ0FBQyxDQUFDO1FBQ3JDLElBQUksQ0FBQyxhQUFhLENBQUMsS0FBSyxDQUFDLENBQUM7SUFDNUIsQ0FBQztDQUNGIiwic291cmNlc0NvbnRlbnQiOlsiLyoqXG4gKiBAbGljZW5zZVxuICogQ29weXJpZ2h0IEdvb2dsZSBMTEMgQWxsIFJpZ2h0cyBSZXNlcnZlZC5cbiAqXG4gKiBVc2Ugb2YgdGhpcyBzb3VyY2UgY29kZSBpcyBnb3Zlcm5lZCBieSBhbiBNSVQtc3R5bGUgbGljZW5zZSB0aGF0IGNhbiBiZVxuICogZm91bmQgaW4gdGhlIExJQ0VOU0UgZmlsZSBhdCBodHRwczovL2FuZ3VsYXIuaW8vbGljZW5zZVxuICovXG5cbmltcG9ydCB7SW5qZWN0b3IsIE5nWm9uZX0gZnJvbSAnQGFuZ3VsYXIvY29yZSc7XG5pbXBvcnQge0ludGVyYWN0aXZpdHlDaGVja2VyfSBmcm9tICcuLi9pbnRlcmFjdGl2aXR5LWNoZWNrZXIvaW50ZXJhY3Rpdml0eS1jaGVja2VyJztcbmltcG9ydCB7Q29uZmlndXJhYmxlRm9jdXNUcmFwQ29uZmlnfSBmcm9tICcuL2NvbmZpZ3VyYWJsZS1mb2N1cy10cmFwLWNvbmZpZyc7XG5pbXBvcnQge0ZvY3VzVHJhcH0gZnJvbSAnLi9mb2N1cy10cmFwJztcbmltcG9ydCB7Rm9jdXNUcmFwSW5lcnRTdHJhdGVneX0gZnJvbSAnLi9mb2N1cy10cmFwLWluZXJ0LXN0cmF0ZWd5JztcbmltcG9ydCB7Rm9jdXNUcmFwTWFuYWdlciwgTWFuYWdlZEZvY3VzVHJhcH0gZnJvbSAnLi9mb2N1cy10cmFwLW1hbmFnZXInO1xuXG4vKipcbiAqIENsYXNzIHRoYXQgYWxsb3dzIGZvciB0cmFwcGluZyBmb2N1cyB3aXRoaW4gYSBET00gZWxlbWVudC5cbiAqXG4gKiBUaGlzIGNsYXNzIHVzZXMgYSBzdHJhdGVneSBwYXR0ZXJuIHRoYXQgZGV0ZXJtaW5lcyBob3cgaXQgdHJhcHMgZm9jdXMuXG4gKiBTZWUgRm9jdXNUcmFwSW5lcnRTdHJhdGVneS5cbiAqL1xuZXhwb3J0IGNsYXNzIENvbmZpZ3VyYWJsZUZvY3VzVHJhcCBleHRlbmRzIEZvY3VzVHJhcCBpbXBsZW1lbnRzIE1hbmFnZWRGb2N1c1RyYXAge1xuICAvKiogV2hldGhlciB0aGUgRm9jdXNUcmFwIGlzIGVuYWJsZWQuICovXG4gIG92ZXJyaWRlIGdldCBlbmFibGVkKCk6IGJvb2xlYW4ge1xuICAgIHJldHVybiB0aGlzLl9lbmFibGVkO1xuICB9XG4gIG92ZXJyaWRlIHNldCBlbmFibGVkKHZhbHVlOiBib29sZWFuKSB7XG4gICAgdGhpcy5fZW5hYmxlZCA9IHZhbHVlO1xuICAgIGlmICh0aGlzLl9lbmFibGVkKSB7XG4gICAgICB0aGlzLl9mb2N1c1RyYXBNYW5hZ2VyLnJlZ2lzdGVyKHRoaXMpO1xuICAgIH0gZWxzZSB7XG4gICAgICB0aGlzLl9mb2N1c1RyYXBNYW5hZ2VyLmRlcmVnaXN0ZXIodGhpcyk7XG4gICAgfVxuICB9XG5cbiAgY29uc3RydWN0b3IoXG4gICAgX2VsZW1lbnQ6IEhUTUxFbGVtZW50LFxuICAgIF9jaGVja2VyOiBJbnRlcmFjdGl2aXR5Q2hlY2tlcixcbiAgICBfbmdab25lOiBOZ1pvbmUsXG4gICAgX2RvY3VtZW50OiBEb2N1bWVudCxcbiAgICBwcml2YXRlIF9mb2N1c1RyYXBNYW5hZ2VyOiBGb2N1c1RyYXBNYW5hZ2VyLFxuICAgIHByaXZhdGUgX2luZXJ0U3RyYXRlZ3k6IEZvY3VzVHJhcEluZXJ0U3RyYXRlZ3ksXG4gICAgY29uZmlnOiBDb25maWd1cmFibGVGb2N1c1RyYXBDb25maWcsXG4gICAgaW5qZWN0b3I/OiBJbmplY3RvcixcbiAgKSB7XG4gICAgc3VwZXIoX2VsZW1lbnQsIF9jaGVja2VyLCBfbmdab25lLCBfZG9jdW1lbnQsIGNvbmZpZy5kZWZlciwgaW5qZWN0b3IpO1xuICAgIHRoaXMuX2ZvY3VzVHJhcE1hbmFnZXIucmVnaXN0ZXIodGhpcyk7XG4gIH1cblxuICAvKiogTm90aWZpZXMgdGhlIEZvY3VzVHJhcE1hbmFnZXIgdGhhdCB0aGlzIEZvY3VzVHJhcCB3aWxsIGJlIGRlc3Ryb3llZC4gKi9cbiAgb3ZlcnJpZGUgZGVzdHJveSgpIHtcbiAgICB0aGlzLl9mb2N1c1RyYXBNYW5hZ2VyLmRlcmVnaXN0ZXIodGhpcyk7XG4gICAgc3VwZXIuZGVzdHJveSgpO1xuICB9XG5cbiAgLyoqIEBkb2NzLXByaXZhdGUgSW1wbGVtZW50ZWQgYXMgcGFydCBvZiBNYW5hZ2VkRm9jdXNUcmFwLiAqL1xuICBfZW5hYmxlKCkge1xuICAgIHRoaXMuX2luZXJ0U3RyYXRlZ3kucHJldmVudEZvY3VzKHRoaXMpO1xuICAgIHRoaXMudG9nZ2xlQW5jaG9ycyh0cnVlKTtcbiAgfVxuXG4gIC8qKiBAZG9jcy1wcml2YXRlIEltcGxlbWVudGVkIGFzIHBhcnQgb2YgTWFuYWdlZEZvY3VzVHJhcC4gKi9cbiAgX2Rpc2FibGUoKSB7XG4gICAgdGhpcy5faW5lcnRTdHJhdGVneS5hbGxvd0ZvY3VzKHRoaXMpO1xuICAgIHRoaXMudG9nZ2xlQW5jaG9ycyhmYWxzZSk7XG4gIH1cbn1cbiJdfQ==

@@ -1,0 +1,23 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema",
+  "$id": "SchematicsAngularAppShell",
+  "title": "Angular AppShell Options Schema",
+  "type": "object",
+  "description": "Configures your project to generate an app-shell during build time.",
+  "additionalProperties": false,
+  "properties": {
+    "project": {
+      "type": "string",
+      "description": "The name of the project where the app-shell should be generated.",
+      "$default": {
+        "$source": "projectName"
+      }
+    },
+    "serverRouting": {
+      "description": "Set up a server application using the Server Routing and App Engine APIs (Developer Preview).",
+      "type": "boolean",
+      "default": false
+    }
+  },
+  "required": ["project"]
+}

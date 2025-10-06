@@ -1,0 +1,44 @@
+/**
+ * @license
+ * Copyright Google LLC All Rights Reserved.
+ *
+ * Use of this source code is governed by an MIT-style license that can be
+ * found in the LICENSE file at https://angular.io/license
+ */
+import { ContentContainerComponentHarness, HarnessPredicate, parallel } from '@angular/cdk/testing';
+/** Selectors for different sections of the mat-toolbar that contain user content. */
+export var MatToolbarSection;
+(function (MatToolbarSection) {
+    MatToolbarSection["ROW"] = ".mat-toolbar-row";
+})(MatToolbarSection || (MatToolbarSection = {}));
+/** Harness for interacting with a standard mat-toolbar in tests. */
+export class MatToolbarHarness extends ContentContainerComponentHarness {
+    constructor() {
+        super(...arguments);
+        this._getRows = this.locatorForAll(MatToolbarSection.ROW);
+    }
+    static { this.hostSelector = '.mat-toolbar'; }
+    /**
+     * Gets a `HarnessPredicate` that can be used to search for a `MatToolbarHarness` that meets
+     * certain criteria.
+     * @param options Options for filtering which card instances are considered a match.
+     * @return a `HarnessPredicate` configured with the given options.
+     */
+    static with(options = {}) {
+        return new HarnessPredicate(MatToolbarHarness, options).addOption('text', options.text, (harness, text) => HarnessPredicate.stringMatches(harness._getText(), text));
+    }
+    /** Whether the toolbar has multiple rows. */
+    async hasMultipleRows() {
+        return (await this.host()).hasClass('mat-toolbar-multiple-rows');
+    }
+    /** Gets all of the toolbar's content as text. */
+    async _getText() {
+        return (await this.host()).text();
+    }
+    /** Gets the text of each row in the toolbar. */
+    async getRowsAsText() {
+        const rows = await this._getRows();
+        return parallel(() => (rows.length ? rows.map(r => r.text()) : [this._getText()]));
+    }
+}
+//# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoidG9vbGJhci1oYXJuZXNzLmpzIiwic291cmNlUm9vdCI6IiIsInNvdXJjZXMiOlsiLi4vLi4vLi4vLi4vLi4vLi4vLi4vc3JjL21hdGVyaWFsL3Rvb2xiYXIvdGVzdGluZy90b29sYmFyLWhhcm5lc3MudHMiXSwibmFtZXMiOltdLCJtYXBwaW5ncyI6IkFBQUE7Ozs7OztHQU1HO0FBRUgsT0FBTyxFQUFDLGdDQUFnQyxFQUFFLGdCQUFnQixFQUFFLFFBQVEsRUFBQyxNQUFNLHNCQUFzQixDQUFDO0FBR2xHLHFGQUFxRjtBQUNyRixNQUFNLENBQU4sSUFBWSxpQkFFWDtBQUZELFdBQVksaUJBQWlCO0lBQzNCLDZDQUF3QixDQUFBO0FBQzFCLENBQUMsRUFGVyxpQkFBaUIsS0FBakIsaUJBQWlCLFFBRTVCO0FBRUQsb0VBQW9FO0FBQ3BFLE1BQU0sT0FBTyxpQkFBa0IsU0FBUSxnQ0FBbUQ7SUFBMUY7O1FBR1UsYUFBUSxHQUFHLElBQUksQ0FBQyxhQUFhLENBQUMsaUJBQWlCLENBQUMsR0FBRyxDQUFDLENBQUM7SUErQi9ELENBQUM7YUFqQ1EsaUJBQVksR0FBRyxjQUFjLEFBQWpCLENBQWtCO0lBSXJDOzs7OztPQUtHO0lBQ0gsTUFBTSxDQUFDLElBQUksQ0FBQyxVQUFpQyxFQUFFO1FBQzdDLE9BQU8sSUFBSSxnQkFBZ0IsQ0FBQyxpQkFBaUIsRUFBRSxPQUFPLENBQUMsQ0FBQyxTQUFTLENBQy9ELE1BQU0sRUFDTixPQUFPLENBQUMsSUFBSSxFQUNaLENBQUMsT0FBTyxFQUFFLElBQUksRUFBRSxFQUFFLENBQUMsZ0JBQWdCLENBQUMsYUFBYSxDQUFDLE9BQU8sQ0FBQyxRQUFRLEVBQUUsRUFBRSxJQUFJLENBQUMsQ0FDNUUsQ0FBQztJQUNKLENBQUM7SUFFRCw2Q0FBNkM7SUFDN0MsS0FBSyxDQUFDLGVBQWU7UUFDbkIsT0FBTyxDQUFDLE1BQU0sSUFBSSxDQUFDLElBQUksRUFBRSxDQUFDLENBQUMsUUFBUSxDQUFDLDJCQUEyQixDQUFDLENBQUM7SUFDbkUsQ0FBQztJQUVELGlEQUFpRDtJQUN6QyxLQUFLLENBQUMsUUFBUTtRQUNwQixPQUFPLENBQUMsTUFBTSxJQUFJLENBQUMsSUFBSSxFQUFFLENBQUMsQ0FBQyxJQUFJLEVBQUUsQ0FBQztJQUNwQyxDQUFDO0lBRUQsZ0RBQWdEO0lBQ2hELEtBQUssQ0FBQyxhQUFhO1FBQ2pCLE1BQU0sSUFBSSxHQUFHLE1BQU0sSUFBSSxDQUFDLFFBQVEsRUFBRSxDQUFDO1FBQ25DLE9BQU8sUUFBUSxDQUFDLEdBQUcsRUFBRSxDQUFDLENBQUMsSUFBSSxDQUFDLE1BQU0sQ0FBQyxDQUFDLENBQUMsSUFBSSxDQUFDLEdBQUcsQ0FBQyxDQUFDLENBQUMsRUFBRSxDQUFDLENBQUMsQ0FBQyxJQUFJLEVBQUUsQ0FBQyxDQUFDLENBQUMsQ0FBQyxDQUFDLElBQUksQ0FBQyxRQUFRLEVBQUUsQ0FBQyxDQUFDLENBQUMsQ0FBQztJQUNyRixDQUFDIiwic291cmNlc0NvbnRlbnQiOlsiLyoqXG4gKiBAbGljZW5zZVxuICogQ29weXJpZ2h0IEdvb2dsZSBMTEMgQWxsIFJpZ2h0cyBSZXNlcnZlZC5cbiAqXG4gKiBVc2Ugb2YgdGhpcyBzb3VyY2UgY29kZSBpcyBnb3Zlcm5lZCBieSBhbiBNSVQtc3R5bGUgbGljZW5zZSB0aGF0IGNhbiBiZVxuICogZm91bmQgaW4gdGhlIExJQ0VOU0UgZmlsZSBhdCBodHRwczovL2FuZ3VsYXIuaW8vbGljZW5zZVxuICovXG5cbmltcG9ydCB7Q29udGVudENvbnRhaW5lckNvbXBvbmVudEhhcm5lc3MsIEhhcm5lc3NQcmVkaWNhdGUsIHBhcmFsbGVsfSBmcm9tICdAYW5ndWxhci9jZGsvdGVzdGluZyc7XG5pbXBvcnQge1Rvb2xiYXJIYXJuZXNzRmlsdGVyc30gZnJvbSAnLi90b29sYmFyLWhhcm5lc3MtZmlsdGVycyc7XG5cbi8qKiBTZWxlY3RvcnMgZm9yIGRpZmZlcmVudCBzZWN0aW9ucyBvZiB0aGUgbWF0LXRvb2xiYXIgdGhhdCBjb250YWluIHVzZXIgY29udGVudC4gKi9cbmV4cG9ydCBlbnVtIE1hdFRvb2xiYXJTZWN0aW9uIHtcbiAgUk9XID0gJy5tYXQtdG9vbGJhci1yb3cnLFxufVxuXG4vKiogSGFybmVzcyBmb3IgaW50ZXJhY3Rpbmcgd2l0aCBhIHN0YW5kYXJkIG1hdC10b29sYmFyIGluIHRlc3RzLiAqL1xuZXhwb3J0IGNsYXNzIE1hdFRvb2xiYXJIYXJuZXNzIGV4dGVuZHMgQ29udGVudENvbnRhaW5lckNvbXBvbmVudEhhcm5lc3M8TWF0VG9vbGJhclNlY3Rpb24+IHtcbiAgc3RhdGljIGhvc3RTZWxlY3RvciA9ICcubWF0LXRvb2xiYXInO1xuXG4gIHByaXZhdGUgX2dldFJvd3MgPSB0aGlzLmxvY2F0b3JGb3JBbGwoTWF0VG9vbGJhclNlY3Rpb24uUk9XKTtcblxuICAvKipcbiAgICogR2V0cyBhIGBIYXJuZXNzUHJlZGljYXRlYCB0aGF0IGNhbiBiZSB1c2VkIHRvIHNlYXJjaCBmb3IgYSBgTWF0VG9vbGJhckhhcm5lc3NgIHRoYXQgbWVldHNcbiAgICogY2VydGFpbiBjcml0ZXJpYS5cbiAgICogQHBhcmFtIG9wdGlvbnMgT3B0aW9ucyBmb3IgZmlsdGVyaW5nIHdoaWNoIGNhcmQgaW5zdGFuY2VzIGFyZSBjb25zaWRlcmVkIGEgbWF0Y2guXG4gICAqIEByZXR1cm4gYSBgSGFybmVzc1ByZWRpY2F0ZWAgY29uZmlndXJlZCB3aXRoIHRoZSBnaXZlbiBvcHRpb25zLlxuICAgKi9cbiAgc3RhdGljIHdpdGgob3B0aW9uczogVG9vbGJhckhhcm5lc3NGaWx0ZXJzID0ge30pOiBIYXJuZXNzUHJlZGljYXRlPE1hdFRvb2xiYXJIYXJuZXNzPiB7XG4gICAgcmV0dXJuIG5ldyBIYXJuZXNzUHJlZGljYXRlKE1hdFRvb2xiYXJIYXJuZXNzLCBvcHRpb25zKS5hZGRPcHRpb24oXG4gICAgICAndGV4dCcsXG4gICAgICBvcHRpb25zLnRleHQsXG4gICAgICAoaGFybmVzcywgdGV4dCkgPT4gSGFybmVzc1ByZWRpY2F0ZS5zdHJpbmdNYXRjaGVzKGhhcm5lc3MuX2dldFRleHQoKSwgdGV4dCksXG4gICAgKTtcbiAgfVxuXG4gIC8qKiBXaGV0aGVyIHRoZSB0b29sYmFyIGhhcyBtdWx0aXBsZSByb3dzLiAqL1xuICBhc3luYyBoYXNNdWx0aXBsZVJvd3MoKTogUHJvbWlzZTxib29sZWFuPiB7XG4gICAgcmV0dXJuIChhd2FpdCB0aGlzLmhvc3QoKSkuaGFzQ2xhc3MoJ21hdC10b29sYmFyLW11bHRpcGxlLXJvd3MnKTtcbiAgfVxuXG4gIC8qKiBHZXRzIGFsbCBvZiB0aGUgdG9vbGJhcidzIGNvbnRlbnQgYXMgdGV4dC4gKi9cbiAgcHJpdmF0ZSBhc3luYyBfZ2V0VGV4dCgpOiBQcm9taXNlPHN0cmluZz4ge1xuICAgIHJldHVybiAoYXdhaXQgdGhpcy5ob3N0KCkpLnRleHQoKTtcbiAgfVxuXG4gIC8qKiBHZXRzIHRoZSB0ZXh0IG9mIGVhY2ggcm93IGluIHRoZSB0b29sYmFyLiAqL1xuICBhc3luYyBnZXRSb3dzQXNUZXh0KCk6IFByb21pc2U8c3RyaW5nW10+IHtcbiAgICBjb25zdCByb3dzID0gYXdhaXQgdGhpcy5fZ2V0Um93cygpO1xuICAgIHJldHVybiBwYXJhbGxlbCgoKSA9PiAocm93cy5sZW5ndGggPyByb3dzLm1hcChyID0+IHIudGV4dCgpKSA6IFt0aGlzLl9nZXRUZXh0KCldKSk7XG4gIH1cbn1cbiJdfQ==

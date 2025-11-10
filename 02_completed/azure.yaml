@@ -40,7 +40,10 @@ hooks:
       shell: pwsh
       continueOnError: false
       interactive: true
-      run: dotnet run --project ./infra/data/loaddata.csproj -- $COSMOSDB_ENDPOINT 
+      run: |
+        # Load data into Cosmos DB
+        Write-Host "Loading data into Cosmos DB..." -ForegroundColor Cyan
+        dotnet run --project ./infra/data/loaddata.csproj -- $env:COSMOSDB_ENDPOINT 
     postprovision:
       posix:
         shell: sh

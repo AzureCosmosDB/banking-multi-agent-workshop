@@ -11,8 +11,12 @@
     "principalId": {
       "value": "${AZURE_PRINCIPAL_ID}"
     },
+    "servicePrincipalId": {
+      "value": "${AZURE_SERVICE_PRINCIPAL_ID=}"
+    },
     "owner": {
       "value": "${OWNER_EMAIL}"
     }
   }
 }
+

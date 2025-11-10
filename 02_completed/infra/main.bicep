@@ -12,6 +12,9 @@ param location string
 @description('Id of the user or app to assign application roles')
 param principalId string
 
+@description('Id of the service principal to assign application roles (optional - if not provided, SP roles will be skipped)')
+param servicePrincipalId string = ''
+
 @description('Owner tag for resource tagging')
 param owner string = 'defaultuser@example.com'
 
@@ -114,6 +117,7 @@ module AssignRoles './shared/assignroles.bicep' = {
     openAIName: openAi.outputs.name
     identityName: managedIdentity.outputs.name
 	  userPrincipalId: !empty(principalId) ? principalId : null
+    servicePrincipalId: !empty(servicePrincipalId) ? servicePrincipalId : ''
   }
   scope: rg
 }

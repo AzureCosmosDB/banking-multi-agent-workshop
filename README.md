@@ -26,8 +26,7 @@ Here’s the deployment architecture and components of the workshop!
 
 ## User Experience
 
-https://github.com/user-attachments/assets/0e943130-13c5-4bb5-a40b-51b6c85dd58c
-
+<img src="01_exercises/media/hol_v2_afandlanggraph.gif" height=600 width=600 alt="Multi-Agent GIF">
 
 # Branch Overview
 

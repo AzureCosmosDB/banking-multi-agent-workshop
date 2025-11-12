@@ -58,7 +58,7 @@ This model defines the structure for termination decision responses. It includes
 
 Let's create an Agent to decide the next agent in the conversation, using the ContinuationInfo model as the response format.
 
-1. In VS Code, Navigate to the **/Helper** folder.
+1. In VS Code, Within **MultiAgentCopilot** folder, navigate to the **/Helper** folder.
 1. Navigate to **GroupChatWorkflowHelper.cs**.
 1. Replace the **SelectNextAgentAsync()** method with the below code.
 
@@ -110,7 +110,7 @@ This method implements the agent selection logic using a moderator agent. It ana
 ```
 ### Termination Decider
 
-1. Replace the **ShouldTerminateWithAI()** method with the below code.
+1. Staying within **GroupChatWorkflowHelper.cs**, replace the **ShouldTerminateWithAI()** method with the below code.
 
 ```csharp
  private async Task<bool> ShouldTerminateWithAI(IReadOnlyList<ChatMessage> history, CancellationToken cancellationToken)
@@ -171,7 +171,7 @@ This method implements the agent selection logic using a moderator agent. It ana
 
 Until now the responses we received were from a single agent, lets use AgentGroupChat to orchestrate a chat where multiple agents participate.
 
-1. In VS Code, navigate to **Services/AgentFrameworkService.cs**
+1. In VS Code, navigate to **MultiAgentCopilot/Services/AgentFrameworkService.cs**
 1. Search for **//TO DO: Add RunGroupChatOrchestration** and paste the code below
 ```csharp
     /// <summary>
@@ -244,7 +244,7 @@ Until now the responses we received were from a single agent, lets use AgentGrou
 
 ```
 
-1. Next replace the **GetResponse()** method with the code below.
+1. Staying within **MultiAgentCopilot/Services/AgentFrameworkService.cs**, next replace the **GetResponse()** method with the code below.
 
 
 ```csharp

@@ -335,7 +335,7 @@ Now that we can build Agents, we can make the agent build process dynamic based 
 
 1. In VS Code, navigate to the **/Services** folder
 1. Open the **AgentFrameworkService.cs** class.
-1. Update the **GetResponse()** method with the code below .
+1. Replace the **GetResponse()** method with the below version.
 
 ```csharp
 
@@ -368,7 +368,7 @@ Now that we can build Agents, we can make the agent build process dynamic based 
 
 ## Activity 6: Semantic Search
 
-The Sales Agent in this banking application performs a vector search in Cosmos DB to search for banking products and services for users. In this activity, you will learn how to configure vector indexing and search in Azure Cosmos DB and explore the container and vector indexing policies. Then learn how to implement vector search using for Semantic Kernel.
+The Sales Agent in this banking application performs a vector search in Cosmos DB to search for banking products and services for users. In this activity, you will learn how to configure vector indexing and search in Azure Cosmos DB and explore the container and vector indexing policies. Then learn how to implement vector search using Semantic Kernel.
 
 ### Create Data Model for Vector Search
 

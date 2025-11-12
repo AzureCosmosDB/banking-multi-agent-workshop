@@ -185,7 +185,7 @@ public async Task<IList<McpClientTool>> GetMcpTools(AgentType agent)
 
 ### Update Agent Factory to Use MCP Tools
 
-1. In VS Code, navigate to the **/Factories** folder
+1. In VS Code, navigate to the **MultiAgentCopilot/Factories** folder
 1. Navigate to **AgentFactory.cs**
 1. Search for **//TO DO: Add Agent Creation with MCP Tools** and paste the code below
 
@@ -223,7 +223,7 @@ public static async Task<List<AIAgent>> CreateAllAgentsWithMCPToolsAsync(IChatCl
 
 ## Integrate MCP Tools with Agent Framework
 
-1. Navigate to **AgentFrameworkService.cs**
+1. Navigate to **MultiAgentFramework/Services/AgentFrameworkService.cs**
 1. Search for **//TO DO: Add MCP Service Option** and paste the code below **within** the method. Do **not** replace the entire method.
 
 This code integrates MCP tool service as an option for agent creation. It provides a fallback mechanism when MCP tools are preferred over in-process tools.
@@ -259,7 +259,7 @@ This method enables setting the MCP tool service for agent framework integration
 
 ## Set MCP Tools in Chat Service
 
-1. Navigate to **ChatService.cs**
+1. Navigate to **MultiAgentCopilot/Services/ChatService.cs**
 1. Search for **//TO DO: Invoke SetMCPToolService** and paste the code below **within** the method. Do **not** replace the entire method.
 
 ```csharp

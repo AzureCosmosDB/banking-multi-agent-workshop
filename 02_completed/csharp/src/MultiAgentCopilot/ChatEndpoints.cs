@@ -69,7 +69,7 @@ namespace MultiAgentCopilot
                 .WithName("GetAccountTransactions");
 
             app.MapGet("/tenant/{tenantId}/servicerequests",
-                    async (string tenantId, string userId) =>
+                    async (string tenantId) =>
                     await _cosmosDBService.GetServiceRequestsAsync(tenantId))
                 .WithName("GetServiceRequests");
 

@@ -122,6 +122,40 @@ module AssignRoles './shared/assignroles.bicep' = {
   scope: rg
 }
 
+// Deploy Azure Container Registry
+module containerRegistry './shared/containerregistry.bicep' = {
+  name: 'container-registry'
+  params: {
+    acrName: '${abbrs.containerRegistryRegistries}${resourceToken}'
+    location: location
+    tags: tags
+  }
+  scope: rg
+}
+
+// Deploy MultiAgentCopilot Container App
+module multiAgentCopilotContainerApp './shared/multiagentcopilot-containerapp.bicep' = {
+  name: 'multiagentcopilot-containerapp'
+  params: {
+    location: location
+    tags: tags
+    containerAppsEnvironmentName: '${abbrs.appManagedEnvironments}${environmentName}'
+    containerAppName: '${abbrs.appContainerApps}${environmentName}-multiagentcopilot'
+    logAnalyticsWorkspaceName: '${abbrs.operationalInsightsWorkspaces}${environmentName}'
+    containerRegistryLoginServer: containerRegistry.outputs.loginServer
+    containerRegistryName: containerRegistry.outputs.name
+    containerImage: '' // Empty for now - will be set after building and pushing the image
+    userAssignedIdentityName: managedIdentity.outputs.name
+    userAssignedIdentityPrincipalId: managedIdentity.outputs.principalId
+    cosmosDbEndpoint: cosmos.outputs.endpoint
+    openAiEndpoint: openAi.outputs.endpoint
+    openAiCompletionsDeployment: openAiModelDeployments[0].outputs.name
+    openAiEmbeddingsDeployment: openAiModelDeployments[1].outputs.name
+    userAssignedIdentityClientId: AssignRoles.outputs.identityId
+  }
+  scope: rg
+  dependsOn: [containerRegistry]
+}
 
 // Outputs
 output RG_NAME string = 'rg-${environmentName}'
@@ -129,3 +163,7 @@ output COSMOSDB_ENDPOINT string = cosmos.outputs.endpoint
 output AZURE_OPENAI_ENDPOINT string = openAi.outputs.endpoint
 output AZURE_OPENAI_COMPLETIONSDEPLOYMENTID string = openAiModelDeployments[0].outputs.name
 output AZURE_OPENAI_EMBEDDINGDEPLOYMENTID string = openAiModelDeployments[1].outputs.name
+output MULTIAGENTCOPILOT_CONTAINERAPP_NAME string = multiAgentCopilotContainerApp.outputs.containerAppNameOutput
+output MULTIAGENTCOPILOT_CONTAINERAPP_URL string = 'https://${multiAgentCopilotContainerApp.outputs.containerAppFqdn}'
+output CONTAINER_REGISTRY_LOGIN_SERVER string = containerRegistry.outputs.loginServer
+output CONTAINER_REGISTRY_NAME string = containerRegistry.outputs.name

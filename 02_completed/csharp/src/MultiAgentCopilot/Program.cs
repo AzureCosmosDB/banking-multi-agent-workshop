@@ -68,12 +68,19 @@ namespace MultiAgentCopilot
 
             app.UseAuthorization();
 
+            // Serve static files (Angular frontend)
+            app.UseDefaultFiles();
+            app.UseStaticFiles();
+
             // Map the chat REST endpoints:
             using (var scope = app.Services.CreateScope())
             {
                 var service = scope.ServiceProvider.GetService<ChatEndpoints>();
                 service?.Map(app);
             }
+
+            // Fallback to index.html for Angular routing (must be last)
+            app.MapFallbackToFile("index.html");
 
             app.Run();
 

@@ -25,23 +25,19 @@ hooks:
         interactive: false
         continueOnError: false
         run: |
-          # Check if OWNER_EMAIL is already set in azd environment
+          # Set OWNER_EMAIL from current Azure user
           try {
-            $existingOwner = azd env get-value OWNER_EMAIL 2>$null
-          } catch {
-            $existingOwner = ""
-          }
-          if ([string]::IsNullOrEmpty($existingOwner)) {
-            try {
-              $currentUser = az account show --query user.name -o tsv
-              Write-Host "Auto-setting OWNER_EMAIL to: $currentUser"
-              azd env set OWNER_EMAIL "$currentUser"
-            } catch {
+            $currentUser = az account show --query user.name -o tsv
+            if ($currentUser -and $currentUser.Trim() -ne "") {
+              Write-Host "Setting OWNER_EMAIL to: $($currentUser.Trim())"
+              azd env set OWNER_EMAIL $currentUser.Trim()
+            } else {
               Write-Host "Could not get current user, setting default"
               azd env set OWNER_EMAIL "user@example.com"
             }
-          } else {
-            Write-Host "OWNER_EMAIL already set to: $existingOwner"
+          } catch {
+            Write-Host "Could not get current user, setting default"
+            azd env set OWNER_EMAIL "user@example.com"
           }
     postdeploy:
       shell: pwsh

@@ -25,7 +25,7 @@ The application code and configuration it contains, has been built to showcase M
 Each implementation is available as a separate branch. Select the one that best fits your needs:
 
 #### Current Versions
-- **`HOL_v2_AFandLangGraph`** - Short hands-on lab using Azure Functions and LangGraph
+- **`HOL_v2_AFandLangGraph`** - Short hands-on lab using Microsoft Agent Framework and LangGraph
 - **`WorkShop_v2_PythonLangGraph`** - Comprehensive Python workshop with LangGraph
 
 #### Legacy Versions

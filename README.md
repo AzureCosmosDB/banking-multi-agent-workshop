@@ -1,66 +1,69 @@
-# Multi Agent Workshop
+# 🏦 Banking Multi-Agent Workshop
 
-Welcome to our multi-agent sample and workshop for a retail banking scenario. Implemented in both C# using Semantic Kernel Agents and Python using LangGraph.
+Welcome! 👋 We're excited to have you here. This repository contains a comprehensive multi-agent banking application that demonstrates how AI agents can collaborate to handle complex retail banking scenarios.
 
-## Build a Multi-Agent AI application using Semantic Kernel Agents or LangGraph
+## 🌟 What You'll Learn
 
-This sample application and workshop shows how to build a multi-tenant, multi-agent, banking application with containerized applications built using two multi-agent frameworks
+Build intelligent, collaborative AI agents that work together to solve real-world banking challenges. Choose your preferred programming language (C# or Python) and session length to match your schedule and learning goals.
 
-- Semantic Kernel Agents in C#
-- LangGraph in Python
+## 📚 Workshop Formats
 
-Both are hosted on Azure Container Apps, with Azure Cosmos DB for NoSQL as the transactional database and vector store with Azure OpenAI Service for embeddings and completions. This complete sample and workshop provides practical guidance on many concepts you will need to design and build these types of applications.
+We offer two flexible learning paths:
 
-## Architecture Diagram
+| Format | Duration | Best For |
+|--------|----------|----------|
+| **Hands-On Lab (HOL)** | 2 hours | Quick introduction, time-constrained sessions |
+| **Workshop** | 8 hours | Deep dive, comprehensive understanding |
 
-Here’s the deployment architecture and components of the workshop!
+The application code and configuration it contains, has been built to showcase Microsoft Azure specific services and tools. We strongly advise our customers not to make this code part of their production environments without implementing or enabling additional security features.
 
-<img src="media/multi-agent.png" alt="Multi-Agent Image">
 
-## User Experience
+## 🚀 Getting Started
 
-https://github.com/user-attachments/assets/0e943130-13c5-4bb5-a40b-51b6c85dd58c
+### Choose Your Path
 
-## Complete the Workshop Exercises
+Each implementation is available as a separate branch. Select the one that best fits your needs:
 
-There are two completely separate implementations for this sample multi-agent application with different instructions on how to deploy and configure for use.
+#### Current Versions
+- **`HOL_v2_AFandLangGraph`** - Short hands-on lab using Azure Functions and LangGraph
+- **`WorkShop_v2_PythonLangGraph`** - Comprehensive Python workshop with LangGraph
 
-The workshop for this sample is on the [HOL branch](https://github.com/AzureCosmosDB/banking-multi-agent-workshop/blob/hol) in this repository. To navigate and complete this workshop select one of the following:
+#### Legacy Versions
+- **`HOL_v1_SKandLangGraph`** - Earlier HOL version with Semantic Kernel
+- **`WorkShop_v1_SKandLangGraph`** - Earlier workshop version with Semantic Kernel
 
-- Navigate to the [LangGraph Python Workshop](https://github.com/AzureCosmosDB/banking-multi-agent-workshop/blob/hol/python/workshop/Module-0.md)
-- Navigate to the [Semantic Kernel Csharp Workshop](https://github.com/AzureCosmosDB/banking-multi-agent-workshop/blob/hol/csharp/workshop/Module-0.md)
-## Important Security Notice
+### Repository Structure
 
-This template, the application code and configuration it contains, has been built to showcase Microsoft Azure specific services and tools. We strongly advise our customers not to make this code part of their production environments without implementing or enabling additional security features.
+Each branch contains two main folders:
 
-## Guidance
+```
+📁 01_exercises/
+   ├── Starter code to build upon
+   └── Step-by-step instructions to guide you
 
-### Region Availability
+📁 02_completed/
+   └── Fully working solution for demos and reference
+```
 
-This template uses gpt-4o and text-embedding-3-large models which may not be available in all Azure regions. Check for [up-to-date region availability](https://learn.microsoft.com/azure/ai-services/openai/concepts/models#standard-deployment-model-availability) and select a region during deployment accordingly.
+### Next Steps
 
-### Costs
+1. **Select your branch** - Choose from the options above based on your format preference and desired technology stack
+2. **Navigate to `01_exercises`** - Start building with guided instructions
+3. **Reference `02_completed`** - Check the complete implementation whenever needed
 
-You can estimate the cost of this project's architecture with [Azure's pricing calculator](https://azure.microsoft.com/pricing/calculator/)
+## 💡 What's Inside
 
-As an example in US dollars, here's how the sample is currently built:
+This workshop demonstrates a multi-agent architecture where specialized AI agents collaborate to:
+- Process customer requests
+- Retrieve account information
+- Execute banking transactions
+- Provide personalized recommendations
 
-Average Monthly Cost:
+## 🤝 Contributing
 
-- Azure Cosmos DB Serverless ($0.25 USD per 1M RU/s): $0.25
-- Azure Container Apps (1 CPU, 2 Gi memory): $8.00
-- Azure Container Registry(Standard): $5:50
-- Azure App Service (B3 Plan): $1.20
-- Azure OpenAI (GPT-4o 1M input/output tokens): $20 (Sample uses 10K tokens)
-- Azure OpenAI (text-3-embedding-large): < $0.01 (Sample uses 5K tokens)
-- Log Analytics (Pay as you go): < $0.12
+We welcome contributions! If you find issues or have suggestions for improvements, please feel free to open an issue or submit a pull request.
 
-## Resources
 
-To learn more about the services and features demonstrated in this sample, see the following:
 
-- [Azure Cosmos DB for NoSQL Vector Search announcement](https://aka.ms/CosmosDBDiskANNBlog/)
-- [Azure OpenAI Service documentation](https://learn.microsoft.com/azure/cognitive-services/openai/)
-- [Semantic Kernel](https://learn.microsoft.com/semantic-kernel/overview)
-- [Azure App Service documentation](https://learn.microsoft.com/azure/app-service/)
-- [ASP.NET Core Blazor documentation](https://dotnet.microsoft.com/apps/aspnet/web-apps/blazor)
+
+Ready to get started? Pick your branch and let's build something amazing! 🚀

@@ -2,12 +2,6 @@
 
 Welcome to our multi-agent samples repository showcasing a retail banking scenario. This repository demonstrates several approaches to building multi-agent applications using Azure Cosmos DB.
 
-
-**Note:** This branch is still being built and may not be ready yet. Please check back later.
-
-<img src="01_exercises/media/wip.png" alt="Multi-Agent Image">
-
-
 ## Build a Multi-Agent AI application using Agent Framework Agents or LangGraph
 
 This branch of the repo shows how to build a multi-tenant, multi-agent, banking application with containerized applications built using 

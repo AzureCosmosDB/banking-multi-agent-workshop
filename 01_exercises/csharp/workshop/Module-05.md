@@ -1523,7 +1523,8 @@ namespace MultiAgentCopilot.Factories
                 var agent = chatClient.CreateAIAgent(
                         instructions: GetAgentPrompt(agentType),
                         name: GetAgentName(agentType),
-                        description: GetAgentDescription(agentType)
+                        description: GetAgentDescription(agentType),
+                        tools: aiFunctions
                     );
 
                 agents.Add(agent);

@@ -285,7 +285,8 @@ Similar to generating system prompts based on agent type, we need the Tools to b
                 var agent = chatClient.CreateAIAgent(
                         instructions: GetAgentPrompt(agentType),
                         name: GetAgentName(agentType),
-                        description: GetAgentDescription(agentType)
+                        description: GetAgentDescription(agentType),
+                        tools: aiFunctions
                     );
 
                 agents.Add(agent);
@@ -1663,7 +1664,8 @@ namespace MultiAgentCopilot.Factories
                 var agent = chatClient.CreateAIAgent(
                         instructions: GetAgentPrompt(agentType),
                         name: GetAgentName(agentType),
-                        description: GetAgentDescription(agentType)
+                        description: GetAgentDescription(agentType),
+                        tools: aiFunctions
                     );
 
                 agents.Add(agent);

@@ -73,10 +73,8 @@ You can run this sample app and workshop virtually by using GitHub Codespaces. T
 2. Clone the repository and checkout the WorkShop_v2_PythonLangGraph branch:
 
    ```bash
-   git clone https://github.com/AzureCosmosDB/banking-multi-agent-workshop/
+   git clone --branch HOL_v2_AFandLangGraph https://github.com/AzureCosmosDB/banking-multi-agent-workshop/
    cd banking-multi-agent-workshop/01_exercises
-   git fetch --all
-   git checkout WorkShop_v2_PythonLangGraph
    ```
 
 3. Open the repository in VS Code and select **Reopen in Container** when prompted.

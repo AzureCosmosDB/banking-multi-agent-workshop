@@ -30,7 +30,7 @@ This branch contains both exercise starter files and completed solutions for the
 
 Work through the exercises to build the application step by step:
 
-- [LangGraph (Python)](01_exercises/python/workshop/Module-0.md)  
+- [LangGraph (Python)](01_exercises/python/langgraph/workshop/Module-0.md)  
 - [Agent Framework (C#)](01_exercises/csharp/workshop/Module-0.md)  
 
 ## 2. Completed Files

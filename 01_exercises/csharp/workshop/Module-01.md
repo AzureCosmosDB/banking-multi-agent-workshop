@@ -308,7 +308,7 @@ public class AgentFrameworkService : IDisposable
             {
                 Transport = new HttpClientPipelineTransport(),
             });
-    
+
             return openAIClient
                 .GetChatClient(_settings.AzureOpenAISettings.CompletionsDeployment)
                 .AsIChatClient();
@@ -437,22 +437,22 @@ public class AgentFrameworkService : IDisposable
     /// 
     //TO DO: Add GetResponse function
     public async Task<Tuple<List<Message>, List<DebugLog>>> GetResponse(
-        Message userMessage,
-        List<Message> messageHistory,
-        BankingDataService bankService,
-        string tenantId,
-        string userId)
+     Message userMessage,
+     List<Message> messageHistory,
+     BankingDataService bankService,
+     string tenantId,
+     string userId)
     {
         try
         {
             var agent = _chatClient.AsAIAgent(
                 "Greet the user and translate the request into French",
                 "Translator");
-            
-    
-            var responseText= agent.RunAsync(userMessage.Text).GetAwaiter().GetResult().Text;
-            return CreateResponseTuple(userMessage, responseText, "Translator");      
-    
+
+
+            var responseText = agent.RunAsync(userMessage.Text).GetAwaiter().GetResult().Text;
+            return CreateResponseTuple(userMessage, responseText, "Translator");
+
         }
         catch (Exception ex)
         {
@@ -469,24 +469,24 @@ public class AgentFrameworkService : IDisposable
     /// <returns>A summarized version of the text.</returns>
     /// 
     //TO DO: Add Summarize function
-    
+
     public async Task<string> Summarize(string sessionId, string userPrompt)
     {
         try
         {
             var agent = _chatClient.AsAIAgent(
-                "Summarize the text into exactly two words:", 
+                "Summarize the text into exactly two words:",
                 "Summarizer");
 
-            return agent.RunAsync(userPrompt).GetAwaiter().GetResult().Text;        
-        
+            return agent.RunAsync(userPrompt).GetAwaiter().GetResult().Text;
+
         }
         catch (Exception ex)
         {
             _logger.LogError(ex, "Error when getting response: {ErrorMessage}", ex.Message);
             return string.Empty;
         }
-    }   
+    }
 
 
     /// <summary>
@@ -539,6 +539,7 @@ public class AgentFrameworkService : IDisposable
         string messageId = Guid.NewGuid().ToString();
         string debugLogId = Guid.NewGuid().ToString();
 
+     
         var responseMessage = new Message(
             userMessage.TenantId,
             userMessage.UserId,
@@ -567,14 +568,13 @@ public class AgentFrameworkService : IDisposable
     /// Runs the workflow asynchronously and returns the response messages and selected agent.
     /// </summary>
     private async Task<(List<ChatMessage> messages, string selectedAgent)> RunWorkflowAsync(
-        Workflow workflow, 
-        List<ChatMessage> messages)
+         Workflow workflow,
+         List<ChatMessage> messages)
     {
         try
         {
             string selectedAgent = "__";
             List<ChatMessage> latestMessages = [];
-
             await using StreamingRun run = await InProcessExecution.RunStreamingAsync(
                 workflow,
                 messages,
@@ -702,7 +702,6 @@ public class AgentFrameworkService : IDisposable
         }
     }
 }
-
 ```
 </details>
 <details>
@@ -752,7 +751,7 @@ public class ChatService
         {
 
             //MCP tools
-            // TO DO: Invoke SetMCPToolService
+            //TO DO: Invoke SetMCPToolService
         }
         else
         {
@@ -821,7 +820,7 @@ public class ChatService
         try
         {
             var archivedMessages = new List<Message>();
-            var userMessage = new Message(tenantId, userId, sessionId, "User", "User", userPrompt); 
+            var userMessage = new Message(tenantId, userId, sessionId, "User", "User", userPrompt);
             var result = await _afService.GetResponse(userMessage, archivedMessages, _bankService, tenantId, userId);
             return result.Item1;
         }
@@ -835,7 +834,7 @@ public class ChatService
 
 
     //TO DO: Add AddPromptCompletionMessagesAsync
-    
+
 
 
     /// <summary>
@@ -882,12 +881,7 @@ public class ChatService
         return await _cosmosDBService.GetChatCompletionDebugLogAsync(tenantId, userId, sessionId, debugLogId);
     }
 
-
-
-
-
 }
-
 ```
 
 </details>

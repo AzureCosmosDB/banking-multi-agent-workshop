@@ -266,7 +266,7 @@ public class AgentFrameworkService : IDisposable
             {
                 Transport = new HttpClientPipelineTransport(),
             });
-    
+
             return openAIClient
                 .GetChatClient(_settings.AzureOpenAISettings.CompletionsDeployment)
                 .AsIChatClient();
@@ -395,32 +395,32 @@ public class AgentFrameworkService : IDisposable
     /// 
     //TO DO: Add GetResponse function
     public async Task<Tuple<List<Message>, List<DebugLog>>> GetResponse(
-         Message userMessage,
-         List<Message> messageHistory,
-         BankingDataService bankService,
-         string tenantId,
-         string userId)
-     {
-         try
-         {
-             _promptDebugProperties= new List<LogProperty>(); // Reset debug properties for each new message
-             messageHistory.Add(userMessage);
-             var chatHistory = ConvertToAIChatMessages(messageHistory);
-             chatHistory.Add(new ChatMessage(ChatRole.User, userMessage.Text));
-    
-              var agent = _chatClient.AsAIAgent(
-                 "You are a front desk agent in a bank. Respond to the user queries professionally. Provide professional and helpful responses to user queries.Use your knowledge of banking services and procedures to address user queries accurately.",
-                 "Banker");
-    
-             var responseText= agent.RunAsync(chatHistory).GetAwaiter().GetResult().Text;
-             return CreateResponseTuple(userMessage, responseText, "Banker");
-         }
-         catch (Exception ex)
-         {
-             _logger.LogError(ex, "Error when getting response: {ErrorMessage}", ex.Message);
-             return new Tuple<List<Message>, List<DebugLog>>(new List<Message>(), new List<DebugLog>());
-         }
-     }
+     Message userMessage,
+     List<Message> messageHistory,
+     BankingDataService bankService,
+     string tenantId,
+     string userId)
+    {
+        try
+        {
+            _promptDebugProperties = new List<LogProperty>(); // Reset debug properties for each new message
+            messageHistory.Add(userMessage);
+            var chatHistory = ConvertToAIChatMessages(messageHistory);
+            chatHistory.Add(new ChatMessage(ChatRole.User, userMessage.Text));
+
+            var agent = _chatClient.AsAIAgent(
+               "You are a front desk agent in a bank. Respond to the user queries professionally. Provide professional and helpful responses to user queries.Use your knowledge of banking services and procedures to address user queries accurately.",
+               "Banker");
+
+            var responseText = agent.RunAsync(chatHistory).GetAwaiter().GetResult().Text;
+            return CreateResponseTuple(userMessage, responseText, "Banker");
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "Error when getting response: {ErrorMessage}", ex.Message);
+            return new Tuple<List<Message>, List<DebugLog>>(new List<Message>(), new List<DebugLog>());
+        }
+    }
 
     /// <summary>
     /// Summarizes the given text.
@@ -430,24 +430,24 @@ public class AgentFrameworkService : IDisposable
     /// <returns>A summarized version of the text.</returns>
     /// 
     //TO DO: Add Summarize function
-    
+
     public async Task<string> Summarize(string sessionId, string userPrompt)
     {
         try
         {
             var agent = _chatClient.AsAIAgent(
-                "Summarize the text into exactly two words:", 
+                "Summarize the text into exactly two words:",
                 "Summarizer");
 
-            return agent.RunAsync(userPrompt).GetAwaiter().GetResult().Text;        
-        
+            return agent.RunAsync(userPrompt).GetAwaiter().GetResult().Text;
+
         }
         catch (Exception ex)
         {
             _logger.LogError(ex, "Error when getting response: {ErrorMessage}", ex.Message);
             return string.Empty;
         }
-    }   
+    }
 
 
     /// <summary>
@@ -500,6 +500,7 @@ public class AgentFrameworkService : IDisposable
         string messageId = Guid.NewGuid().ToString();
         string debugLogId = Guid.NewGuid().ToString();
 
+     
         var responseMessage = new Message(
             userMessage.TenantId,
             userMessage.UserId,
@@ -528,14 +529,13 @@ public class AgentFrameworkService : IDisposable
     /// Runs the workflow asynchronously and returns the response messages and selected agent.
     /// </summary>
     private async Task<(List<ChatMessage> messages, string selectedAgent)> RunWorkflowAsync(
-        Workflow workflow, 
-        List<ChatMessage> messages)
+         Workflow workflow,
+         List<ChatMessage> messages)
     {
         try
         {
             string selectedAgent = "__";
             List<ChatMessage> latestMessages = [];
-
             await using StreamingRun run = await InProcessExecution.RunStreamingAsync(
                 workflow,
                 messages,
@@ -663,7 +663,6 @@ public class AgentFrameworkService : IDisposable
         }
     }
 }
-
 ```
 </details>
 <details>
@@ -713,7 +712,7 @@ public class ChatService
         {
 
             //MCP tools
-            // TO DO: Invoke SetMCPToolService
+            //TO DO: Invoke SetMCPToolService
         }
         else
         {
@@ -806,7 +805,7 @@ public class ChatService
 
 
     //TO DO: Add AddPromptCompletionMessagesAsync
-    
+
     /// <summary>
     /// Add user prompt and AI assistance response to the chat session message list object and insert into the data service as a transaction.
     /// </summary>
@@ -814,7 +813,7 @@ public class ChatService
     private async Task AddPromptCompletionMessagesAsync(string tenantId, string userId, string sessionId, Message promptMessage, List<Message> completionMessages, List<DebugLog> completionMessageLogs)
     {
         var session = await _cosmosDBService.GetSessionAsync(tenantId, userId, sessionId);
-    
+
         completionMessages.Insert(0, promptMessage);
         await _cosmosDBService.UpsertSessionBatchAsync(completionMessages, completionMessageLogs, session);
     }
@@ -863,12 +862,7 @@ public class ChatService
         return await _cosmosDBService.GetChatCompletionDebugLogAsync(tenantId, userId, sessionId, debugLogId);
     }
 
-
-
-
-
 }
-
 ```
 </details>
 

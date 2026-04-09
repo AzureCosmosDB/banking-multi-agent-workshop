@@ -377,16 +377,16 @@ namespace MultiAgentCopilot.MultiAgentCopilot.Helper
         }
 
 
-         protected override async ValueTask<AIAgent> SelectNextAgentAsync(IReadOnlyList<ChatMessage> history, CancellationToken cancellationToken = default(CancellationToken))
+        protected override async ValueTask<AIAgent> SelectNextAgentAsync(IReadOnlyList<ChatMessage> history, CancellationToken cancellationToken = default(CancellationToken))
         {
             // Convert chat history to a string representation for the prompt
-            var historyText = string.Join("\n", history.TakeLast(5).Select(msg => 
+            var historyText = string.Join("\n", history.TakeLast(5).Select(msg =>
             {
                 var role = msg.Role.ToString();
                 var content = msg.Text ?? "";
                 return $"{role}: {content}";
             }));
-            
+
             // Create a moderator agent to decide which agent should respond next
             var moderatorAgent = _chatClient.AsAIAgent(
                 instructions: PromptFactory.Selection(historyText, GetAgentNames()),
@@ -421,57 +421,9 @@ namespace MultiAgentCopilot.MultiAgentCopilot.Helper
 
             // Return the selected agent, or default to the first agent if no match found
             return selectedAgent ?? _agents[0];
-            
+
         }
-      
 
-        protected override async ValueTask<bool> ShouldTerminateAsync(IReadOnlyList<ChatMessage> history, CancellationToken cancellationToken = default(CancellationToken))
-        {
-
-            // Check if the last user message was from user, if so, do not terminate, skip system messages
-            for(int i = history.Count -1; i >=0; i--)
-            {
-                if(history[i].Role == ChatRole.System)
-                {
-                    continue;
-                }
-                else if(history[i].Role == ChatRole.User)
-                {
-                    return false;
-                }
-                else
-                {
-                    break;
-                }
-            }       
-
-            // First check if there's a custom termination function
-            if (_shouldTerminateFunc != null)
-            {
-                bool customResult = await _shouldTerminateFunc(this, history, cancellationToken).ConfigureAwait(continueOnCapturedContext: false);
-                if (customResult)
-                {
-                    return true;
-                }
-            }
-
-            // Use AI-based termination decision using TerminationStrategy.prompty
-            try
-            {
-                var shouldTerminate = await ShouldTerminateWithAI(history, cancellationToken);
-                if (shouldTerminate)
-                {
-                    return true;
-                }
-            }
-            catch (Exception ex)
-            {
-                _logCallback.Invoke("ShouldTerminateAsync Error", ex.Message);
-            }
-
-            // Fall back to base implementation
-            return await base.ShouldTerminateAsync(history, cancellationToken).ConfigureAwait(continueOnCapturedContext: false);
-        }
 
         private async Task<bool> ShouldTerminateWithAI(IReadOnlyList<ChatMessage> history, CancellationToken cancellationToken)
         {
@@ -535,8 +487,6 @@ namespace MultiAgentCopilot.MultiAgentCopilot.Helper
         }
     }
 }
-
-
 ```
 </details>
 <details>
@@ -639,7 +589,7 @@ public class AgentFrameworkService : IDisposable
             {
                 Transport = new HttpClientPipelineTransport(),
             });
-    
+
             return openAIClient
                 .GetChatClient(_settings.AzureOpenAISettings.CompletionsDeployment)
                 .AsIChatClient();
@@ -705,12 +655,13 @@ public class AgentFrameworkService : IDisposable
     #region Public Methods
 
     //TO DO: Add SetInProcessToolService
-        /// <summary>
+
+    /// <summary>
     /// Sets the in-process tool service for banking operations.
     /// </summary>
     /// <param name="bankService">The banking data service instance.</param>
     /// <returns>True if the service was set successfully.</returns>
-    
+
     public bool SetInProcessToolService(BankingDataService bankService)
     {
         _bankService = bankService ?? throw new ArgumentNullException(nameof(bankService));
@@ -719,9 +670,12 @@ public class AgentFrameworkService : IDisposable
     }
 
 
+
     //TO DO: Add SetMCPToolService
+    
 
     ////TO DO: Add RunGroupChatOrchestration
+
 
     /// <summary>
     /// Initializes the AI agents based on available tool services.
@@ -739,9 +693,8 @@ public class AgentFrameworkService : IDisposable
                 {
                     _agents = AgentFactory.CreateAllAgentsWithInProcessTools(_chatClient, _bankService, _loggerFactory);
                 }
-
                 //TO DO: Add MCP Service Option
-
+               
 
                 if (_agents == null || _agents.Count == 0)
                 {
@@ -782,17 +735,17 @@ public class AgentFrameworkService : IDisposable
     /// <returns>A tuple containing the response messages and debug logs.</returns>
     /// 
     //TO DO: Add GetResponse function
-    
+
     public async Task<Tuple<List<Message>, List<DebugLog>>> GetResponse(
-        Message userMessage,
-        List<Message> messageHistory,
-        BankingDataService bankService,
-        string tenantId,
-        string userId)
+    Message userMessage,
+    List<Message> messageHistory,
+    BankingDataService bankService,
+    string tenantId,
+    string userId)
     {
         try
         {
-            _promptDebugProperties= new List<LogProperty>(); // Reset debug properties for each new message
+            _promptDebugProperties = new List<LogProperty>(); // Reset debug properties for each new message
             messageHistory.Add(userMessage);
             var chatHistory = ConvertToAIChatMessages(messageHistory);
             chatHistory.Add(new ChatMessage(ChatRole.User, userMessage.Text));
@@ -815,24 +768,24 @@ public class AgentFrameworkService : IDisposable
     /// <returns>A summarized version of the text.</returns>
     /// 
     //TO DO: Add Summarize function
-    
+
     public async Task<string> Summarize(string sessionId, string userPrompt)
     {
         try
         {
             var agent = _chatClient.AsAIAgent(
-                "Summarize the text into exactly two words:", 
+                "Summarize the text into exactly two words:",
                 "Summarizer");
 
-            return agent.RunAsync(userPrompt).GetAwaiter().GetResult().Text;        
-        
+            return agent.RunAsync(userPrompt).GetAwaiter().GetResult().Text;
+
         }
         catch (Exception ex)
         {
             _logger.LogError(ex, "Error when getting response: {ErrorMessage}", ex.Message);
             return string.Empty;
         }
-    }   
+    }
 
 
     /// <summary>
@@ -885,6 +838,7 @@ public class AgentFrameworkService : IDisposable
         string messageId = Guid.NewGuid().ToString();
         string debugLogId = Guid.NewGuid().ToString();
 
+     
         var responseMessage = new Message(
             userMessage.TenantId,
             userMessage.UserId,
@@ -913,14 +867,13 @@ public class AgentFrameworkService : IDisposable
     /// Runs the workflow asynchronously and returns the response messages and selected agent.
     /// </summary>
     private async Task<(List<ChatMessage> messages, string selectedAgent)> RunWorkflowAsync(
-        Workflow workflow, 
-        List<ChatMessage> messages)
+         Workflow workflow,
+         List<ChatMessage> messages)
     {
         try
         {
             string selectedAgent = "__";
             List<ChatMessage> latestMessages = [];
-
             await using StreamingRun run = await InProcessExecution.RunStreamingAsync(
                 workflow,
                 messages,
@@ -978,8 +931,8 @@ public class AgentFrameworkService : IDisposable
     }
 
     //TO DO: Add RunGroupChatOrchestration
-    
-        /// <summary>
+
+    /// <summary>
     /// Orchestrates the group chat with AI agents.
     /// </summary>
     private async Task<(string responseText, string selectedAgentName)> RunGroupChatOrchestration(
@@ -990,7 +943,7 @@ public class AgentFrameworkService : IDisposable
         try
         {
             _logger.LogInformation("Starting Agent Framework Group Chat");
-                       
+
             // Add system context
             chatHistory.Add(new ChatMessage(ChatRole.System, $"User Id: {userId}, Tenant Id: {tenantId}"));
 
@@ -1007,7 +960,7 @@ public class AgentFrameworkService : IDisposable
                     .Build();
 
             //run the workflow
-            var (responseMessages, selectedAgentName) = await RunWorkflowAsync(workflow,chatHistory);
+            var (responseMessages, selectedAgentName) = await RunWorkflowAsync(workflow, chatHistory);
 
             //log the function calls from the response messages
             for (int i = chatHistory.Count; i < responseMessages.Count; i++)
@@ -1077,7 +1030,23 @@ public class AgentFrameworkService : IDisposable
         if (responseMessages?.Any() == true)
         {
             var lastAssistantMessage = responseMessages.LastOrDefault(m => m.Role == ChatRole.Assistant);
-            return lastAssistantMessage?.Text ?? "";
+            if (lastAssistantMessage is null)
+            {
+                return "";
+            }
+
+            if (!string.IsNullOrWhiteSpace(lastAssistantMessage.Text))
+            {
+                return lastAssistantMessage.Text;
+            }
+
+            // GA responses may store text content in message contents instead of Text.
+            var contentText = string.Join("\n", lastAssistantMessage.Contents
+                .OfType<TextContent>()
+                .Select(content => content.Text)
+                .Where(text => !string.IsNullOrWhiteSpace(text)));
+
+            return contentText;
         }
         return "";
     }
@@ -1099,7 +1068,6 @@ public class AgentFrameworkService : IDisposable
         }
     }
 }
-
 ```
 </details>
 

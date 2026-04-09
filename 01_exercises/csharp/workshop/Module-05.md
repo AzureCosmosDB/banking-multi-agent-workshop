@@ -433,7 +433,7 @@ public class AgentFrameworkService : IDisposable
             {
                 Transport = new HttpClientPipelineTransport(),
             });
-    
+
             return openAIClient
                 .GetChatClient(_settings.AzureOpenAISettings.CompletionsDeployment)
                 .AsIChatClient();
@@ -499,18 +499,20 @@ public class AgentFrameworkService : IDisposable
     #region Public Methods
 
     //TO DO: Add SetInProcessToolService
-        /// <summary>
+
+    /// <summary>
     /// Sets the in-process tool service for banking operations.
     /// </summary>
     /// <param name="bankService">The banking data service instance.</param>
     /// <returns>True if the service was set successfully.</returns>
-    
+
     public bool SetInProcessToolService(BankingDataService bankService)
     {
         _bankService = bankService ?? throw new ArgumentNullException(nameof(bankService));
         _logger.LogInformation("InProcessToolService has been set.");
         return true;
     }
+
 
 
     //TO DO: Add SetMCPToolService
@@ -526,8 +528,9 @@ public class AgentFrameworkService : IDisposable
         _logger.LogInformation("MCPToolService has been set");
         return true;
     }
-    
+
     ////TO DO: Add RunGroupChatOrchestration
+
 
     /// <summary>
     /// Initializes the AI agents based on available tool services.
@@ -545,12 +548,11 @@ public class AgentFrameworkService : IDisposable
                 {
                     _agents = AgentFactory.CreateAllAgentsWithInProcessTools(_chatClient, _bankService, _loggerFactory);
                 }
-
                 //TO DO: Add MCP Service Option
                 else if (_mcpService != null)
                 {
                     _agents = AgentFactory.CreateAllAgentsWithMCPToolsAsync(_chatClient, _mcpService, _loggerFactory).GetAwaiter().GetResult();
-                }                
+                }
                 else
                 {
                     _logger.LogError("No tool services available - cannot create agents");
@@ -595,17 +597,17 @@ public class AgentFrameworkService : IDisposable
     /// <returns>A tuple containing the response messages and debug logs.</returns>
     /// 
     //TO DO: Add GetResponse function
-    
+
     public async Task<Tuple<List<Message>, List<DebugLog>>> GetResponse(
-        Message userMessage,
-        List<Message> messageHistory,
-        BankingDataService bankService,
-        string tenantId,
-        string userId)
+    Message userMessage,
+    List<Message> messageHistory,
+    BankingDataService bankService,
+    string tenantId,
+    string userId)
     {
         try
         {
-            _promptDebugProperties= new List<LogProperty>(); // Reset debug properties for each new message
+            _promptDebugProperties = new List<LogProperty>(); // Reset debug properties for each new message
             messageHistory.Add(userMessage);
             var chatHistory = ConvertToAIChatMessages(messageHistory);
             chatHistory.Add(new ChatMessage(ChatRole.User, userMessage.Text));
@@ -628,24 +630,24 @@ public class AgentFrameworkService : IDisposable
     /// <returns>A summarized version of the text.</returns>
     /// 
     //TO DO: Add Summarize function
-    
+
     public async Task<string> Summarize(string sessionId, string userPrompt)
     {
         try
         {
             var agent = _chatClient.AsAIAgent(
-                "Summarize the text into exactly two words:", 
+                "Summarize the text into exactly two words:",
                 "Summarizer");
 
-            return agent.RunAsync(userPrompt).GetAwaiter().GetResult().Text;        
-        
+            return agent.RunAsync(userPrompt).GetAwaiter().GetResult().Text;
+
         }
         catch (Exception ex)
         {
             _logger.LogError(ex, "Error when getting response: {ErrorMessage}", ex.Message);
             return string.Empty;
         }
-    }   
+    }
 
 
     /// <summary>
@@ -698,6 +700,7 @@ public class AgentFrameworkService : IDisposable
         string messageId = Guid.NewGuid().ToString();
         string debugLogId = Guid.NewGuid().ToString();
 
+     
         var responseMessage = new Message(
             userMessage.TenantId,
             userMessage.UserId,
@@ -726,14 +729,13 @@ public class AgentFrameworkService : IDisposable
     /// Runs the workflow asynchronously and returns the response messages and selected agent.
     /// </summary>
     private async Task<(List<ChatMessage> messages, string selectedAgent)> RunWorkflowAsync(
-        Workflow workflow, 
-        List<ChatMessage> messages)
+         Workflow workflow,
+         List<ChatMessage> messages)
     {
         try
         {
             string selectedAgent = "__";
             List<ChatMessage> latestMessages = [];
-
             await using StreamingRun run = await InProcessExecution.RunStreamingAsync(
                 workflow,
                 messages,
@@ -791,8 +793,8 @@ public class AgentFrameworkService : IDisposable
     }
 
     //TO DO: Add RunGroupChatOrchestration
-    
-        /// <summary>
+
+    /// <summary>
     /// Orchestrates the group chat with AI agents.
     /// </summary>
     private async Task<(string responseText, string selectedAgentName)> RunGroupChatOrchestration(
@@ -803,7 +805,7 @@ public class AgentFrameworkService : IDisposable
         try
         {
             _logger.LogInformation("Starting Agent Framework Group Chat");
-                       
+
             // Add system context
             chatHistory.Add(new ChatMessage(ChatRole.System, $"User Id: {userId}, Tenant Id: {tenantId}"));
 
@@ -820,7 +822,7 @@ public class AgentFrameworkService : IDisposable
                     .Build();
 
             //run the workflow
-            var (responseMessages, selectedAgentName) = await RunWorkflowAsync(workflow,chatHistory);
+            var (responseMessages, selectedAgentName) = await RunWorkflowAsync(workflow, chatHistory);
 
             //log the function calls from the response messages
             for (int i = chatHistory.Count; i < responseMessages.Count; i++)
@@ -890,7 +892,23 @@ public class AgentFrameworkService : IDisposable
         if (responseMessages?.Any() == true)
         {
             var lastAssistantMessage = responseMessages.LastOrDefault(m => m.Role == ChatRole.Assistant);
-            return lastAssistantMessage?.Text ?? "";
+            if (lastAssistantMessage is null)
+            {
+                return "";
+            }
+
+            if (!string.IsNullOrWhiteSpace(lastAssistantMessage.Text))
+            {
+                return lastAssistantMessage.Text;
+            }
+
+            // GA responses may store text content in message contents instead of Text.
+            var contentText = string.Join("\n", lastAssistantMessage.Contents
+                .OfType<TextContent>()
+                .Select(content => content.Text)
+                .Where(text => !string.IsNullOrWhiteSpace(text)));
+
+            return contentText;
         }
         return "";
     }
@@ -912,7 +930,6 @@ public class AgentFrameworkService : IDisposable
         }
     }
 }
-
 ```
 <details>
   <summary>Completed code for <strong>\MultiAgentCopilot\Services\ChatService.cs</strong></summary>
@@ -962,6 +979,7 @@ public class ChatService
 
             //MCP tools
             //TO DO: Invoke SetMCPToolService
+
             _afService.SetMCPToolService(_mcpService);
 
         }
@@ -969,6 +987,7 @@ public class ChatService
         {
             //In-Process Tools
             //TO DO: Invoke SetInProcessToolService
+
             var embeddingClient = _afService.GetAzureOpenAIClient();
             var embeddingDeployment = _afService.GetEmbeddingDeploymentName();
             EmbeddingService embeddingService = new EmbeddingService(embeddingClient, embeddingDeployment);
@@ -1063,7 +1082,7 @@ public class ChatService
 
 
     //TO DO: Add AddPromptCompletionMessagesAsync
-    
+
     /// <summary>
     /// Add user prompt and AI assistance response to the chat session message list object and insert into the data service as a transaction.
     /// </summary>
@@ -1071,7 +1090,7 @@ public class ChatService
     private async Task AddPromptCompletionMessagesAsync(string tenantId, string userId, string sessionId, Message promptMessage, List<Message> completionMessages, List<DebugLog> completionMessageLogs)
     {
         var session = await _cosmosDBService.GetSessionAsync(tenantId, userId, sessionId);
-    
+
         completionMessages.Insert(0, promptMessage);
         await _cosmosDBService.UpsertSessionBatchAsync(completionMessages, completionMessageLogs, session);
     }
@@ -1119,13 +1138,7 @@ public class ChatService
 
         return await _cosmosDBService.GetChatCompletionDebugLogAsync(tenantId, userId, sessionId, debugLogId);
     }
-
-
-
-
-
 }
-
 ```
 </details>
 <details>
@@ -1200,14 +1213,14 @@ namespace MultiAgentCopilot.MultiAgentCopilot.Services
         }
 
 
-        
+
         private MCPServerSettings GetMCPServerSettings(AgentType agentType)
         {
             var agentName = AgentFactory.GetAgentName(agentType);
 
-            
+
             // Find the server configuration for this agent type
-            var serverSettings = _mcpSettings.Servers?.FirstOrDefault(s => 
+            var serverSettings = _mcpSettings.Servers?.FirstOrDefault(s =>
                 string.Equals(s.AgentName, agentName, StringComparison.OrdinalIgnoreCase));
 
             if (serverSettings == null)
@@ -1228,12 +1241,12 @@ namespace MultiAgentCopilot.MultiAgentCopilot.Services
 
             return serverSettings;
         }
-       
+
 
         /// <summary>
         /// Creates or retrieves a cached MCP client for the specified agent type
         /// </summary>
-        /// <summary>
+
         private async Task<McpClient> CreateMcpClientAsync(AgentType agentType, MCPServerSettings settings)
         {
             // Create authenticated transport with enhanced error handling
@@ -1243,7 +1256,7 @@ namespace MultiAgentCopilot.MultiAgentCopilot.Services
                 // Create transport with authentication and streamable-http support
                 var wrapper = new AuthenticatedHttpWrapper(settings.Url, settings.Key);
                 clientTransport = wrapper.CreateTransport();
-                
+
                 // Configure transport for streamable-http if needed
                 if (clientTransport is HttpClientTransport httpTransport)
                 {
@@ -1267,8 +1280,8 @@ namespace MultiAgentCopilot.MultiAgentCopilot.Services
             catch (Exception ex)
             {
                 _logger.LogError(ex, "Failed to create MCP client for agent {AgentType}: {Message}", agentType, ex.Message);
-                
-                
+
+
                 throw new InvalidOperationException($"Failed to create MCP client for agent '{agentType}': {ex.Message}", ex);
             }
         }
@@ -1341,10 +1354,10 @@ namespace MultiAgentCopilot.MultiAgentCopilot.Services
                 var settings = GetMCPServerSettings(agent);
 
                 // Get or create MCP client with authentication and streamable-http support
-                var mcpClient = await CreateMcpClientAsync(agent,settings);
+                var mcpClient = await CreateMcpClientAsync(agent, settings);
 
                 // List available tools from the MCP server
-                var tools = await  mcpClient.ListToolsAsync();
+                var tools = await mcpClient.ListToolsAsync();
 
                 var filteredTools = FilterToolsByTags(tools, settings.Tags.Split(',', StringSplitOptions.RemoveEmptyEntries).Select(t => t.Trim()).ToArray());
 
@@ -1353,7 +1366,7 @@ namespace MultiAgentCopilot.MultiAgentCopilot.Services
                 // Log each tool for debugging
                 foreach (var tool in filteredTools)
                 {
-                    _logger.LogDebug("Tool available - Name: {ToolName}, Description: {ToolDescription}", 
+                    _logger.LogDebug("Tool available - Name: {ToolName}, Description: {ToolDescription}",
                         tool.Name, tool.Description);
                 }
 
@@ -1366,9 +1379,9 @@ namespace MultiAgentCopilot.MultiAgentCopilot.Services
             }
             catch (HttpRequestException httpEx)
             {
-                _logger.LogError(httpEx, "HTTP error when connecting to MCP server for agent {AgentType}: {Message}", 
+                _logger.LogError(httpEx, "HTTP error when connecting to MCP server for agent {AgentType}: {Message}",
                     agent, httpEx.Message);
-                
+
                 // Check if it's an authentication error
                 if (httpEx.Message.Contains("401") || httpEx.Message.Contains("Unauthorized"))
                 {
@@ -1379,16 +1392,16 @@ namespace MultiAgentCopilot.MultiAgentCopilot.Services
             }
             catch (TaskCanceledException timeoutEx)
             {
-                _logger.LogError(timeoutEx, "Timeout when connecting to MCP server for agent {AgentType}: {Message}", 
+                _logger.LogError(timeoutEx, "Timeout when connecting to MCP server for agent {AgentType}: {Message}",
                     agent, timeoutEx.Message);
                 return new List<McpClientTool>();
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "Unexpected error getting MCP tools for agent {AgentType}: {Message} | StackTrace: {StackTrace}", 
+                _logger.LogError(ex, "Unexpected error getting MCP tools for agent {AgentType}: {Message} | StackTrace: {StackTrace}",
                     agent, ex.Message, ex.StackTrace);
                 return new List<McpClientTool>();
-            }    
+            }
         }
 
 
@@ -1464,7 +1477,6 @@ namespace MultiAgentCopilot.MultiAgentCopilot.Services
         }
     }
 }
-
 ```
 </details>
 <details>
@@ -1511,11 +1523,12 @@ namespace MultiAgentCopilot.Factories
     public static class AgentFactory
     {
         //TO DO: Add Agent Creation with Tools
-               /// <summary>
+
+        /// <summary>
         /// Create all banking agents with proper instructions and tools
         /// </summary>
         public static List<AIAgent> CreateAllAgentsWithInProcessTools(IChatClient chatClient, BankingDataService bankService, ILoggerFactory loggerFactory)
-        {           
+        {
 
             var agents = new List<AIAgent>();
             ILogger logger = loggerFactory.CreateLogger("AgentFactory");
@@ -1527,7 +1540,7 @@ namespace MultiAgentCopilot.Factories
             foreach (var agentType in agentTypes)
             {
                 logger.LogInformation("Creating agent {AgentType} with InProcess tools", agentType);
-                
+
                 var aiFunctions = GetInProcessAgentTools(agentType, bankService, loggerFactory).ToArray();
 
                 var agent = chatClient.AsAIAgent(
@@ -1547,7 +1560,7 @@ namespace MultiAgentCopilot.Factories
 
         //TO DO: Add Agent Creation with MCP Tools
         public static async Task<List<AIAgent>> CreateAllAgentsWithMCPToolsAsync(IChatClient chatClient, MCPToolService mcpService, ILoggerFactory loggerFactory)
-        { 
+        {
             var agents = new List<AIAgent>();
             ILogger logger = loggerFactory.CreateLogger("AgentFactory");
 
@@ -1576,7 +1589,7 @@ namespace MultiAgentCopilot.Factories
             return agents;
         }
         //TO DO: Add Agent Details
-                /// <summary>
+        /// <summary>
         /// Get agent prompt based on type
         /// </summary>
         private static string GetAgentPrompt(AgentType agentType)
@@ -1620,7 +1633,8 @@ namespace MultiAgentCopilot.Factories
 
 
         //TO DO: Create Agent Tools
-                /// <summary>
+
+        /// <summary>
         /// Get tools for specific agent type using existing tool classes
         /// </summary>
         private static IList<AIFunction>? GetInProcessAgentTools(AgentType agentType, BankingDataService bankService, ILoggerFactory loggerFactory)
@@ -1648,14 +1662,14 @@ namespace MultiAgentCopilot.Factories
                     .Where(m => m.GetCustomAttributes(typeof(DescriptionAttribute), false).Length > 0);
 
                 IList<AIFunction> functions = new List<AIFunction>();
-                
+
                 foreach (var method in methods)
                 {
                     try
                     {
                         var aiFunction = AIFunctionFactory.Create(method, toolsClass);
                         functions.Add(aiFunction);
-                        
+
                         var description = method.GetCustomAttribute<DescriptionAttribute>().Description;
                         logger.LogDebug("Agent {AgentType} in-process tool: '{MethodName}' - {Description}",
                             agentType, method.Name, description);
@@ -1667,7 +1681,7 @@ namespace MultiAgentCopilot.Factories
                     }
                 }
 
-                logger.LogInformation("Created {FunctionCount} in-process tools for agent type: {AgentType}", 
+                logger.LogInformation("Created {FunctionCount} in-process tools for agent type: {AgentType}",
                     functions.Count, agentType);
 
                 return functions.Count > 0 ? functions : null;
@@ -1678,12 +1692,8 @@ namespace MultiAgentCopilot.Factories
                 return null;
             }
         }
-
-        
-
     }
 }
-
 ```
 </details>
 

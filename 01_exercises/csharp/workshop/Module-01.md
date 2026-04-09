@@ -100,7 +100,7 @@ This method creates a simple AI agent with specific instructions and runs it wit
     {
         try
         {
-            var agent = _chatClient.CreateAIAgent(
+            var agent = _chatClient.AsAIAgent(
                 "Greet the user and translate the request into French",
                 "Translator");
             
@@ -127,7 +127,7 @@ public async Task<string> Summarize(string sessionId, string userPrompt)
 {
     try
     {
-        var agent = _chatClient.CreateAIAgent(
+        var agent = _chatClient.AsAIAgent(
             "Summarize the text into exactly two words:", 
             "Summarizer");
 
@@ -445,7 +445,7 @@ public class AgentFrameworkService : IDisposable
     {
         try
         {
-            var agent = _chatClient.CreateAIAgent(
+            var agent = _chatClient.AsAIAgent(
                 "Greet the user and translate the request into French",
                 "Translator");
             
@@ -474,7 +474,7 @@ public class AgentFrameworkService : IDisposable
     {
         try
         {
-            var agent = _chatClient.CreateAIAgent(
+            var agent = _chatClient.AsAIAgent(
                 "Summarize the text into exactly two words:", 
                 "Summarizer");
 
@@ -572,54 +572,63 @@ public class AgentFrameworkService : IDisposable
     {
         try
         {
-
-            string? lastExecutorId = null;
             string selectedAgent = "__";
-            int counter = 0;
+            List<ChatMessage> latestMessages = [];
 
-            while (selectedAgent == "__" && counter<5)
+            await using StreamingRun run = await InProcessExecution.RunStreamingAsync(
+                workflow,
+                messages,
+                sessionId: null,
+                cancellationToken: CancellationToken.None);
+
+            await run.TrySendMessageAsync(new TurnToken(emitEvents: true));
+
+            await foreach (WorkflowEvent evt in run.WatchStreamAsync().ConfigureAwait(false))
             {
-                await using StreamingRun run = await InProcessExecution.StreamAsync(workflow, messages);
-               
-                await run.TrySendMessageAsync(new TurnToken(emitEvents: true));
-
-                await foreach (WorkflowEvent evt in run.WatchStreamAsync().ConfigureAwait(false))               
+                switch (evt)
                 {
-                    switch (evt)
-                    {
-                        case AgentRunUpdateEvent e when e.ExecutorId != lastExecutorId:
-                            lastExecutorId = e.ExecutorId;
-                            selectedAgent = ExtractAgentNameFromExecutorId(e.ExecutorId) ?? "__";
-                            break;
+                    case AgentResponseUpdateEvent update:
+                        // Process streaming agent responses (debug only)
+                        AgentResponse response = update.AsResponse();
+                        foreach (ChatMessage message in response.Messages)
+                        {
+                            //Console.WriteLine($"[{update.ExecutorId}]: {message.Text}");
+                        }
+                        break;
 
-                        case WorkflowOutputEvent output:
-                            return (output.As<List<ChatMessage>>()!, selectedAgent);
-                    }
+                    case WorkflowOutputEvent output:
+                        if (output.Is<List<ChatMessage>>(out var outputMessages) && outputMessages is { Count: > 0 })
+                        {
+                            latestMessages = outputMessages;
+                            var lastAssistant = latestMessages.LastOrDefault(m => m.Role == ChatRole.Assistant);
+                            if (!string.IsNullOrWhiteSpace(lastAssistant?.AuthorName))
+                            {
+                                selectedAgent = lastAssistant.AuthorName;
+                            }
+                        }
+                        else if (output.Is<ChatMessage>(out var singleMessage) && singleMessage is not null)
+                        {
+                            latestMessages = [singleMessage];
+                            if (singleMessage.Role == ChatRole.Assistant && !string.IsNullOrWhiteSpace(singleMessage.AuthorName))
+                            {
+                                selectedAgent = singleMessage.AuthorName;
+                            }
+                        }
+                        else if (output.Is<string>(out var textOutput) && !string.IsNullOrWhiteSpace(textOutput))
+                        {
+                            latestMessages = [new ChatMessage(ChatRole.Assistant, textOutput)];
+                        }
+                        break;
                 }
-                
-                counter++;
             }
-            return ([], selectedAgent);
+
+            return (latestMessages, selectedAgent);
         }
         catch (Exception ex)
         {
             _logger.LogError(ex, "Error during workflow execution: {ErrorMessage}", ex.Message);
             return ([], "Error");
         }
-    }
-
-
-
-    /// <summary>
-    /// Extracts the agent name from the executor ID by removing the GUID suffix.
-    /// </summary>
-    private static string? ExtractAgentNameFromExecutorId(string? executorId)
-    {
-        if (string.IsNullOrEmpty(executorId))
-            return null;
-
-        var parts = executorId.Split('_');
-        return parts.Length > 0 ? parts[0] : executorId;
     }
 
     //TO DO: Add RunGroupChatOrchestration
@@ -655,7 +664,23 @@ public class AgentFrameworkService : IDisposable
         if (responseMessages?.Any() == true)
         {
             var lastAssistantMessage = responseMessages.LastOrDefault(m => m.Role == ChatRole.Assistant);
-            return lastAssistantMessage?.Text ?? "";
+            if (lastAssistantMessage is null)
+            {
+                return "";
+            }
+
+            if (!string.IsNullOrWhiteSpace(lastAssistantMessage.Text))
+            {
+                return lastAssistantMessage.Text;
+            }
+
+            // GA responses may store text content in message contents instead of Text.
+            var contentText = string.Join("\n", lastAssistantMessage.Contents
+                .OfType<TextContent>()
+                .Select(content => content.Text)
+                .Where(text => !string.IsNullOrWhiteSpace(text)));
+
+            return contentText;
         }
         return "";
     }
@@ -870,3 +895,4 @@ public class ChatService
 ## Next Steps
 
 Proceed to Module 2: [Connecting Agents to Memory](./Module-02.md)
+

@@ -13,7 +13,6 @@ using System.Diagnostics;
 using System.Text;
 using System.Text.Json;
 using System.Transactions;
-using static Microsoft.ApplicationInsights.MetricDimensionNames.TelemetryContext;
 using Container = Microsoft.Azure.Cosmos.Container;
 using Message = MultiAgentCopilot.Models.Chat.Message;
 using PartitionKey = Microsoft.Azure.Cosmos.PartitionKey;

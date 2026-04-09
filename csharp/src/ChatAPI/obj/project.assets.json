@@ -1,0 +1,155 @@
+{
+  "version": 3,
+  "targets": {
+    "net8.0": {}
+  },
+  "libraries": {},
+  "projectFileDependencyGroups": {
+    "net8.0": [
+      "Microsoft.ApplicationInsights.AspNetCore >= 2.23.0",
+      "Microsoft.AspNetCore.OpenApi >= 8.0.0",
+      "Microsoft.VisualStudio.Azure.Containers.Tools.Targets >= 1.17.2",
+      "Swashbuckle.AspNetCore >= 7.2.0"
+    ]
+  },
+  "packageFolders": {
+    "C:\\Users\\sandnair\\.nuget\\packages\\": {},
+    "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages": {}
+  },
+  "project": {
+    "version": "1.0.0",
+    "restore": {
+      "projectUniqueName": "C:\\Work\\GH\\repos\\banking-multi-agent-workshop\\csharp\\src\\ChatAPI\\ChatAPI.csproj",
+      "projectName": "ChatAPI",
+      "projectPath": "C:\\Work\\GH\\repos\\banking-multi-agent-workshop\\csharp\\src\\ChatAPI\\ChatAPI.csproj",
+      "packagesPath": "C:\\Users\\sandnair\\.nuget\\packages\\",
+      "outputPath": "C:\\Work\\GH\\repos\\banking-multi-agent-workshop\\csharp\\src\\ChatAPI\\obj\\",
+      "projectStyle": "PackageReference",
+      "fallbackFolders": [
+        "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
+      ],
+      "configFilePaths": [
+        "C:\\Work\\GH\\repos\\banking-multi-agent-workshop\\csharp\\src\\NuGet.Config",
+        "C:\\Users\\sandnair\\AppData\\Roaming\\NuGet\\NuGet.Config",
+        "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
+        "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
+      ],
+      "originalTargetFrameworks": [
+        "net8.0"
+      ],
+      "sources": {
+        "https://api.nuget.org/v3/index.json": {},
+        "https://pkgs.dev.azure.com/azure-sdk/public/_packaging/azure-sdk-for-net/nuget/v3/index.json": {}
+      },
+      "frameworks": {
+        "net8.0": {
+          "targetAlias": "net8.0",
+          "projectReferences": {
+            "C:\\Work\\GH\\repos\\banking-multi-agent-workshop\\csharp\\src\\ChatInfrastructure\\ChatInfrastructure.csproj": {
+              "projectPath": "C:\\Work\\GH\\repos\\banking-multi-agent-workshop\\csharp\\src\\ChatInfrastructure\\ChatInfrastructure.csproj"
+            }
+          }
+        }
+      },
+      "warningProperties": {
+        "warnAsError": [
+          "NU1605"
+        ]
+      },
+      "restoreAuditProperties": {
+        "enableAudit": "true",
+        "auditLevel": "low",
+        "auditMode": "direct"
+      },
+      "SdkAnalysisLevel": "10.0.100"
+    },
+    "frameworks": {
+      "net8.0": {
+        "targetAlias": "net8.0",
+        "dependencies": {
+          "Microsoft.ApplicationInsights.AspNetCore": {
+            "target": "Package",
+            "version": "[2.23.0, )"
+          },
+          "Microsoft.AspNetCore.OpenApi": {
+            "target": "Package",
+            "version": "[8.0.0, )"
+          },
+          "Microsoft.VisualStudio.Azure.Containers.Tools.Targets": {
+            "target": "Package",
+            "version": "[1.17.2, )"
+          },
+          "Swashbuckle.AspNetCore": {
+            "target": "Package",
+            "version": "[7.2.0, )"
+          }
+        },
+        "imports": [
+          "net461",
+          "net462",
+          "net47",
+          "net471",
+          "net472",
+          "net48",
+          "net481"
+        ],
+        "assetTargetFallback": true,
+        "warn": true,
+        "downloadDependencies": [
+          {
+            "name": "Microsoft.AspNetCore.App.Ref",
+            "version": "[8.0.24, 8.0.24]"
+          },
+          {
+            "name": "Microsoft.NETCore.App.Host.win-arm64",
+            "version": "[8.0.24, 8.0.24]"
+          },
+          {
+            "name": "Microsoft.NETCore.App.Ref",
+            "version": "[8.0.24, 8.0.24]"
+          },
+          {
+            "name": "Microsoft.WindowsDesktop.App.Ref",
+            "version": "[8.0.24, 8.0.24]"
+          }
+        ],
+        "frameworkReferences": {
+          "Microsoft.AspNetCore.App": {
+            "privateAssets": "none"
+          },
+          "Microsoft.NETCore.App": {
+            "privateAssets": "all"
+          }
+        },
+        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\10.0.103/PortableRuntimeIdentifierGraph.json"
+      }
+    }
+  },
+  "logs": [
+    {
+      "code": "Undefined",
+      "level": "Error",
+      "message": "Failed to download package 'Swashbuckle.AspNetCore.7.2.0' from 'https://pkgs.dev.azure.com/azure-sdk/29ec6040-b234-4e31-b139-33dc4287b756/_packaging/fa8c16a3-dbe0-4de2-a297-03065ec1ba3f/nuget/v3/flat2/swashbuckle.aspnetcore/7.2.0/swashbuckle.aspnetcore.7.2.0.nupkg'.\r\nResponse status code does not indicate success: 401 (Unauthorized - No local versions of package 'swashbuckle.aspnetcore'; please provide authentication to access versions from upstream that have not yet been saved to your feed. (DevOps Activity ID: 84D8CB14-D03F-4621-BEEC-72F15858B6A1))."
+    },
+    {
+      "code": "NU1301",
+      "level": "Error",
+      "message": "Failed to retrieve information about 'Microsoft.SemanticKernel' from remote source 'https://pkgs.dev.azure.com/azure-sdk/29ec6040-b234-4e31-b139-33dc4287b756/_packaging/fa8c16a3-dbe0-4de2-a297-03065ec1ba3f/nuget/v3/flat2/microsoft.semantickernel/index.json'.\r\n  Response status code does not indicate success: 401 (Unauthorized - No local versions of package 'microsoft.semantickernel'; please provide authentication to access versions from upstream that have not yet been saved to your feed. (DevOps Activity ID: 148BBC74-3BC5-4C26-A63E-1B14D79C1C01))."
+    },
+    {
+      "code": "NU1301",
+      "level": "Error",
+      "message": "Failed to retrieve information about 'Microsoft.SemanticKernel.Agents.Core' from remote source 'https://pkgs.dev.azure.com/azure-sdk/29ec6040-b234-4e31-b139-33dc4287b756/_packaging/fa8c16a3-dbe0-4de2-a297-03065ec1ba3f/nuget/v3/flat2/microsoft.semantickernel.agents.core/index.json'.\r\n  Response status code does not indicate success: 401 (Unauthorized - No local versions of package 'microsoft.semantickernel.agents.core'; please provide authentication to access versions from upstream that have not yet been saved to your feed. (DevOps Activity ID: 9BD504CC-E9DB-467E-AA60-7218C73CC825))."
+    },
+    {
+      "code": "NU1301",
+      "level": "Error",
+      "message": "Failed to retrieve information about 'Microsoft.SemanticKernel.Core' from remote source 'https://pkgs.dev.azure.com/azure-sdk/29ec6040-b234-4e31-b139-33dc4287b756/_packaging/fa8c16a3-dbe0-4de2-a297-03065ec1ba3f/nuget/v3/flat2/microsoft.semantickernel.core/index.json'.\r\n  Response status code does not indicate success: 401 (Unauthorized - No local versions of package 'microsoft.semantickernel.core'; please provide authentication to access versions from upstream that have not yet been saved to your feed. (DevOps Activity ID: 245131E7-20BC-4D88-A018-1076AD0E794E))."
+    },
+    {
+      "code": "Undefined",
+      "level": "Error",
+      "message": "The feed 'azure-sdk-for-net [https://pkgs.dev.azure.com/azure-sdk/public/_packaging/azure-sdk-for-net/nuget/v3/index.json]' lists package 'Microsoft.Extensions.Hosting.9.0.2' but multiple attempts to download the nupkg have failed. The feed is either invalid or required packages were removed while the current operation was in progress. Verify the package exists on the feed and try again."
+    }
+  ]
+}

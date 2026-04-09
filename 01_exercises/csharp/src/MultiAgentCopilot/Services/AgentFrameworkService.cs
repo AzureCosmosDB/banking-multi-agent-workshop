@@ -295,6 +295,7 @@ public class AgentFrameworkService : IDisposable
         string messageId = Guid.NewGuid().ToString();
         string debugLogId = Guid.NewGuid().ToString();
 
+     
         var responseMessage = new Message(
             userMessage.TenantId,
             userMessage.UserId,
@@ -335,20 +336,22 @@ public class AgentFrameworkService : IDisposable
 
             while (selectedAgent == "__" && counter<5)
             {
-                await using StreamingRun run = await InProcessExecution.StreamAsync(workflow, messages);
-               
-                await run.TrySendMessageAsync(new TurnToken(emitEvents: true));
+                await using StreamingRun run = await InProcessExecution.RunStreamingAsync(workflow, messages, sessionId: null, cancellationToken: CancellationToken.None);
 
                 await foreach (WorkflowEvent evt in run.WatchStreamAsync().ConfigureAwait(false))               
                 {
                     switch (evt)
                     {
-                        case AgentRunUpdateEvent e when e.ExecutorId != lastExecutorId:
+                        case ExecutorInvokedEvent e when e.ExecutorId != lastExecutorId:
                             lastExecutorId = e.ExecutorId;
                             selectedAgent = ExtractAgentNameFromExecutorId(e.ExecutorId) ?? "__";
                             break;
 
                         case WorkflowOutputEvent output:
+                            if (selectedAgent == "__")
+                            {
+                                selectedAgent = ExtractAgentNameFromExecutorId(output.ExecutorId) ?? "__";
+                            }
                             return (output.As<List<ChatMessage>>()!, selectedAgent);
                     }
                 }
@@ -411,7 +414,23 @@ public class AgentFrameworkService : IDisposable
         if (responseMessages?.Any() == true)
         {
             var lastAssistantMessage = responseMessages.LastOrDefault(m => m.Role == ChatRole.Assistant);
-            return lastAssistantMessage?.Text ?? "";
+            if (lastAssistantMessage is null)
+            {
+                return "";
+            }
+
+            if (!string.IsNullOrWhiteSpace(lastAssistantMessage.Text))
+            {
+                return lastAssistantMessage.Text;
+            }
+
+            // GA responses may store text content in message contents instead of Text.
+            var contentText = string.Join("\n", lastAssistantMessage.Contents
+                .OfType<TextContent>()
+                .Select(content => content.Text)
+                .Where(text => !string.IsNullOrWhiteSpace(text)));
+
+            return contentText;
         }
         return "";
     }

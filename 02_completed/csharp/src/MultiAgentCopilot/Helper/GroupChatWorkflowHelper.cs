@@ -49,7 +49,11 @@ namespace MultiAgentCopilot.MultiAgentCopilot.Helper
             }));
             
             // Create a moderator agent to decide which agent should respond next
-            ChatClientAgentOptions agentOptions = new(name: "Moderator", instructions: PromptFactory.Selection(historyText, GetAgentNames()))
+            var moderatorAgent = _chatClient.AsAIAgent(
+                instructions: PromptFactory.Selection(historyText, GetAgentNames()),
+                name: "Moderator");
+
+            var runOptions = new ChatClientAgentRunOptions
             {
                 ChatOptions = new()
                 {
@@ -60,11 +64,11 @@ namespace MultiAgentCopilot.MultiAgentCopilot.Helper
                 }
             };
 
-            var moderatorAgent = _chatClient.CreateAIAgent(agentOptions);
-
             // Get the selection recommendation from the moderator
-            var response = await moderatorAgent.RunAsync(history);
-            var selectionInfo = response.Deserialize<ContinuationInfo>(JsonSerializerOptions.Web);
+            var response = await moderatorAgent.RunAsync(history, null, runOptions, cancellationToken);
+            var selectionInfo = string.IsNullOrWhiteSpace(response.Text)
+                ? null
+                : JsonSerializer.Deserialize<ContinuationInfo>(response.Text, JsonSerializerOptions.Web);
 
             var selectedAgentName = selectionInfo?.AgentName?.ToString();
             var reason = selectionInfo?.Reason;
@@ -144,9 +148,11 @@ namespace MultiAgentCopilot.MultiAgentCopilot.Helper
             }));
 
             // Create a termination decision agent using the TerminationStrategy.prompty
-            ChatClientAgentOptions agentOptions = new(
-                name: "TerminationDecider",
-                instructions: PromptFactory.Termination(historyText))
+            var terminationAgent = _chatClient.AsAIAgent(
+                instructions: PromptFactory.Termination(historyText),
+                name: "TerminationDecider");
+
+            var runOptions = new ChatClientAgentRunOptions
             {
                 ChatOptions = new()
                 {
@@ -157,13 +163,13 @@ namespace MultiAgentCopilot.MultiAgentCopilot.Helper
                 }
             };
 
-            var terminationAgent = _chatClient.CreateAIAgent(agentOptions);
-
             try
             {
                 // Get the termination decision from the AI agent
-                var response = await terminationAgent.RunAsync(history);
-                var terminationInfo = response.Deserialize<TerminationInfo>(JsonSerializerOptions.Web);
+                var response = await terminationAgent.RunAsync(history, null, runOptions, cancellationToken);
+                var terminationInfo = string.IsNullOrWhiteSpace(response.Text)
+                    ? null
+                    : JsonSerializer.Deserialize<TerminationInfo>(response.Text, JsonSerializerOptions.Web);
 
                 var shouldContinue = terminationInfo?.ShouldContinue ?? true;
                 var reason = terminationInfo?.Reason ?? "No reason provided";

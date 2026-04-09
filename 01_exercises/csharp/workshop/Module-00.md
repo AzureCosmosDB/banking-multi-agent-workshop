@@ -35,9 +35,9 @@ cd 01_exercises\csharp\src\MultiAgentCopilot
 1. Execute the below command in the Terminal to add the preview Nuget packages.
 
 ```shell
-dotnet add package Microsoft.Agents.AI --version 1.0.0-preview.251016.1 --source https://api.nuget.org/v3/index.json
-dotnet add package Microsoft.Agents.AI.OpenAI --version 1.0.0-preview.251016.1 --source https://api.nuget.org/v3/index.json
-dotnet add package Microsoft.Agents.AI.Workflows --version 1.0.0-preview.251016.1 --source https://api.nuget.org/v3/index.json
+dotnet add package Microsoft.Agents.AI --version 1.0.0 --source https://api.nuget.org/v3/index.json
+dotnet add package Microsoft.Agents.AI.OpenAI --version 1.0.0 --source https://api.nuget.org/v3/index.json
+dotnet add package Microsoft.Agents.AI.Workflows --version 1.0.0 --source https://api.nuget.org/v3/index.json
 ```
 
 1. Type  `dotnet run` to start the multi-agent service.
@@ -90,3 +90,4 @@ Hello, how are you?
 ## Next Steps
 
 Proceed to Module 1: Creating Your First Agent
+

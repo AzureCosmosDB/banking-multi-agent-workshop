@@ -1,0 +1,54 @@
+{
+  "version": 2,
+  "dgSpecHash": "Rj4sGvmeVQo=",
+  "success": false,
+  "projectFilePath": "C:\\Work\\GH\\repos\\banking-multi-agent-workshop\\csharp\\src\\ChatAPI\\ChatAPI.csproj",
+  "expectedPackageFiles": [
+    "C:\\Users\\sandnair\\.nuget\\packages\\microsoft.netcore.app.ref\\8.0.24\\microsoft.netcore.app.ref.8.0.24.nupkg.sha512",
+    "C:\\Users\\sandnair\\.nuget\\packages\\microsoft.windowsdesktop.app.ref\\8.0.24\\microsoft.windowsdesktop.app.ref.8.0.24.nupkg.sha512",
+    "C:\\Users\\sandnair\\.nuget\\packages\\microsoft.aspnetcore.app.ref\\8.0.24\\microsoft.aspnetcore.app.ref.8.0.24.nupkg.sha512",
+    "C:\\Users\\sandnair\\.nuget\\packages\\microsoft.netcore.app.host.win-arm64\\8.0.24\\microsoft.netcore.app.host.win-arm64.8.0.24.nupkg.sha512"
+  ],
+  "logs": [
+    {
+      "code": "Undefined",
+      "level": "Error",
+      "message": "Failed to download package 'Swashbuckle.AspNetCore.7.2.0' from 'https://pkgs.dev.azure.com/azure-sdk/29ec6040-b234-4e31-b139-33dc4287b756/_packaging/fa8c16a3-dbe0-4de2-a297-03065ec1ba3f/nuget/v3/flat2/swashbuckle.aspnetcore/7.2.0/swashbuckle.aspnetcore.7.2.0.nupkg'.\r\nResponse status code does not indicate success: 401 (Unauthorized - No local versions of package 'swashbuckle.aspnetcore'; please provide authentication to access versions from upstream that have not yet been saved to your feed. (DevOps Activity ID: 84D8CB14-D03F-4621-BEEC-72F15858B6A1)).",
+      "projectPath": "C:\\Work\\GH\\repos\\banking-multi-agent-workshop\\csharp\\src\\ChatAPI\\ChatAPI.csproj",
+      "filePath": "C:\\Work\\GH\\repos\\banking-multi-agent-workshop\\csharp\\src\\ChatAPI\\ChatAPI.csproj",
+      "targetGraphs": []
+    },
+    {
+      "code": "NU1301",
+      "level": "Error",
+      "message": "Failed to retrieve information about 'Microsoft.SemanticKernel' from remote source 'https://pkgs.dev.azure.com/azure-sdk/29ec6040-b234-4e31-b139-33dc4287b756/_packaging/fa8c16a3-dbe0-4de2-a297-03065ec1ba3f/nuget/v3/flat2/microsoft.semantickernel/index.json'.\r\n  Response status code does not indicate success: 401 (Unauthorized - No local versions of package 'microsoft.semantickernel'; please provide authentication to access versions from upstream that have not yet been saved to your feed. (DevOps Activity ID: 148BBC74-3BC5-4C26-A63E-1B14D79C1C01)).",
+      "projectPath": "C:\\Work\\GH\\repos\\banking-multi-agent-workshop\\csharp\\src\\ChatAPI\\ChatAPI.csproj",
+      "filePath": "C:\\Work\\GH\\repos\\banking-multi-agent-workshop\\csharp\\src\\ChatAPI\\ChatAPI.csproj",
+      "targetGraphs": []
+    },
+    {
+      "code": "NU1301",
+      "level": "Error",
+      "message": "Failed to retrieve information about 'Microsoft.SemanticKernel.Agents.Core' from remote source 'https://pkgs.dev.azure.com/azure-sdk/29ec6040-b234-4e31-b139-33dc4287b756/_packaging/fa8c16a3-dbe0-4de2-a297-03065ec1ba3f/nuget/v3/flat2/microsoft.semantickernel.agents.core/index.json'.\r\n  Response status code does not indicate success: 401 (Unauthorized - No local versions of package 'microsoft.semantickernel.agents.core'; please provide authentication to access versions from upstream that have not yet been saved to your feed. (DevOps Activity ID: 9BD504CC-E9DB-467E-AA60-7218C73CC825)).",
+      "projectPath": "C:\\Work\\GH\\repos\\banking-multi-agent-workshop\\csharp\\src\\ChatAPI\\ChatAPI.csproj",
+      "filePath": "C:\\Work\\GH\\repos\\banking-multi-agent-workshop\\csharp\\src\\ChatAPI\\ChatAPI.csproj",
+      "targetGraphs": []
+    },
+    {
+      "code": "NU1301",
+      "level": "Error",
+      "message": "Failed to retrieve information about 'Microsoft.SemanticKernel.Core' from remote source 'https://pkgs.dev.azure.com/azure-sdk/29ec6040-b234-4e31-b139-33dc4287b756/_packaging/fa8c16a3-dbe0-4de2-a297-03065ec1ba3f/nuget/v3/flat2/microsoft.semantickernel.core/index.json'.\r\n  Response status code does not indicate success: 401 (Unauthorized - No local versions of package 'microsoft.semantickernel.core'; please provide authentication to access versions from upstream that have not yet been saved to your feed. (DevOps Activity ID: 245131E7-20BC-4D88-A018-1076AD0E794E)).",
+      "projectPath": "C:\\Work\\GH\\repos\\banking-multi-agent-workshop\\csharp\\src\\ChatAPI\\ChatAPI.csproj",
+      "filePath": "C:\\Work\\GH\\repos\\banking-multi-agent-workshop\\csharp\\src\\ChatAPI\\ChatAPI.csproj",
+      "targetGraphs": []
+    },
+    {
+      "code": "Undefined",
+      "level": "Error",
+      "message": "The feed 'azure-sdk-for-net [https://pkgs.dev.azure.com/azure-sdk/public/_packaging/azure-sdk-for-net/nuget/v3/index.json]' lists package 'Microsoft.Extensions.Hosting.9.0.2' but multiple attempts to download the nupkg have failed. The feed is either invalid or required packages were removed while the current operation was in progress. Verify the package exists on the feed and try again.",
+      "projectPath": "C:\\Work\\GH\\repos\\banking-multi-agent-workshop\\csharp\\src\\ChatAPI\\ChatAPI.csproj",
+      "filePath": "C:\\Work\\GH\\repos\\banking-multi-agent-workshop\\csharp\\src\\ChatAPI\\ChatAPI.csproj",
+      "targetGraphs": []
+    }
+  ]
+}

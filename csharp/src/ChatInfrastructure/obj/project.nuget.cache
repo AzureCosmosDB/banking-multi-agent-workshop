@@ -1,0 +1,149 @@
+{
+  "version": 2,
+  "dgSpecHash": "R7HxVwoR8mk=",
+  "success": false,
+  "projectFilePath": "C:\\Work\\GH\\repos\\banking-multi-agent-workshop\\csharp\\src\\ChatInfrastructure\\ChatInfrastructure.csproj",
+  "expectedPackageFiles": [
+    "C:\\Users\\sandnair\\.nuget\\packages\\microsoft.netcore.app.ref\\8.0.24\\microsoft.netcore.app.ref.8.0.24.nupkg.sha512",
+    "C:\\Users\\sandnair\\.nuget\\packages\\microsoft.windowsdesktop.app.ref\\8.0.24\\microsoft.windowsdesktop.app.ref.8.0.24.nupkg.sha512",
+    "C:\\Users\\sandnair\\.nuget\\packages\\microsoft.aspnetcore.app.ref\\8.0.24\\microsoft.aspnetcore.app.ref.8.0.24.nupkg.sha512"
+  ],
+  "logs": [
+    {
+      "code": "NU1301",
+      "level": "Error",
+      "message": "Failed to retrieve information about 'Microsoft.SemanticKernel.Core' from remote source 'https://pkgs.dev.azure.com/azure-sdk/29ec6040-b234-4e31-b139-33dc4287b756/_packaging/fa8c16a3-dbe0-4de2-a297-03065ec1ba3f/nuget/v3/flat2/microsoft.semantickernel.core/index.json'.\r\n  Response status code does not indicate success: 401 (Unauthorized - No local versions of package 'microsoft.semantickernel.core'; please provide authentication to access versions from upstream that have not yet been saved to your feed. (DevOps Activity ID: 245131E7-20BC-4D88-A018-1076AD0E794E)).",
+      "projectPath": "C:\\Work\\GH\\repos\\banking-multi-agent-workshop\\csharp\\src\\ChatInfrastructure\\ChatInfrastructure.csproj",
+      "filePath": "C:\\Work\\GH\\repos\\banking-multi-agent-workshop\\csharp\\src\\ChatInfrastructure\\ChatInfrastructure.csproj",
+      "targetGraphs": []
+    },
+    {
+      "code": "NU1301",
+      "level": "Error",
+      "message": "Failed to retrieve information about 'Microsoft.SemanticKernel.Core' from remote source 'https://pkgs.dev.azure.com/azure-sdk/29ec6040-b234-4e31-b139-33dc4287b756/_packaging/fa8c16a3-dbe0-4de2-a297-03065ec1ba3f/nuget/v3/flat2/microsoft.semantickernel.core/index.json'.\r\n  Response status code does not indicate success: 401 (Unauthorized - No local versions of package 'microsoft.semantickernel.core'; please provide authentication to access versions from upstream that have not yet been saved to your feed. (DevOps Activity ID: 245131E7-20BC-4D88-A018-1076AD0E794E)).",
+      "projectPath": "C:\\Work\\GH\\repos\\banking-multi-agent-workshop\\csharp\\src\\ChatInfrastructure\\ChatInfrastructure.csproj",
+      "filePath": "C:\\Work\\GH\\repos\\banking-multi-agent-workshop\\csharp\\src\\ChatInfrastructure\\ChatInfrastructure.csproj",
+      "targetGraphs": []
+    },
+    {
+      "code": "NU1301",
+      "level": "Error",
+      "message": "Failed to retrieve information about 'Microsoft.SemanticKernel.Agents.Core' from remote source 'https://pkgs.dev.azure.com/azure-sdk/29ec6040-b234-4e31-b139-33dc4287b756/_packaging/fa8c16a3-dbe0-4de2-a297-03065ec1ba3f/nuget/v3/flat2/microsoft.semantickernel.agents.core/index.json'.\r\n  Response status code does not indicate success: 401 (Unauthorized - No local versions of package 'microsoft.semantickernel.agents.core'; please provide authentication to access versions from upstream that have not yet been saved to your feed. (DevOps Activity ID: 9BD504CC-E9DB-467E-AA60-7218C73CC825)).",
+      "projectPath": "C:\\Work\\GH\\repos\\banking-multi-agent-workshop\\csharp\\src\\ChatInfrastructure\\ChatInfrastructure.csproj",
+      "filePath": "C:\\Work\\GH\\repos\\banking-multi-agent-workshop\\csharp\\src\\ChatInfrastructure\\ChatInfrastructure.csproj",
+      "targetGraphs": []
+    },
+    {
+      "code": "NU1301",
+      "level": "Error",
+      "message": "Failed to retrieve information about 'Microsoft.SemanticKernel.Agents.Core' from remote source 'https://pkgs.dev.azure.com/azure-sdk/29ec6040-b234-4e31-b139-33dc4287b756/_packaging/fa8c16a3-dbe0-4de2-a297-03065ec1ba3f/nuget/v3/flat2/microsoft.semantickernel.agents.core/index.json'.\r\n  Response status code does not indicate success: 401 (Unauthorized - No local versions of package 'microsoft.semantickernel.agents.core'; please provide authentication to access versions from upstream that have not yet been saved to your feed. (DevOps Activity ID: 9BD504CC-E9DB-467E-AA60-7218C73CC825)).",
+      "projectPath": "C:\\Work\\GH\\repos\\banking-multi-agent-workshop\\csharp\\src\\ChatInfrastructure\\ChatInfrastructure.csproj",
+      "filePath": "C:\\Work\\GH\\repos\\banking-multi-agent-workshop\\csharp\\src\\ChatInfrastructure\\ChatInfrastructure.csproj",
+      "targetGraphs": []
+    },
+    {
+      "code": "NU1301",
+      "level": "Error",
+      "message": "Failed to retrieve information about 'Microsoft.SemanticKernel' from remote source 'https://pkgs.dev.azure.com/azure-sdk/29ec6040-b234-4e31-b139-33dc4287b756/_packaging/fa8c16a3-dbe0-4de2-a297-03065ec1ba3f/nuget/v3/flat2/microsoft.semantickernel/index.json'.\r\n  Response status code does not indicate success: 401 (Unauthorized - No local versions of package 'microsoft.semantickernel'; please provide authentication to access versions from upstream that have not yet been saved to your feed. (DevOps Activity ID: 148BBC74-3BC5-4C26-A63E-1B14D79C1C01)).",
+      "projectPath": "C:\\Work\\GH\\repos\\banking-multi-agent-workshop\\csharp\\src\\ChatInfrastructure\\ChatInfrastructure.csproj",
+      "filePath": "C:\\Work\\GH\\repos\\banking-multi-agent-workshop\\csharp\\src\\ChatInfrastructure\\ChatInfrastructure.csproj",
+      "targetGraphs": []
+    },
+    {
+      "code": "NU1301",
+      "level": "Error",
+      "message": "Failed to retrieve information about 'Microsoft.SemanticKernel' from remote source 'https://pkgs.dev.azure.com/azure-sdk/29ec6040-b234-4e31-b139-33dc4287b756/_packaging/fa8c16a3-dbe0-4de2-a297-03065ec1ba3f/nuget/v3/flat2/microsoft.semantickernel/index.json'.\r\n  Response status code does not indicate success: 401 (Unauthorized - No local versions of package 'microsoft.semantickernel'; please provide authentication to access versions from upstream that have not yet been saved to your feed. (DevOps Activity ID: 148BBC74-3BC5-4C26-A63E-1B14D79C1C01)).",
+      "projectPath": "C:\\Work\\GH\\repos\\banking-multi-agent-workshop\\csharp\\src\\ChatInfrastructure\\ChatInfrastructure.csproj",
+      "filePath": "C:\\Work\\GH\\repos\\banking-multi-agent-workshop\\csharp\\src\\ChatInfrastructure\\ChatInfrastructure.csproj",
+      "targetGraphs": []
+    },
+    {
+      "code": "Undefined",
+      "level": "Error",
+      "message": "Failed to download package 'Microsoft.Extensions.Hosting.9.0.2' from 'https://pkgs.dev.azure.com/azure-sdk/29ec6040-b234-4e31-b139-33dc4287b756/_packaging/fa8c16a3-dbe0-4de2-a297-03065ec1ba3f/nuget/v3/flat2/microsoft.extensions.hosting/9.0.2/microsoft.extensions.hosting.9.0.2.nupkg'.\r\nResponse status code does not indicate success: 401 (Unauthorized - No local versions of package 'microsoft.extensions.hosting'; please provide authentication to access versions from upstream that have not yet been saved to your feed. (DevOps Activity ID: ADBEB15C-CE70-4DDE-A775-16C6A7DAD744)).",
+      "projectPath": "C:\\Work\\GH\\repos\\banking-multi-agent-workshop\\csharp\\src\\ChatInfrastructure\\ChatInfrastructure.csproj",
+      "filePath": "C:\\Work\\GH\\repos\\banking-multi-agent-workshop\\csharp\\src\\ChatInfrastructure\\ChatInfrastructure.csproj",
+      "targetGraphs": []
+    },
+    {
+      "code": "Undefined",
+      "level": "Error",
+      "message": "Failed to download package 'Microsoft.NET.Test.Sdk.17.6.1' from 'https://pkgs.dev.azure.com/azure-sdk/29ec6040-b234-4e31-b139-33dc4287b756/_packaging/fa8c16a3-dbe0-4de2-a297-03065ec1ba3f/nuget/v3/flat2/microsoft.net.test.sdk/17.6.1/microsoft.net.test.sdk.17.6.1.nupkg'.\r\nResponse status code does not indicate success: 401 (Unauthorized - No local versions of package 'microsoft.net.test.sdk'; please provide authentication to access versions from upstream that have not yet been saved to your feed. (DevOps Activity ID: 245132C3-20BC-4D88-A018-1076AD0E794E)).",
+      "projectPath": "C:\\Work\\GH\\repos\\banking-multi-agent-workshop\\csharp\\src\\ChatInfrastructure\\ChatInfrastructure.csproj",
+      "filePath": "C:\\Work\\GH\\repos\\banking-multi-agent-workshop\\csharp\\src\\ChatInfrastructure\\ChatInfrastructure.csproj",
+      "targetGraphs": []
+    },
+    {
+      "code": "NU1301",
+      "level": "Error",
+      "message": "Failed to retrieve information about 'Microsoft.SemanticKernel.Connectors.AzureOpenAI' from remote source 'https://pkgs.dev.azure.com/azure-sdk/29ec6040-b234-4e31-b139-33dc4287b756/_packaging/fa8c16a3-dbe0-4de2-a297-03065ec1ba3f/nuget/v3/flat2/microsoft.semantickernel.connectors.azureopenai/index.json'.\r\n  Response status code does not indicate success: 401 (Unauthorized - No local versions of package 'microsoft.semantickernel.connectors.azureopenai'; please provide authentication to access versions from upstream that have not yet been saved to your feed. (DevOps Activity ID: C7259D38-243C-40C3-89D8-4000F3ADCB6A)).",
+      "projectPath": "C:\\Work\\GH\\repos\\banking-multi-agent-workshop\\csharp\\src\\ChatInfrastructure\\ChatInfrastructure.csproj",
+      "filePath": "C:\\Work\\GH\\repos\\banking-multi-agent-workshop\\csharp\\src\\ChatInfrastructure\\ChatInfrastructure.csproj",
+      "targetGraphs": []
+    },
+    {
+      "code": "NU1301",
+      "level": "Error",
+      "message": "Failed to retrieve information about 'Microsoft.SemanticKernel.Connectors.AzureOpenAI' from remote source 'https://pkgs.dev.azure.com/azure-sdk/29ec6040-b234-4e31-b139-33dc4287b756/_packaging/fa8c16a3-dbe0-4de2-a297-03065ec1ba3f/nuget/v3/flat2/microsoft.semantickernel.connectors.azureopenai/index.json'.\r\n  Response status code does not indicate success: 401 (Unauthorized - No local versions of package 'microsoft.semantickernel.connectors.azureopenai'; please provide authentication to access versions from upstream that have not yet been saved to your feed. (DevOps Activity ID: C7259D38-243C-40C3-89D8-4000F3ADCB6A)).",
+      "projectPath": "C:\\Work\\GH\\repos\\banking-multi-agent-workshop\\csharp\\src\\ChatInfrastructure\\ChatInfrastructure.csproj",
+      "filePath": "C:\\Work\\GH\\repos\\banking-multi-agent-workshop\\csharp\\src\\ChatInfrastructure\\ChatInfrastructure.csproj",
+      "targetGraphs": []
+    },
+    {
+      "code": "NU1301",
+      "level": "Error",
+      "message": "Failed to retrieve information about 'Microsoft.SemanticKernel.Connectors.AzureCosmosDBNoSQL' from remote source 'https://pkgs.dev.azure.com/azure-sdk/29ec6040-b234-4e31-b139-33dc4287b756/_packaging/fa8c16a3-dbe0-4de2-a297-03065ec1ba3f/nuget/v3/flat2/microsoft.semantickernel.connectors.azurecosmosdbnosql/index.json'.\r\n  Response status code does not indicate success: 401 (Unauthorized - No local versions of package 'microsoft.semantickernel.connectors.azurecosmosdbnosql'; please provide authentication to access versions from upstream that have not yet been saved to your feed. (DevOps Activity ID: ADBEB027-CE70-4DDE-A775-16C6A7DAD744)).",
+      "projectPath": "C:\\Work\\GH\\repos\\banking-multi-agent-workshop\\csharp\\src\\ChatInfrastructure\\ChatInfrastructure.csproj",
+      "filePath": "C:\\Work\\GH\\repos\\banking-multi-agent-workshop\\csharp\\src\\ChatInfrastructure\\ChatInfrastructure.csproj",
+      "targetGraphs": []
+    },
+    {
+      "code": "NU1301",
+      "level": "Error",
+      "message": "Failed to retrieve information about 'Microsoft.SemanticKernel.Connectors.AzureOpenAI' from remote source 'https://pkgs.dev.azure.com/azure-sdk/29ec6040-b234-4e31-b139-33dc4287b756/_packaging/fa8c16a3-dbe0-4de2-a297-03065ec1ba3f/nuget/v3/flat2/microsoft.semantickernel.connectors.azureopenai/index.json'.\r\n  Response status code does not indicate success: 401 (Unauthorized - No local versions of package 'microsoft.semantickernel.connectors.azureopenai'; please provide authentication to access versions from upstream that have not yet been saved to your feed. (DevOps Activity ID: C7259D38-243C-40C3-89D8-4000F3ADCB6A)).",
+      "projectPath": "C:\\Work\\GH\\repos\\banking-multi-agent-workshop\\csharp\\src\\ChatInfrastructure\\ChatInfrastructure.csproj",
+      "filePath": "C:\\Work\\GH\\repos\\banking-multi-agent-workshop\\csharp\\src\\ChatInfrastructure\\ChatInfrastructure.csproj",
+      "targetGraphs": []
+    },
+    {
+      "code": "NU1301",
+      "level": "Error",
+      "message": "Failed to retrieve information about 'Microsoft.SemanticKernel.Agents.Abstractions' from remote source 'https://pkgs.dev.azure.com/azure-sdk/29ec6040-b234-4e31-b139-33dc4287b756/_packaging/fa8c16a3-dbe0-4de2-a297-03065ec1ba3f/nuget/v3/flat2/microsoft.semantickernel.agents.abstractions/index.json'.\r\n  Response status code does not indicate success: 401 (Unauthorized - No local versions of package 'microsoft.semantickernel.agents.abstractions'; please provide authentication to access versions from upstream that have not yet been saved to your feed. (DevOps Activity ID: 9BD50C1E-E9DB-467E-AA60-7218C73CC825)).",
+      "projectPath": "C:\\Work\\GH\\repos\\banking-multi-agent-workshop\\csharp\\src\\ChatInfrastructure\\ChatInfrastructure.csproj",
+      "filePath": "C:\\Work\\GH\\repos\\banking-multi-agent-workshop\\csharp\\src\\ChatInfrastructure\\ChatInfrastructure.csproj",
+      "targetGraphs": []
+    },
+    {
+      "code": "NU1301",
+      "level": "Error",
+      "message": "Failed to retrieve information about 'Microsoft.SemanticKernel.Agents.Abstractions' from remote source 'https://pkgs.dev.azure.com/azure-sdk/29ec6040-b234-4e31-b139-33dc4287b756/_packaging/fa8c16a3-dbe0-4de2-a297-03065ec1ba3f/nuget/v3/flat2/microsoft.semantickernel.agents.abstractions/index.json'.\r\n  Response status code does not indicate success: 401 (Unauthorized - No local versions of package 'microsoft.semantickernel.agents.abstractions'; please provide authentication to access versions from upstream that have not yet been saved to your feed. (DevOps Activity ID: 9BD50C1E-E9DB-467E-AA60-7218C73CC825)).",
+      "projectPath": "C:\\Work\\GH\\repos\\banking-multi-agent-workshop\\csharp\\src\\ChatInfrastructure\\ChatInfrastructure.csproj",
+      "filePath": "C:\\Work\\GH\\repos\\banking-multi-agent-workshop\\csharp\\src\\ChatInfrastructure\\ChatInfrastructure.csproj",
+      "targetGraphs": []
+    },
+    {
+      "code": "Undefined",
+      "level": "Error",
+      "message": "Failed to download package 'Microsoft.Extensions.Configuration.CommandLine.9.0.2' from 'https://pkgs.dev.azure.com/azure-sdk/29ec6040-b234-4e31-b139-33dc4287b756/_packaging/fa8c16a3-dbe0-4de2-a297-03065ec1ba3f/nuget/v3/flat2/microsoft.extensions.configuration.commandline/9.0.2/microsoft.extensions.configuration.commandline.9.0.2.nupkg'.\r\nResponse status code does not indicate success: 401 (Unauthorized - No local versions of package 'microsoft.extensions.configuration.commandline'; please provide authentication to access versions from upstream that have not yet been saved to your feed. (DevOps Activity ID: C7258B38-243C-40C3-89D8-4000F3ADCB6A)).",
+      "projectPath": "C:\\Work\\GH\\repos\\banking-multi-agent-workshop\\csharp\\src\\ChatInfrastructure\\ChatInfrastructure.csproj",
+      "filePath": "C:\\Work\\GH\\repos\\banking-multi-agent-workshop\\csharp\\src\\ChatInfrastructure\\ChatInfrastructure.csproj",
+      "targetGraphs": []
+    },
+    {
+      "code": "Undefined",
+      "level": "Error",
+      "message": "Failed to download package 'Microsoft.Extensions.Configuration.UserSecrets.9.0.2' from 'https://pkgs.dev.azure.com/azure-sdk/29ec6040-b234-4e31-b139-33dc4287b756/_packaging/fa8c16a3-dbe0-4de2-a297-03065ec1ba3f/nuget/v3/flat2/microsoft.extensions.configuration.usersecrets/9.0.2/microsoft.extensions.configuration.usersecrets.9.0.2.nupkg'.\r\nResponse status code does not indicate success: 401 (Unauthorized - No local versions of package 'microsoft.extensions.configuration.usersecrets'; please provide authentication to access versions from upstream that have not yet been saved to your feed. (DevOps Activity ID: 148BAA5B-3BC5-4C26-A63E-1B14D79C1C01)).",
+      "projectPath": "C:\\Work\\GH\\repos\\banking-multi-agent-workshop\\csharp\\src\\ChatInfrastructure\\ChatInfrastructure.csproj",
+      "filePath": "C:\\Work\\GH\\repos\\banking-multi-agent-workshop\\csharp\\src\\ChatInfrastructure\\ChatInfrastructure.csproj",
+      "targetGraphs": []
+    },
+    {
+      "code": "Undefined",
+      "level": "Error",
+      "message": "Failed to download package 'Microsoft.CodeCoverage.17.6.1' from 'https://pkgs.dev.azure.com/azure-sdk/29ec6040-b234-4e31-b139-33dc4287b756/_packaging/fa8c16a3-dbe0-4de2-a297-03065ec1ba3f/nuget/v3/flat2/microsoft.codecoverage/17.6.1/microsoft.codecoverage.17.6.1.nupkg'.\r\nResponse status code does not indicate success: 401 (Unauthorized - No local versions of package 'microsoft.codecoverage'; please provide authentication to access versions from upstream that have not yet been saved to your feed. (DevOps Activity ID: 045CAE22-AA86-4E67-B8AF-ABED8E4EAF4A)).",
+      "projectPath": "C:\\Work\\GH\\repos\\banking-multi-agent-workshop\\csharp\\src\\ChatInfrastructure\\ChatInfrastructure.csproj",
+      "filePath": "C:\\Work\\GH\\repos\\banking-multi-agent-workshop\\csharp\\src\\ChatInfrastructure\\ChatInfrastructure.csproj",
+      "targetGraphs": []
+    }
+  ]
+}

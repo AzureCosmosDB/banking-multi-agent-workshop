@@ -1,0 +1,203 @@
+{
+  "version": 3,
+  "targets": {
+    "net8.0": {}
+  },
+  "libraries": {},
+  "projectFileDependencyGroups": {
+    "net8.0": [
+      "Azure.Identity >= 1.13.2",
+      "Microsoft.Azure.Cosmos >= 3.47.0",
+      "Microsoft.Extensions.Logging >= 9.0.2",
+      "Microsoft.Extensions.Options >= 9.0.2",
+      "Microsoft.SemanticKernel >= 1.40.1",
+      "Microsoft.SemanticKernel.Connectors.AzureCosmosDBNoSQL >= 1.40.1-preview",
+      "Microsoft.SemanticKernel.Connectors.AzureOpenAI >= 1.40.1",
+      "Newtonsoft.Json >= 13.0.3",
+      "System.Linq.Async >= 6.0.1"
+    ]
+  },
+  "packageFolders": {
+    "C:\\Users\\sandnair\\.nuget\\packages\\": {},
+    "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages": {}
+  },
+  "project": {
+    "version": "1.0.0",
+    "restore": {
+      "projectUniqueName": "C:\\Work\\GH\\repos\\banking-multi-agent-workshop\\csharp\\src\\BankingAPI\\BankingServices.csproj",
+      "projectName": "BankingServices",
+      "projectPath": "C:\\Work\\GH\\repos\\banking-multi-agent-workshop\\csharp\\src\\BankingAPI\\BankingServices.csproj",
+      "packagesPath": "C:\\Users\\sandnair\\.nuget\\packages\\",
+      "outputPath": "C:\\Work\\GH\\repos\\banking-multi-agent-workshop\\csharp\\src\\BankingAPI\\obj\\",
+      "projectStyle": "PackageReference",
+      "fallbackFolders": [
+        "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
+      ],
+      "configFilePaths": [
+        "C:\\Work\\GH\\repos\\banking-multi-agent-workshop\\csharp\\src\\NuGet.Config",
+        "C:\\Users\\sandnair\\AppData\\Roaming\\NuGet\\NuGet.Config",
+        "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
+        "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
+      ],
+      "originalTargetFrameworks": [
+        "net8.0"
+      ],
+      "sources": {
+        "https://api.nuget.org/v3/index.json": {},
+        "https://pkgs.dev.azure.com/azure-sdk/public/_packaging/azure-sdk-for-net/nuget/v3/index.json": {}
+      },
+      "frameworks": {
+        "net8.0": {
+          "targetAlias": "net8.0",
+          "projectReferences": {
+            "C:\\Work\\GH\\repos\\banking-multi-agent-workshop\\csharp\\src\\Common\\Common.csproj": {
+              "projectPath": "C:\\Work\\GH\\repos\\banking-multi-agent-workshop\\csharp\\src\\Common\\Common.csproj"
+            }
+          }
+        }
+      },
+      "warningProperties": {
+        "warnAsError": [
+          "NU1605"
+        ]
+      },
+      "restoreAuditProperties": {
+        "enableAudit": "true",
+        "auditLevel": "low",
+        "auditMode": "direct"
+      },
+      "SdkAnalysisLevel": "10.0.100"
+    },
+    "frameworks": {
+      "net8.0": {
+        "targetAlias": "net8.0",
+        "dependencies": {
+          "Azure.Identity": {
+            "target": "Package",
+            "version": "[1.13.2, )"
+          },
+          "Microsoft.Azure.Cosmos": {
+            "target": "Package",
+            "version": "[3.47.0, )"
+          },
+          "Microsoft.Extensions.Logging": {
+            "target": "Package",
+            "version": "[9.0.2, )"
+          },
+          "Microsoft.Extensions.Options": {
+            "target": "Package",
+            "version": "[9.0.2, )"
+          },
+          "Microsoft.SemanticKernel": {
+            "target": "Package",
+            "version": "[1.40.1, )"
+          },
+          "Microsoft.SemanticKernel.Connectors.AzureCosmosDBNoSQL": {
+            "target": "Package",
+            "version": "[1.40.1-preview, )"
+          },
+          "Microsoft.SemanticKernel.Connectors.AzureOpenAI": {
+            "target": "Package",
+            "version": "[1.40.1, )"
+          },
+          "Newtonsoft.Json": {
+            "target": "Package",
+            "version": "[13.0.3, )"
+          },
+          "System.Linq.Async": {
+            "target": "Package",
+            "version": "[6.0.1, )"
+          }
+        },
+        "imports": [
+          "net461",
+          "net462",
+          "net47",
+          "net471",
+          "net472",
+          "net48",
+          "net481"
+        ],
+        "assetTargetFallback": true,
+        "warn": true,
+        "downloadDependencies": [
+          {
+            "name": "Microsoft.AspNetCore.App.Ref",
+            "version": "[8.0.24, 8.0.24]"
+          },
+          {
+            "name": "Microsoft.NETCore.App.Ref",
+            "version": "[8.0.24, 8.0.24]"
+          },
+          {
+            "name": "Microsoft.WindowsDesktop.App.Ref",
+            "version": "[8.0.24, 8.0.24]"
+          }
+        ],
+        "frameworkReferences": {
+          "Microsoft.NETCore.App": {
+            "privateAssets": "all"
+          }
+        },
+        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\10.0.103/PortableRuntimeIdentifierGraph.json"
+      }
+    }
+  },
+  "logs": [
+    {
+      "code": "NU1301",
+      "level": "Error",
+      "message": "Failed to retrieve information about 'Microsoft.SemanticKernel.Connectors.AzureCosmosDBNoSQL' from remote source 'https://pkgs.dev.azure.com/azure-sdk/29ec6040-b234-4e31-b139-33dc4287b756/_packaging/fa8c16a3-dbe0-4de2-a297-03065ec1ba3f/nuget/v3/flat2/microsoft.semantickernel.connectors.azurecosmosdbnosql/index.json'.\r\n  Response status code does not indicate success: 401 (Unauthorized - No local versions of package 'microsoft.semantickernel.connectors.azurecosmosdbnosql'; please provide authentication to access versions from upstream that have not yet been saved to your feed. (DevOps Activity ID: ADBEB027-CE70-4DDE-A775-16C6A7DAD744))."
+    },
+    {
+      "code": "NU1301",
+      "level": "Error",
+      "message": "Failed to retrieve information about 'Microsoft.SemanticKernel.Connectors.AzureCosmosDBNoSQL' from remote source 'https://pkgs.dev.azure.com/azure-sdk/29ec6040-b234-4e31-b139-33dc4287b756/_packaging/fa8c16a3-dbe0-4de2-a297-03065ec1ba3f/nuget/v3/flat2/microsoft.semantickernel.connectors.azurecosmosdbnosql/index.json'.\r\n  Response status code does not indicate success: 401 (Unauthorized - No local versions of package 'microsoft.semantickernel.connectors.azurecosmosdbnosql'; please provide authentication to access versions from upstream that have not yet been saved to your feed. (DevOps Activity ID: ADBEB027-CE70-4DDE-A775-16C6A7DAD744))."
+    },
+    {
+      "code": "NU1301",
+      "level": "Error",
+      "message": "Failed to retrieve information about 'Microsoft.SemanticKernel.Connectors.AzureOpenAI' from remote source 'https://pkgs.dev.azure.com/azure-sdk/29ec6040-b234-4e31-b139-33dc4287b756/_packaging/fa8c16a3-dbe0-4de2-a297-03065ec1ba3f/nuget/v3/flat2/microsoft.semantickernel.connectors.azureopenai/index.json'.\r\n  Response status code does not indicate success: 401 (Unauthorized - No local versions of package 'microsoft.semantickernel.connectors.azureopenai'; please provide authentication to access versions from upstream that have not yet been saved to your feed. (DevOps Activity ID: C7259D38-243C-40C3-89D8-4000F3ADCB6A))."
+    },
+    {
+      "code": "NU1301",
+      "level": "Error",
+      "message": "Failed to retrieve information about 'Microsoft.SemanticKernel.Connectors.AzureOpenAI' from remote source 'https://pkgs.dev.azure.com/azure-sdk/29ec6040-b234-4e31-b139-33dc4287b756/_packaging/fa8c16a3-dbe0-4de2-a297-03065ec1ba3f/nuget/v3/flat2/microsoft.semantickernel.connectors.azureopenai/index.json'.\r\n  Response status code does not indicate success: 401 (Unauthorized - No local versions of package 'microsoft.semantickernel.connectors.azureopenai'; please provide authentication to access versions from upstream that have not yet been saved to your feed. (DevOps Activity ID: C7259D38-243C-40C3-89D8-4000F3ADCB6A))."
+    },
+    {
+      "code": "NU1301",
+      "level": "Error",
+      "message": "Failed to retrieve information about 'Microsoft.SemanticKernel' from remote source 'https://pkgs.dev.azure.com/azure-sdk/29ec6040-b234-4e31-b139-33dc4287b756/_packaging/fa8c16a3-dbe0-4de2-a297-03065ec1ba3f/nuget/v3/flat2/microsoft.semantickernel/index.json'.\r\n  Response status code does not indicate success: 401 (Unauthorized - No local versions of package 'microsoft.semantickernel'; please provide authentication to access versions from upstream that have not yet been saved to your feed. (DevOps Activity ID: 148BBC74-3BC5-4C26-A63E-1B14D79C1C01))."
+    },
+    {
+      "code": "NU1301",
+      "level": "Error",
+      "message": "Failed to retrieve information about 'Microsoft.SemanticKernel' from remote source 'https://pkgs.dev.azure.com/azure-sdk/29ec6040-b234-4e31-b139-33dc4287b756/_packaging/fa8c16a3-dbe0-4de2-a297-03065ec1ba3f/nuget/v3/flat2/microsoft.semantickernel/index.json'.\r\n  Response status code does not indicate success: 401 (Unauthorized - No local versions of package 'microsoft.semantickernel'; please provide authentication to access versions from upstream that have not yet been saved to your feed. (DevOps Activity ID: 148BBC74-3BC5-4C26-A63E-1B14D79C1C01))."
+    },
+    {
+      "code": "Undefined",
+      "level": "Error",
+      "message": "Failed to download package 'Microsoft.Extensions.Options.9.0.2' from 'https://pkgs.dev.azure.com/azure-sdk/29ec6040-b234-4e31-b139-33dc4287b756/_packaging/fa8c16a3-dbe0-4de2-a297-03065ec1ba3f/nuget/v3/flat2/microsoft.extensions.options/9.0.2/microsoft.extensions.options.9.0.2.nupkg'.\r\nResponse status code does not indicate success: 401 (Unauthorized - No local versions of package 'microsoft.extensions.options'; please provide authentication to access versions from upstream that have not yet been saved to your feed. (DevOps Activity ID: 24513207-20BC-4D88-A018-1076AD0E794E))."
+    },
+    {
+      "code": "NU1301",
+      "level": "Error",
+      "message": "Failed to retrieve information about 'Microsoft.SemanticKernel.Agents.Core' from remote source 'https://pkgs.dev.azure.com/azure-sdk/29ec6040-b234-4e31-b139-33dc4287b756/_packaging/fa8c16a3-dbe0-4de2-a297-03065ec1ba3f/nuget/v3/flat2/microsoft.semantickernel.agents.core/index.json'.\r\n  Response status code does not indicate success: 401 (Unauthorized - No local versions of package 'microsoft.semantickernel.agents.core'; please provide authentication to access versions from upstream that have not yet been saved to your feed. (DevOps Activity ID: 9BD504CC-E9DB-467E-AA60-7218C73CC825))."
+    },
+    {
+      "code": "NU1301",
+      "level": "Error",
+      "message": "Failed to retrieve information about 'Microsoft.SemanticKernel.Core' from remote source 'https://pkgs.dev.azure.com/azure-sdk/29ec6040-b234-4e31-b139-33dc4287b756/_packaging/fa8c16a3-dbe0-4de2-a297-03065ec1ba3f/nuget/v3/flat2/microsoft.semantickernel.core/index.json'.\r\n  Response status code does not indicate success: 401 (Unauthorized - No local versions of package 'microsoft.semantickernel.core'; please provide authentication to access versions from upstream that have not yet been saved to your feed. (DevOps Activity ID: 245131E7-20BC-4D88-A018-1076AD0E794E))."
+    },
+    {
+      "code": "NU1301",
+      "level": "Error",
+      "message": "Failed to retrieve information about 'Microsoft.SemanticKernel.Core' from remote source 'https://pkgs.dev.azure.com/azure-sdk/29ec6040-b234-4e31-b139-33dc4287b756/_packaging/fa8c16a3-dbe0-4de2-a297-03065ec1ba3f/nuget/v3/flat2/microsoft.semantickernel.core/index.json'.\r\n  Response status code does not indicate success: 401 (Unauthorized - No local versions of package 'microsoft.semantickernel.core'; please provide authentication to access versions from upstream that have not yet been saved to your feed. (DevOps Activity ID: 245131E7-20BC-4D88-A018-1076AD0E794E))."
+    },
+    {
+      "code": "NU1301",
+      "level": "Error",
+      "message": "Failed to retrieve information about 'Microsoft.SemanticKernel.Core' from remote source 'https://pkgs.dev.azure.com/azure-sdk/29ec6040-b234-4e31-b139-33dc4287b756/_packaging/fa8c16a3-dbe0-4de2-a297-03065ec1ba3f/nuget/v3/flat2/microsoft.semantickernel.core/index.json'.\r\n  Response status code does not indicate success: 401 (Unauthorized - No local versions of package 'microsoft.semantickernel.core'; please provide authentication to access versions from upstream that have not yet been saved to your feed. (DevOps Activity ID: 245131E7-20BC-4D88-A018-1076AD0E794E))."
+    }
+  ]
+}

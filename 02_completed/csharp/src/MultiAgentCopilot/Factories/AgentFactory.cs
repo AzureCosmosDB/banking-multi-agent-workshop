@@ -54,9 +54,9 @@ namespace MultiAgentCopilot.Factories
             {
                 logger.LogInformation("Creating agent {AgentType} with InProcess tools", agentType);
                 
-                var aiFunctions = GetInProcessAgentTools(agentType, bankService, loggerFactory).ToArray();
+                var aiFunctions = GetInProcessAgentTools(agentType, bankService, loggerFactory)?.ToArray() ?? [];
 
-                var agent = chatClient.CreateAIAgent(
+                var agent = chatClient.AsAIAgent(
                         instructions: GetAgentPrompt(agentType),
                         name: GetAgentName(agentType),
                         description: GetAgentDescription(agentType),
@@ -87,7 +87,7 @@ namespace MultiAgentCopilot.Factories
 
                 var aiFunctions = await mcpService.GetMcpTools(agentType);
 
-                var agent = chatClient.CreateAIAgent(
+                var agent = chatClient.AsAIAgent(
                         instructions: GetAgentPrompt(agentType),
                         name: GetAgentName(agentType),
                         description: GetAgentDescription(agentType),

@@ -76,7 +76,11 @@ This method implements the agent selection logic using a moderator agent. It ana
      }));
      
      // Create a moderator agent to decide which agent should respond next
-     ChatClientAgentOptions agentOptions = new(name: "Moderator", instructions: PromptFactory.Selection(historyText, GetAgentNames()))
+     var moderatorAgent = _chatClient.AsAIAgent(
+         instructions: PromptFactory.Selection(historyText, GetAgentNames()),
+         name: "Moderator");
+
+     var runOptions = new ChatClientAgentRunOptions
      {
          ChatOptions = new()
          {
@@ -87,11 +91,11 @@ This method implements the agent selection logic using a moderator agent. It ana
          }
      };
 
-     var moderatorAgent = _chatClient.CreateAIAgent(agentOptions);
-
      // Get the selection recommendation from the moderator
-     var response = await moderatorAgent.RunAsync(history);
-     var selectionInfo = response.Deserialize<ContinuationInfo>(JsonSerializerOptions.Web);
+     var response = await moderatorAgent.RunAsync(history, null, runOptions, cancellationToken);
+     var selectionInfo = string.IsNullOrWhiteSpace(response.Text)
+         ? null
+         : JsonSerializer.Deserialize<ContinuationInfo>(response.Text, JsonSerializerOptions.Web);
 
      var selectedAgentName = selectionInfo?.AgentName?.ToString();
      var reason = selectionInfo?.Reason;
@@ -127,9 +131,11 @@ This method implements the agent selection logic using a moderator agent. It ana
      }));
 
      // Create a termination decision agent using the TerminationStrategy.prompty
-     ChatClientAgentOptions agentOptions = new(
-         name: "TerminationDecider",
-         instructions: PromptFactory.Termination(historyText))
+     var terminationAgent = _chatClient.AsAIAgent(
+         instructions: PromptFactory.Termination(historyText),
+         name: "TerminationDecider");
+
+     var runOptions = new ChatClientAgentRunOptions
      {
          ChatOptions = new()
          {
@@ -140,13 +146,13 @@ This method implements the agent selection logic using a moderator agent. It ana
          }
      };
 
-     var terminationAgent = _chatClient.CreateAIAgent(agentOptions);
-
      try
      {
          // Get the termination decision from the AI agent
-         var response = await terminationAgent.RunAsync(history);
-         var terminationInfo = response.Deserialize<TerminationInfo>(JsonSerializerOptions.Web);
+         var response = await terminationAgent.RunAsync(history, null, runOptions, cancellationToken);
+         var terminationInfo = string.IsNullOrWhiteSpace(response.Text)
+             ? null
+             : JsonSerializer.Deserialize<TerminationInfo>(response.Text, JsonSerializerOptions.Web);
 
          var shouldContinue = terminationInfo?.ShouldContinue ?? true;
          var reason = terminationInfo?.Reason ?? "No reason provided";
@@ -215,21 +221,21 @@ Until now the responses we received were from a single agent, lets use AgentGrou
                         switch (content)
                         {
                             case FunctionCallContent functionCall:
-                                LogMessage("Function Call", $"Name: {functionCall.Name}, CallId: {functionCall.CallId}");
-                                LogMessage("Function Arguments", JsonSerializer.Serialize(functionCall.Arguments, new JsonSerializerOptions { WriteIndented = true }));
+                                LogMessage("Function Call", $"Name: {functionCall.Name}, CallId: {functionCall.CallId}, Arguments: {JsonSerializer.Serialize(functionCall.Arguments, new JsonSerializerOptions { WriteIndented = true })}");
                                 break;
                         }
                     }
                 }
             }
 
-            if (selectedAgentName == "__")
-            {
-                _logger.LogError("Error in getting response");
-                return ("I’m sorry, I didn’t quite understand that. Could you please rephrase your message?", "Oops!");
-            }
             // Extract response text
             string responseText = ExtractResponseText(responseMessages);
+
+            if (string.IsNullOrWhiteSpace(responseText))
+            {
+                _logger.LogError("Error in getting response: workflow produced empty assistant text");
+                return ("I’m sorry, I didn’t quite understand that. Could you please rephrase your message?", "Oops!");
+            }
 
             _logger.LogInformation("Agent Framework orchestration completed with agent: {AgentName}", selectedAgentName);
 
@@ -257,6 +263,7 @@ public async Task<Tuple<List<Message>, List<DebugLog>>> GetResponse(
 {
     try
     {
+        _promptDebugProperties= new List<LogProperty>(); // Reset debug properties for each new message
         messageHistory.Add(userMessage);
         var chatHistory = ConvertToAIChatMessages(messageHistory);
         chatHistory.Add(new ChatMessage(ChatRole.User, userMessage.Text));
@@ -370,18 +377,22 @@ namespace MultiAgentCopilot.MultiAgentCopilot.Helper
         }
 
 
-         protected override async ValueTask<AIAgent> SelectNextAgentAsync(IReadOnlyList<ChatMessage> history, CancellationToken cancellationToken = default(CancellationToken))
+        protected override async ValueTask<AIAgent> SelectNextAgentAsync(IReadOnlyList<ChatMessage> history, CancellationToken cancellationToken = default(CancellationToken))
         {
             // Convert chat history to a string representation for the prompt
-            var historyText = string.Join("\n", history.TakeLast(5).Select(msg => 
+            var historyText = string.Join("\n", history.TakeLast(5).Select(msg =>
             {
                 var role = msg.Role.ToString();
                 var content = msg.Text ?? "";
                 return $"{role}: {content}";
             }));
-            
+
             // Create a moderator agent to decide which agent should respond next
-            ChatClientAgentOptions agentOptions = new(name: "Moderator", instructions: PromptFactory.Selection(historyText, GetAgentNames()))
+            var moderatorAgent = _chatClient.AsAIAgent(
+                instructions: PromptFactory.Selection(historyText, GetAgentNames()),
+                name: "Moderator");
+
+            var runOptions = new ChatClientAgentRunOptions
             {
                 ChatOptions = new()
                 {
@@ -392,11 +403,11 @@ namespace MultiAgentCopilot.MultiAgentCopilot.Helper
                 }
             };
 
-            var moderatorAgent = _chatClient.CreateAIAgent(agentOptions);
-
             // Get the selection recommendation from the moderator
-            var response = await moderatorAgent.RunAsync(history);
-            var selectionInfo = response.Deserialize<ContinuationInfo>(JsonSerializerOptions.Web);
+            var response = await moderatorAgent.RunAsync(history, null, runOptions, cancellationToken);
+            var selectionInfo = string.IsNullOrWhiteSpace(response.Text)
+                ? null
+                : JsonSerializer.Deserialize<ContinuationInfo>(response.Text, JsonSerializerOptions.Web);
 
             var selectedAgentName = selectionInfo?.AgentName?.ToString();
             var reason = selectionInfo?.Reason;
@@ -410,57 +421,9 @@ namespace MultiAgentCopilot.MultiAgentCopilot.Helper
 
             // Return the selected agent, or default to the first agent if no match found
             return selectedAgent ?? _agents[0];
-            
+
         }
-      
 
-        protected override async ValueTask<bool> ShouldTerminateAsync(IReadOnlyList<ChatMessage> history, CancellationToken cancellationToken = default(CancellationToken))
-        {
-
-            // Check if the last user message was from user, if so, do not terminate, skip system messages
-            for(int i = history.Count -1; i >=0; i--)
-            {
-                if(history[i].Role == ChatRole.System)
-                {
-                    continue;
-                }
-                else if(history[i].Role == ChatRole.User)
-                {
-                    return false;
-                }
-                else
-                {
-                    break;
-                }
-            }       
-
-            // First check if there's a custom termination function
-            if (_shouldTerminateFunc != null)
-            {
-                bool customResult = await _shouldTerminateFunc(this, history, cancellationToken).ConfigureAwait(continueOnCapturedContext: false);
-                if (customResult)
-                {
-                    return true;
-                }
-            }
-
-            // Use AI-based termination decision using TerminationStrategy.prompty
-            try
-            {
-                var shouldTerminate = await ShouldTerminateWithAI(history, cancellationToken);
-                if (shouldTerminate)
-                {
-                    return true;
-                }
-            }
-            catch (Exception ex)
-            {
-                _logCallback.Invoke("ShouldTerminateAsync Error", ex.Message);
-            }
-
-            // Fall back to base implementation
-            return await base.ShouldTerminateAsync(history, cancellationToken).ConfigureAwait(continueOnCapturedContext: false);
-        }
 
         private async Task<bool> ShouldTerminateWithAI(IReadOnlyList<ChatMessage> history, CancellationToken cancellationToken)
         {
@@ -476,9 +439,11 @@ namespace MultiAgentCopilot.MultiAgentCopilot.Helper
             }));
 
             // Create a termination decision agent using the TerminationStrategy.prompty
-            ChatClientAgentOptions agentOptions = new(
-                name: "TerminationDecider",
-                instructions: PromptFactory.Termination(historyText))
+            var terminationAgent = _chatClient.AsAIAgent(
+                instructions: PromptFactory.Termination(historyText),
+                name: "TerminationDecider");
+
+            var runOptions = new ChatClientAgentRunOptions
             {
                 ChatOptions = new()
                 {
@@ -489,13 +454,13 @@ namespace MultiAgentCopilot.MultiAgentCopilot.Helper
                 }
             };
 
-            var terminationAgent = _chatClient.CreateAIAgent(agentOptions);
-
             try
             {
                 // Get the termination decision from the AI agent
-                var response = await terminationAgent.RunAsync(history);
-                var terminationInfo = response.Deserialize<TerminationInfo>(JsonSerializerOptions.Web);
+                var response = await terminationAgent.RunAsync(history, null, runOptions, cancellationToken);
+                var terminationInfo = string.IsNullOrWhiteSpace(response.Text)
+                    ? null
+                    : JsonSerializer.Deserialize<TerminationInfo>(response.Text, JsonSerializerOptions.Web);
 
                 var shouldContinue = terminationInfo?.ShouldContinue ?? true;
                 var reason = terminationInfo?.Reason ?? "No reason provided";
@@ -522,8 +487,6 @@ namespace MultiAgentCopilot.MultiAgentCopilot.Helper
         }
     }
 }
-
-
 ```
 </details>
 <details>
@@ -626,7 +589,7 @@ public class AgentFrameworkService : IDisposable
             {
                 Transport = new HttpClientPipelineTransport(),
             });
-    
+
             return openAIClient
                 .GetChatClient(_settings.AzureOpenAISettings.CompletionsDeployment)
                 .AsIChatClient();
@@ -692,12 +655,13 @@ public class AgentFrameworkService : IDisposable
     #region Public Methods
 
     //TO DO: Add SetInProcessToolService
-        /// <summary>
+
+    /// <summary>
     /// Sets the in-process tool service for banking operations.
     /// </summary>
     /// <param name="bankService">The banking data service instance.</param>
     /// <returns>True if the service was set successfully.</returns>
-    
+
     public bool SetInProcessToolService(BankingDataService bankService)
     {
         _bankService = bankService ?? throw new ArgumentNullException(nameof(bankService));
@@ -706,9 +670,12 @@ public class AgentFrameworkService : IDisposable
     }
 
 
+
     //TO DO: Add SetMCPToolService
+    
 
     ////TO DO: Add RunGroupChatOrchestration
+
 
     /// <summary>
     /// Initializes the AI agents based on available tool services.
@@ -726,9 +693,8 @@ public class AgentFrameworkService : IDisposable
                 {
                     _agents = AgentFactory.CreateAllAgentsWithInProcessTools(_chatClient, _bankService, _loggerFactory);
                 }
-
                 //TO DO: Add MCP Service Option
-
+               
 
                 if (_agents == null || _agents.Count == 0)
                 {
@@ -769,16 +735,17 @@ public class AgentFrameworkService : IDisposable
     /// <returns>A tuple containing the response messages and debug logs.</returns>
     /// 
     //TO DO: Add GetResponse function
-    
+
     public async Task<Tuple<List<Message>, List<DebugLog>>> GetResponse(
-        Message userMessage,
-        List<Message> messageHistory,
-        BankingDataService bankService,
-        string tenantId,
-        string userId)
+    Message userMessage,
+    List<Message> messageHistory,
+    BankingDataService bankService,
+    string tenantId,
+    string userId)
     {
         try
         {
+            _promptDebugProperties = new List<LogProperty>(); // Reset debug properties for each new message
             messageHistory.Add(userMessage);
             var chatHistory = ConvertToAIChatMessages(messageHistory);
             chatHistory.Add(new ChatMessage(ChatRole.User, userMessage.Text));
@@ -801,24 +768,24 @@ public class AgentFrameworkService : IDisposable
     /// <returns>A summarized version of the text.</returns>
     /// 
     //TO DO: Add Summarize function
-    
+
     public async Task<string> Summarize(string sessionId, string userPrompt)
     {
         try
         {
-            var agent = _chatClient.CreateAIAgent(
-                "Summarize the text into exactly two words:", 
+            var agent = _chatClient.AsAIAgent(
+                "Summarize the text into exactly two words:",
                 "Summarizer");
 
-            return agent.RunAsync(userPrompt).GetAwaiter().GetResult().Text;        
-        
+            return agent.RunAsync(userPrompt).GetAwaiter().GetResult().Text;
+
         }
         catch (Exception ex)
         {
             _logger.LogError(ex, "Error when getting response: {ErrorMessage}", ex.Message);
             return string.Empty;
         }
-    }   
+    }
 
 
     /// <summary>
@@ -871,6 +838,7 @@ public class AgentFrameworkService : IDisposable
         string messageId = Guid.NewGuid().ToString();
         string debugLogId = Guid.NewGuid().ToString();
 
+     
         var responseMessage = new Message(
             userMessage.TenantId,
             userMessage.UserId,
@@ -899,39 +867,61 @@ public class AgentFrameworkService : IDisposable
     /// Runs the workflow asynchronously and returns the response messages and selected agent.
     /// </summary>
     private async Task<(List<ChatMessage> messages, string selectedAgent)> RunWorkflowAsync(
-        Workflow workflow, 
-        List<ChatMessage> messages)
+         Workflow workflow,
+         List<ChatMessage> messages)
     {
         try
         {
-
-            string? lastExecutorId = null;
             string selectedAgent = "__";
-            int counter = 0;
+            List<ChatMessage> latestMessages = [];
+            await using StreamingRun run = await InProcessExecution.RunStreamingAsync(
+                workflow,
+                messages,
+                sessionId: null,
+                cancellationToken: CancellationToken.None);
 
-            while (selectedAgent == "__" && counter<5)
+            await run.TrySendMessageAsync(new TurnToken(emitEvents: true));
+
+            await foreach (WorkflowEvent evt in run.WatchStreamAsync().ConfigureAwait(false))
             {
-                await using StreamingRun run = await InProcessExecution.StreamAsync(workflow, messages);
-               
-                await run.TrySendMessageAsync(new TurnToken(emitEvents: true));
-
-                await foreach (WorkflowEvent evt in run.WatchStreamAsync().ConfigureAwait(false))               
+                switch (evt)
                 {
-                    switch (evt)
-                    {
-                        case AgentRunUpdateEvent e when e.ExecutorId != lastExecutorId:
-                            lastExecutorId = e.ExecutorId;
-                            selectedAgent = ExtractAgentNameFromExecutorId(e.ExecutorId) ?? "__";
-                            break;
+                    case AgentResponseUpdateEvent update:
+                        // Process streaming agent responses (debug only)
+                        AgentResponse response = update.AsResponse();
+                        foreach (ChatMessage message in response.Messages)
+                        {
+                            //Console.WriteLine($"[{update.ExecutorId}]: {message.Text}");
+                        }
+                        break;
 
-                        case WorkflowOutputEvent output:
-                            return (output.As<List<ChatMessage>>()!, selectedAgent);
-                    }
+                    case WorkflowOutputEvent output:
+                        if (output.Is<List<ChatMessage>>(out var outputMessages) && outputMessages is { Count: > 0 })
+                        {
+                            latestMessages = outputMessages;
+                            var lastAssistant = latestMessages.LastOrDefault(m => m.Role == ChatRole.Assistant);
+                            if (!string.IsNullOrWhiteSpace(lastAssistant?.AuthorName))
+                            {
+                                selectedAgent = lastAssistant.AuthorName;
+                            }
+                        }
+                        else if (output.Is<ChatMessage>(out var singleMessage) && singleMessage is not null)
+                        {
+                            latestMessages = [singleMessage];
+                            if (singleMessage.Role == ChatRole.Assistant && !string.IsNullOrWhiteSpace(singleMessage.AuthorName))
+                            {
+                                selectedAgent = singleMessage.AuthorName;
+                            }
+                        }
+                        else if (output.Is<string>(out var textOutput) && !string.IsNullOrWhiteSpace(textOutput))
+                        {
+                            latestMessages = [new ChatMessage(ChatRole.Assistant, textOutput)];
+                        }
+                        break;
                 }
-                
-                counter++;
             }
-            return ([], selectedAgent);
+
+            return (latestMessages, selectedAgent);
         }
         catch (Exception ex)
         {
@@ -940,23 +930,9 @@ public class AgentFrameworkService : IDisposable
         }
     }
 
-
+    //TO DO: Add RunGroupChatOrchestration
 
     /// <summary>
-    /// Extracts the agent name from the executor ID by removing the GUID suffix.
-    /// </summary>
-    private static string? ExtractAgentNameFromExecutorId(string? executorId)
-    {
-        if (string.IsNullOrEmpty(executorId))
-            return null;
-
-        var parts = executorId.Split('_');
-        return parts.Length > 0 ? parts[0] : executorId;
-    }
-
-    //TO DO: Add RunGroupChatOrchestration
-    
-        /// <summary>
     /// Orchestrates the group chat with AI agents.
     /// </summary>
     private async Task<(string responseText, string selectedAgentName)> RunGroupChatOrchestration(
@@ -967,7 +943,7 @@ public class AgentFrameworkService : IDisposable
         try
         {
             _logger.LogInformation("Starting Agent Framework Group Chat");
-                       
+
             // Add system context
             chatHistory.Add(new ChatMessage(ChatRole.System, $"User Id: {userId}, Tenant Id: {tenantId}"));
 
@@ -984,7 +960,7 @@ public class AgentFrameworkService : IDisposable
                     .Build();
 
             //run the workflow
-            var (responseMessages, selectedAgentName) = await RunWorkflowAsync(workflow,chatHistory);
+            var (responseMessages, selectedAgentName) = await RunWorkflowAsync(workflow, chatHistory);
 
             //log the function calls from the response messages
             for (int i = chatHistory.Count; i < responseMessages.Count; i++)
@@ -997,21 +973,21 @@ public class AgentFrameworkService : IDisposable
                         switch (content)
                         {
                             case FunctionCallContent functionCall:
-                                LogMessage("Function Call", $"Name: {functionCall.Name}, CallId: {functionCall.CallId}");
-                                LogMessage("Function Arguments", JsonSerializer.Serialize(functionCall.Arguments, new JsonSerializerOptions { WriteIndented = true }));
+                                LogMessage("Function Call", $"Name: {functionCall.Name}, CallId: {functionCall.CallId}, Arguments: {JsonSerializer.Serialize(functionCall.Arguments, new JsonSerializerOptions { WriteIndented = true })}");
                                 break;
                         }
                     }
                 }
             }
 
-            if (selectedAgentName == "__")
-            {
-                _logger.LogError("Error in getting response");
-                return ("I’m sorry, I didn’t quite understand that. Could you please rephrase your message?", "Oops!");
-            }
             // Extract response text
             string responseText = ExtractResponseText(responseMessages);
+
+            if (string.IsNullOrWhiteSpace(responseText))
+            {
+                _logger.LogError("Error in getting response: workflow produced empty assistant text");
+                return ("I’m sorry, I didn’t quite understand that. Could you please rephrase your message?", "Oops!");
+            }
 
             _logger.LogInformation("Agent Framework orchestration completed with agent: {AgentName}", selectedAgentName);
 
@@ -1054,7 +1030,23 @@ public class AgentFrameworkService : IDisposable
         if (responseMessages?.Any() == true)
         {
             var lastAssistantMessage = responseMessages.LastOrDefault(m => m.Role == ChatRole.Assistant);
-            return lastAssistantMessage?.Text ?? "";
+            if (lastAssistantMessage is null)
+            {
+                return "";
+            }
+
+            if (!string.IsNullOrWhiteSpace(lastAssistantMessage.Text))
+            {
+                return lastAssistantMessage.Text;
+            }
+
+            // GA responses may store text content in message contents instead of Text.
+            var contentText = string.Join("\n", lastAssistantMessage.Contents
+                .OfType<TextContent>()
+                .Select(content => content.Text)
+                .Where(text => !string.IsNullOrWhiteSpace(text)));
+
+            return contentText;
         }
         return "";
     }
@@ -1076,10 +1068,10 @@ public class AgentFrameworkService : IDisposable
         }
     }
 }
-
 ```
 </details>
 
 ## Next Steps
 
 Proceed to Module 5 - [MCP Integration](./Module-05.md)
+

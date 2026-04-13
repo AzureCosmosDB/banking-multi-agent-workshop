@@ -282,7 +282,7 @@ Similar to generating system prompts based on agent type, we need the Tools to b
                 
                 var aiFunctions = GetInProcessAgentTools(agentType, bankService, loggerFactory).ToArray();
 
-                var agent = chatClient.CreateAIAgent(
+                var agent = chatClient.AsAIAgent(
                         instructions: GetAgentPrompt(agentType),
                         name: GetAgentName(agentType),
                         description: GetAgentDescription(agentType),
@@ -349,6 +349,7 @@ Now that we can build Agents, we can make the agent build process dynamic based 
     {
         try
         {
+            _promptDebugProperties= new List<LogProperty>(); // Reset debug properties for each new message
 
             messageHistory.Add(userMessage);
             var chatHistory = ConvertToAIChatMessages(messageHistory);
@@ -614,7 +615,7 @@ public class AgentFrameworkService : IDisposable
             {
                 Transport = new HttpClientPipelineTransport(),
             });
-    
+
             return openAIClient
                 .GetChatClient(_settings.AzureOpenAISettings.CompletionsDeployment)
                 .AsIChatClient();
@@ -680,18 +681,20 @@ public class AgentFrameworkService : IDisposable
     #region Public Methods
 
     //TO DO: Add SetInProcessToolService
-        /// <summary>
+
+    /// <summary>
     /// Sets the in-process tool service for banking operations.
     /// </summary>
     /// <param name="bankService">The banking data service instance.</param>
     /// <returns>True if the service was set successfully.</returns>
-    
+
     public bool SetInProcessToolService(BankingDataService bankService)
     {
         _bankService = bankService ?? throw new ArgumentNullException(nameof(bankService));
         _logger.LogInformation("InProcessToolService has been set.");
         return true;
     }
+
 
 
     //TO DO: Add SetMCPToolService
@@ -714,7 +717,6 @@ public class AgentFrameworkService : IDisposable
                 {
                     _agents = AgentFactory.CreateAllAgentsWithInProcessTools(_chatClient, _bankService, _loggerFactory);
                 }
-
                 //TO DO: Add MCP Service Option
 
 
@@ -757,7 +759,7 @@ public class AgentFrameworkService : IDisposable
     /// <returns>A tuple containing the response messages and debug logs.</returns>
     /// 
     //TO DO: Add GetResponse function
-    
+
     public async Task<Tuple<List<Message>, List<DebugLog>>> GetResponse(
         Message userMessage,
         List<Message> messageHistory,
@@ -767,15 +769,16 @@ public class AgentFrameworkService : IDisposable
     {
         try
         {
+            _promptDebugProperties = new List<LogProperty>(); // Reset debug properties for each new message
 
             messageHistory.Add(userMessage);
             var chatHistory = ConvertToAIChatMessages(messageHistory);
             chatHistory.Add(new ChatMessage(ChatRole.User, userMessage.Text));
-            var agentName="Sales";
+            var agentName = "Coordinator";
             var bankAgent = _agents.FirstOrDefault(s => s.Name == agentName);
             var responseText = bankAgent.RunAsync(chatHistory).GetAwaiter().GetResult().Text;
             return CreateResponseTuple(userMessage, responseText, agentName);
-            
+
         }
         catch (Exception ex)
         {
@@ -792,24 +795,24 @@ public class AgentFrameworkService : IDisposable
     /// <returns>A summarized version of the text.</returns>
     /// 
     //TO DO: Add Summarize function
-    
+
     public async Task<string> Summarize(string sessionId, string userPrompt)
     {
         try
         {
-            var agent = _chatClient.CreateAIAgent(
-                "Summarize the text into exactly two words:", 
+            var agent = _chatClient.AsAIAgent(
+                "Summarize the text into exactly two words:",
                 "Summarizer");
 
-            return agent.RunAsync(userPrompt).GetAwaiter().GetResult().Text;        
-        
+            return agent.RunAsync(userPrompt).GetAwaiter().GetResult().Text;
+
         }
         catch (Exception ex)
         {
             _logger.LogError(ex, "Error when getting response: {ErrorMessage}", ex.Message);
             return string.Empty;
         }
-    }   
+    }
 
 
     /// <summary>
@@ -862,6 +865,7 @@ public class AgentFrameworkService : IDisposable
         string messageId = Guid.NewGuid().ToString();
         string debugLogId = Guid.NewGuid().ToString();
 
+     
         var responseMessage = new Message(
             userMessage.TenantId,
             userMessage.UserId,
@@ -890,59 +894,67 @@ public class AgentFrameworkService : IDisposable
     /// Runs the workflow asynchronously and returns the response messages and selected agent.
     /// </summary>
     private async Task<(List<ChatMessage> messages, string selectedAgent)> RunWorkflowAsync(
-        Workflow workflow, 
-        List<ChatMessage> messages)
+         Workflow workflow,
+         List<ChatMessage> messages)
     {
         try
         {
-
-            string? lastExecutorId = null;
             string selectedAgent = "__";
-            int counter = 0;
+            List<ChatMessage> latestMessages = [];
+            await using StreamingRun run = await InProcessExecution.RunStreamingAsync(
+                workflow,
+                messages,
+                sessionId: null,
+                cancellationToken: CancellationToken.None);
 
-            while (selectedAgent == "__" && counter<5)
+            await run.TrySendMessageAsync(new TurnToken(emitEvents: true));
+
+            await foreach (WorkflowEvent evt in run.WatchStreamAsync().ConfigureAwait(false))
             {
-                await using StreamingRun run = await InProcessExecution.StreamAsync(workflow, messages);
-               
-                await run.TrySendMessageAsync(new TurnToken(emitEvents: true));
-
-                await foreach (WorkflowEvent evt in run.WatchStreamAsync().ConfigureAwait(false))               
+                switch (evt)
                 {
-                    switch (evt)
-                    {
-                        case AgentRunUpdateEvent e when e.ExecutorId != lastExecutorId:
-                            lastExecutorId = e.ExecutorId;
-                            selectedAgent = ExtractAgentNameFromExecutorId(e.ExecutorId) ?? "__";
-                            break;
+                    case AgentResponseUpdateEvent update:
+                        // Process streaming agent responses (debug only)
+                        AgentResponse response = update.AsResponse();
+                        foreach (ChatMessage message in response.Messages)
+                        {
+                            //Console.WriteLine($"[{update.ExecutorId}]: {message.Text}");
+                        }
+                        break;
 
-                        case WorkflowOutputEvent output:
-                            return (output.As<List<ChatMessage>>()!, selectedAgent);
-                    }
+                    case WorkflowOutputEvent output:
+                        if (output.Is<List<ChatMessage>>(out var outputMessages) && outputMessages is { Count: > 0 })
+                        {
+                            latestMessages = outputMessages;
+                            var lastAssistant = latestMessages.LastOrDefault(m => m.Role == ChatRole.Assistant);
+                            if (!string.IsNullOrWhiteSpace(lastAssistant?.AuthorName))
+                            {
+                                selectedAgent = lastAssistant.AuthorName;
+                            }
+                        }
+                        else if (output.Is<ChatMessage>(out var singleMessage) && singleMessage is not null)
+                        {
+                            latestMessages = [singleMessage];
+                            if (singleMessage.Role == ChatRole.Assistant && !string.IsNullOrWhiteSpace(singleMessage.AuthorName))
+                            {
+                                selectedAgent = singleMessage.AuthorName;
+                            }
+                        }
+                        else if (output.Is<string>(out var textOutput) && !string.IsNullOrWhiteSpace(textOutput))
+                        {
+                            latestMessages = [new ChatMessage(ChatRole.Assistant, textOutput)];
+                        }
+                        break;
                 }
-                
-                counter++;
             }
-            return ([], selectedAgent);
+
+            return (latestMessages, selectedAgent);
         }
         catch (Exception ex)
         {
             _logger.LogError(ex, "Error during workflow execution: {ErrorMessage}", ex.Message);
             return ([], "Error");
         }
-    }
-
-
-
-    /// <summary>
-    /// Extracts the agent name from the executor ID by removing the GUID suffix.
-    /// </summary>
-    private static string? ExtractAgentNameFromExecutorId(string? executorId)
-    {
-        if (string.IsNullOrEmpty(executorId))
-            return null;
-
-        var parts = executorId.Split('_');
-        return parts.Length > 0 ? parts[0] : executorId;
     }
 
     //TO DO: Add RunGroupChatOrchestration
@@ -978,7 +990,23 @@ public class AgentFrameworkService : IDisposable
         if (responseMessages?.Any() == true)
         {
             var lastAssistantMessage = responseMessages.LastOrDefault(m => m.Role == ChatRole.Assistant);
-            return lastAssistantMessage?.Text ?? "";
+            if (lastAssistantMessage is null)
+            {
+                return "";
+            }
+
+            if (!string.IsNullOrWhiteSpace(lastAssistantMessage.Text))
+            {
+                return lastAssistantMessage.Text;
+            }
+
+            // GA responses may store text content in message contents instead of Text.
+            var contentText = string.Join("\n", lastAssistantMessage.Contents
+                .OfType<TextContent>()
+                .Select(content => content.Text)
+                .Where(text => !string.IsNullOrWhiteSpace(text)));
+
+            return contentText;
         }
         return "";
     }
@@ -1000,7 +1028,6 @@ public class AgentFrameworkService : IDisposable
         }
     }
 }
-
 ```
 </details>
 <details>
@@ -1050,12 +1077,13 @@ public class ChatService
         {
 
             //MCP tools
-            // TO DO: Invoke SetMCPToolService
+            //TO DO: Invoke SetMCPToolService
         }
         else
         {
             //In-Process Tools
             //TO DO: Invoke SetInProcessToolService
+
             var embeddingClient = _afService.GetAzureOpenAIClient();
             var embeddingDeployment = _afService.GetEmbeddingDeploymentName();
             EmbeddingService embeddingService = new EmbeddingService(embeddingClient, embeddingDeployment);
@@ -1150,7 +1178,7 @@ public class ChatService
 
 
     //TO DO: Add AddPromptCompletionMessagesAsync
-    
+
     /// <summary>
     /// Add user prompt and AI assistance response to the chat session message list object and insert into the data service as a transaction.
     /// </summary>
@@ -1158,7 +1186,7 @@ public class ChatService
     private async Task AddPromptCompletionMessagesAsync(string tenantId, string userId, string sessionId, Message promptMessage, List<Message> completionMessages, List<DebugLog> completionMessageLogs)
     {
         var session = await _cosmosDBService.GetSessionAsync(tenantId, userId, sessionId);
-    
+
         completionMessages.Insert(0, promptMessage);
         await _cosmosDBService.UpsertSessionBatchAsync(completionMessages, completionMessageLogs, session);
     }
@@ -1206,11 +1234,6 @@ public class ChatService
 
         return await _cosmosDBService.GetChatCompletionDebugLogAsync(tenantId, userId, sessionId, debugLogId);
     }
-
-
-
-
-
 }
 
 ```
@@ -1251,8 +1274,6 @@ namespace Banking.Services
         }
     }
 }
-
-
 
 ```
 </details>
@@ -1595,7 +1616,6 @@ namespace Banking.Services
         
     }
 }
-
 ```
 </details>
 <details>
@@ -1642,11 +1662,12 @@ namespace MultiAgentCopilot.Factories
     public static class AgentFactory
     {
         //TO DO: Add Agent Creation with Tools
-               /// <summary>
+
+        /// <summary>
         /// Create all banking agents with proper instructions and tools
         /// </summary>
         public static List<AIAgent> CreateAllAgentsWithInProcessTools(IChatClient chatClient, BankingDataService bankService, ILoggerFactory loggerFactory)
-        {           
+        {
 
             var agents = new List<AIAgent>();
             ILogger logger = loggerFactory.CreateLogger("AgentFactory");
@@ -1658,10 +1679,10 @@ namespace MultiAgentCopilot.Factories
             foreach (var agentType in agentTypes)
             {
                 logger.LogInformation("Creating agent {AgentType} with InProcess tools", agentType);
-                
+
                 var aiFunctions = GetInProcessAgentTools(agentType, bankService, loggerFactory).ToArray();
 
-                var agent = chatClient.CreateAIAgent(
+                var agent = chatClient.AsAIAgent(
                         instructions: GetAgentPrompt(agentType),
                         name: GetAgentName(agentType),
                         description: GetAgentDescription(agentType),
@@ -1679,7 +1700,7 @@ namespace MultiAgentCopilot.Factories
         //TO DO: Add Agent Creation with MCP Tools
 
         //TO DO: Add Agent Details
-                /// <summary>
+        /// <summary>
         /// Get agent prompt based on type
         /// </summary>
         private static string GetAgentPrompt(AgentType agentType)
@@ -1723,7 +1744,8 @@ namespace MultiAgentCopilot.Factories
 
 
         //TO DO: Create Agent Tools
-                /// <summary>
+
+        /// <summary>
         /// Get tools for specific agent type using existing tool classes
         /// </summary>
         private static IList<AIFunction>? GetInProcessAgentTools(AgentType agentType, BankingDataService bankService, ILoggerFactory loggerFactory)
@@ -1751,14 +1773,14 @@ namespace MultiAgentCopilot.Factories
                     .Where(m => m.GetCustomAttributes(typeof(DescriptionAttribute), false).Length > 0);
 
                 IList<AIFunction> functions = new List<AIFunction>();
-                
+
                 foreach (var method in methods)
                 {
                     try
                     {
                         var aiFunction = AIFunctionFactory.Create(method, toolsClass);
                         functions.Add(aiFunction);
-                        
+
                         var description = method.GetCustomAttribute<DescriptionAttribute>().Description;
                         logger.LogDebug("Agent {AgentType} in-process tool: '{MethodName}' - {Description}",
                             agentType, method.Name, description);
@@ -1770,7 +1792,7 @@ namespace MultiAgentCopilot.Factories
                     }
                 }
 
-                logger.LogInformation("Created {FunctionCount} in-process tools for agent type: {AgentType}", 
+                logger.LogInformation("Created {FunctionCount} in-process tools for agent type: {AgentType}",
                     functions.Count, agentType);
 
                 return functions.Count > 0 ? functions : null;
@@ -1781,12 +1803,8 @@ namespace MultiAgentCopilot.Factories
                 return null;
             }
         }
-
-        
-
     }
 }
-
 ```
 
 </details>
@@ -1809,14 +1827,15 @@ namespace MultiAgentCopilot.Tools
             : base(logger, bankService)
         {
         }
-        
-                [Description("Adds a new Account Transaction request")]
+
+
+        [Description("Adds a new Account Transaction request")]
         public async Task<ServiceRequest> AddFunTransferRequest(string tenantId, string userId,
-            string debitAccountId,
-            decimal amount,
-            string requestAnnotation,
-            string? recipientPhoneNumber = null,
-            string? recipientEmailId = null)
+        string debitAccountId,
+        decimal amount,
+        string requestAnnotation,
+        string? recipientPhoneNumber = null,
+        string? recipientEmailId = null)
         {
             _logger.LogTrace("Adding AccountTransaction request for User ID: {UserId}, Debit Account: {DebitAccountId}", userId, debitAccountId);
 
@@ -1828,17 +1847,17 @@ namespace MultiAgentCopilot.Tools
         }
 
         [Description("Get the transactions history between 2 dates")]
-        public async Task<List<BankTransaction>> GetTransactionHistory(string tenantId, string userId,string accountId, DateTime startDate, DateTime endDate)
+        public async Task<List<BankTransaction>> GetTransactionHistory(string tenantId, string userId, string accountId, DateTime startDate, DateTime endDate)
         {
             _logger.LogTrace("Fetching AccountTransaction history for Account: {AccountId}, From: {StartDate} To: {EndDate}", accountId, startDate, endDate);
             return await _bankService.GetTransactionsAsync(tenantId, accountId, startDate, endDate);
         }
     }
 }
-
 ```
 </details>
 
 ## Next Steps
 
 Proceed to Module 4 - [Multi-Agent Orchestration](./Module-04.md)
+

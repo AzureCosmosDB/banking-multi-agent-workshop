@@ -42,13 +42,12 @@ This method handles message history management and creates a specialized banking
      {
          try
          {
+             _promptDebugProperties= new List<LogProperty>(); // Reset debug properties for each new message
              messageHistory.Add(userMessage);
              var chatHistory = ConvertToAIChatMessages(messageHistory);
              chatHistory.Add(new ChatMessage(ChatRole.User, userMessage.Text));
     
-             _promptDebugProperties.Clear();
-    
-              var agent = _chatClient.CreateAIAgent(
+              var agent = _chatClient.AsAIAgent(
                  "You are a front desk agent in a bank. Respond to the user queries professionally. Provide professional and helpful responses to user queries.Use your knowledge of banking services and procedures to address user queries accurately.",
                  "Banker");
     
@@ -267,7 +266,7 @@ public class AgentFrameworkService : IDisposable
             {
                 Transport = new HttpClientPipelineTransport(),
             });
-    
+
             return openAIClient
                 .GetChatClient(_settings.AzureOpenAISettings.CompletionsDeployment)
                 .AsIChatClient();
@@ -396,33 +395,32 @@ public class AgentFrameworkService : IDisposable
     /// 
     //TO DO: Add GetResponse function
     public async Task<Tuple<List<Message>, List<DebugLog>>> GetResponse(
-         Message userMessage,
-         List<Message> messageHistory,
-         BankingDataService bankService,
-         string tenantId,
-         string userId)
-     {
-         try
-         {
-             messageHistory.Add(userMessage);
-             var chatHistory = ConvertToAIChatMessages(messageHistory);
-             chatHistory.Add(new ChatMessage(ChatRole.User, userMessage.Text));
-    
-             _promptDebugProperties.Clear();
-    
-              var agent = _chatClient.CreateAIAgent(
-                 "You are a front desk agent in a bank. Respond to the user queries professionally. Provide professional and helpful responses to user queries.Use your knowledge of banking services and procedures to address user queries accurately.",
-                 "Banker");
-    
-             var responseText= agent.RunAsync(chatHistory).GetAwaiter().GetResult().Text;
-             return CreateResponseTuple(userMessage, responseText, "Banker");
-         }
-         catch (Exception ex)
-         {
-             _logger.LogError(ex, "Error when getting response: {ErrorMessage}", ex.Message);
-             return new Tuple<List<Message>, List<DebugLog>>(new List<Message>(), new List<DebugLog>());
-         }
-     }
+     Message userMessage,
+     List<Message> messageHistory,
+     BankingDataService bankService,
+     string tenantId,
+     string userId)
+    {
+        try
+        {
+            _promptDebugProperties = new List<LogProperty>(); // Reset debug properties for each new message
+            messageHistory.Add(userMessage);
+            var chatHistory = ConvertToAIChatMessages(messageHistory);
+            chatHistory.Add(new ChatMessage(ChatRole.User, userMessage.Text));
+
+            var agent = _chatClient.AsAIAgent(
+               "You are a front desk agent in a bank. Respond to the user queries professionally. Provide professional and helpful responses to user queries.Use your knowledge of banking services and procedures to address user queries accurately.",
+               "Banker");
+
+            var responseText = agent.RunAsync(chatHistory).GetAwaiter().GetResult().Text;
+            return CreateResponseTuple(userMessage, responseText, "Banker");
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "Error when getting response: {ErrorMessage}", ex.Message);
+            return new Tuple<List<Message>, List<DebugLog>>(new List<Message>(), new List<DebugLog>());
+        }
+    }
 
     /// <summary>
     /// Summarizes the given text.
@@ -432,24 +430,24 @@ public class AgentFrameworkService : IDisposable
     /// <returns>A summarized version of the text.</returns>
     /// 
     //TO DO: Add Summarize function
-    
+
     public async Task<string> Summarize(string sessionId, string userPrompt)
     {
         try
         {
-            var agent = _chatClient.CreateAIAgent(
-                "Summarize the text into exactly two words:", 
+            var agent = _chatClient.AsAIAgent(
+                "Summarize the text into exactly two words:",
                 "Summarizer");
 
-            return agent.RunAsync(userPrompt).GetAwaiter().GetResult().Text;        
-        
+            return agent.RunAsync(userPrompt).GetAwaiter().GetResult().Text;
+
         }
         catch (Exception ex)
         {
             _logger.LogError(ex, "Error when getting response: {ErrorMessage}", ex.Message);
             return string.Empty;
         }
-    }   
+    }
 
 
     /// <summary>
@@ -502,6 +500,7 @@ public class AgentFrameworkService : IDisposable
         string messageId = Guid.NewGuid().ToString();
         string debugLogId = Guid.NewGuid().ToString();
 
+     
         var responseMessage = new Message(
             userMessage.TenantId,
             userMessage.UserId,
@@ -530,59 +529,67 @@ public class AgentFrameworkService : IDisposable
     /// Runs the workflow asynchronously and returns the response messages and selected agent.
     /// </summary>
     private async Task<(List<ChatMessage> messages, string selectedAgent)> RunWorkflowAsync(
-        Workflow workflow, 
-        List<ChatMessage> messages)
+         Workflow workflow,
+         List<ChatMessage> messages)
     {
         try
         {
-
-            string? lastExecutorId = null;
             string selectedAgent = "__";
-            int counter = 0;
+            List<ChatMessage> latestMessages = [];
+            await using StreamingRun run = await InProcessExecution.RunStreamingAsync(
+                workflow,
+                messages,
+                sessionId: null,
+                cancellationToken: CancellationToken.None);
 
-            while (selectedAgent == "__" && counter<5)
+            await run.TrySendMessageAsync(new TurnToken(emitEvents: true));
+
+            await foreach (WorkflowEvent evt in run.WatchStreamAsync().ConfigureAwait(false))
             {
-                await using StreamingRun run = await InProcessExecution.StreamAsync(workflow, messages);
-               
-                await run.TrySendMessageAsync(new TurnToken(emitEvents: true));
-
-                await foreach (WorkflowEvent evt in run.WatchStreamAsync().ConfigureAwait(false))               
+                switch (evt)
                 {
-                    switch (evt)
-                    {
-                        case AgentRunUpdateEvent e when e.ExecutorId != lastExecutorId:
-                            lastExecutorId = e.ExecutorId;
-                            selectedAgent = ExtractAgentNameFromExecutorId(e.ExecutorId) ?? "__";
-                            break;
+                    case AgentResponseUpdateEvent update:
+                        // Process streaming agent responses (debug only)
+                        AgentResponse response = update.AsResponse();
+                        foreach (ChatMessage message in response.Messages)
+                        {
+                            //Console.WriteLine($"[{update.ExecutorId}]: {message.Text}");
+                        }
+                        break;
 
-                        case WorkflowOutputEvent output:
-                            return (output.As<List<ChatMessage>>()!, selectedAgent);
-                    }
+                    case WorkflowOutputEvent output:
+                        if (output.Is<List<ChatMessage>>(out var outputMessages) && outputMessages is { Count: > 0 })
+                        {
+                            latestMessages = outputMessages;
+                            var lastAssistant = latestMessages.LastOrDefault(m => m.Role == ChatRole.Assistant);
+                            if (!string.IsNullOrWhiteSpace(lastAssistant?.AuthorName))
+                            {
+                                selectedAgent = lastAssistant.AuthorName;
+                            }
+                        }
+                        else if (output.Is<ChatMessage>(out var singleMessage) && singleMessage is not null)
+                        {
+                            latestMessages = [singleMessage];
+                            if (singleMessage.Role == ChatRole.Assistant && !string.IsNullOrWhiteSpace(singleMessage.AuthorName))
+                            {
+                                selectedAgent = singleMessage.AuthorName;
+                            }
+                        }
+                        else if (output.Is<string>(out var textOutput) && !string.IsNullOrWhiteSpace(textOutput))
+                        {
+                            latestMessages = [new ChatMessage(ChatRole.Assistant, textOutput)];
+                        }
+                        break;
                 }
-                
-                counter++;
             }
-            return ([], selectedAgent);
+
+            return (latestMessages, selectedAgent);
         }
         catch (Exception ex)
         {
             _logger.LogError(ex, "Error during workflow execution: {ErrorMessage}", ex.Message);
             return ([], "Error");
         }
-    }
-
-
-
-    /// <summary>
-    /// Extracts the agent name from the executor ID by removing the GUID suffix.
-    /// </summary>
-    private static string? ExtractAgentNameFromExecutorId(string? executorId)
-    {
-        if (string.IsNullOrEmpty(executorId))
-            return null;
-
-        var parts = executorId.Split('_');
-        return parts.Length > 0 ? parts[0] : executorId;
     }
 
     //TO DO: Add RunGroupChatOrchestration
@@ -618,7 +625,23 @@ public class AgentFrameworkService : IDisposable
         if (responseMessages?.Any() == true)
         {
             var lastAssistantMessage = responseMessages.LastOrDefault(m => m.Role == ChatRole.Assistant);
-            return lastAssistantMessage?.Text ?? "";
+            if (lastAssistantMessage is null)
+            {
+                return "";
+            }
+
+            if (!string.IsNullOrWhiteSpace(lastAssistantMessage.Text))
+            {
+                return lastAssistantMessage.Text;
+            }
+
+            // GA responses may store text content in message contents instead of Text.
+            var contentText = string.Join("\n", lastAssistantMessage.Contents
+                .OfType<TextContent>()
+                .Select(content => content.Text)
+                .Where(text => !string.IsNullOrWhiteSpace(text)));
+
+            return contentText;
         }
         return "";
     }
@@ -640,7 +663,6 @@ public class AgentFrameworkService : IDisposable
         }
     }
 }
-
 ```
 </details>
 <details>
@@ -690,7 +712,7 @@ public class ChatService
         {
 
             //MCP tools
-            // TO DO: Invoke SetMCPToolService
+            //TO DO: Invoke SetMCPToolService
         }
         else
         {
@@ -783,7 +805,7 @@ public class ChatService
 
 
     //TO DO: Add AddPromptCompletionMessagesAsync
-    
+
     /// <summary>
     /// Add user prompt and AI assistance response to the chat session message list object and insert into the data service as a transaction.
     /// </summary>
@@ -791,7 +813,7 @@ public class ChatService
     private async Task AddPromptCompletionMessagesAsync(string tenantId, string userId, string sessionId, Message promptMessage, List<Message> completionMessages, List<DebugLog> completionMessageLogs)
     {
         var session = await _cosmosDBService.GetSessionAsync(tenantId, userId, sessionId);
-    
+
         completionMessages.Insert(0, promptMessage);
         await _cosmosDBService.UpsertSessionBatchAsync(completionMessages, completionMessageLogs, session);
     }
@@ -840,15 +862,11 @@ public class ChatService
         return await _cosmosDBService.GetChatCompletionDebugLogAsync(tenantId, userId, sessionId, debugLogId);
     }
 
-
-
-
-
 }
-
 ```
 </details>
 
 ##Next Steps
 
 Proceed to Module 3: [Agent Specialization](./Module-03.md)
+

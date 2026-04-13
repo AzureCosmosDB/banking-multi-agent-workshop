@@ -9,8 +9,8 @@ This folder contains the starter files for the exercises. Begin with the minimal
 
 Work through the exercises to build the application step by step:
 
-- [LangGraph (Python)](01_exercises/python/workshop/Module-0.md)  
-- [Agent Framework (C#)](01_exercises/csharp/workshop/Module-0.md)  
+- [LangGraph (Python)](/python/workshop/Module-0.md)  
+- [Agent Framework (C#)](/csharp/workshop/Module-0.md)  
 
 
 If you prefer to skip the exercises and go to the final code and [artifacts for running as demo](../02_completed/README.md).

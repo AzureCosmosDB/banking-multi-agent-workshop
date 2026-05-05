@@ -6,7 +6,7 @@
 
 In this Module, you'll deploy the Azure Services needed to run this workshop and get your local environment configured and ready. You will also learn about the structure of this workshop and get an overview of Multi-Agent Systems.
 
-This workshop covers the complete journey from basic multi-agent systems to advanced architectural patterns using the Model Context Protocol (MCP) in Module 06.
+This workshop covers the complete journey from basic multi-agent systems to advanced architectural patterns using the Model Context Protocol (MCP) in Module 05.
 
 ## Learning Objectives and Activities
 
@@ -24,7 +24,7 @@ This workshop covers the complete journey from basic multi-agent systems to adva
 1. [Activity 4: Configure Environment Variables](#activity-4-configure-environment-variables)
 1. [Activity 5: Compile and Run](#activity-5-compile-and-run)
 
-> **Note**: This module prepares your environment for the complete workshop, including the advanced Module 6 covering Model Context Protocol (MCP) architectural patterns.
+> **Note**: This module prepares your environment for the complete workshop, including the advanced Module 5 covering Model Context Protocol (MCP) architectural patterns.
 
 ## Activity 1 Configure Workshop Environment
 
@@ -184,7 +184,8 @@ This workshop consists of 6 progressive modules:
 - **Module 3**: Agent Specialization
 - **Module 4**: Multi-Agent Orchestration
 - **Module 5**: Converting to Model Context Protocol (MCP)
-- **Module 6**: Lessons Learned, Agent Futures, Q&A
+- **Module 6**: Bonus - Build Your Own Multi-Agent App with AI
+- **Module 7**: Lessons Learned, Agent Futures, Q&A
 
 **Module 5** introduces advanced architectural patterns using the Model Context Protocol (MCP), showing how to convert your multi-agent system from native LangChain tools to a standardized, loosely-coupled architecture that enables better team collaboration and maintainability.
 
@@ -345,7 +346,8 @@ Proceed to [Creating Your First Agent](./Module-01.md) to begin building your mu
 
 1. **Modules 1-4**: Core multi-agent system development
 2. **Module 5**: Advanced MCP architectural patterns
-3. **Module 6**: Best practices, lessons learned, Q&A and wrap-up
+3. **Module 6**: Bonus - Build your own multi-agent app using AI + Agent Kit
+4. **Module 7**: Best practices, lessons learned, Q&A and wrap-up
 
 ## Resources
 

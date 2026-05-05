@@ -12,7 +12,8 @@ The workshop follows a progressive learning path with the following Modules
 - [Module 3: Agent Specialization](Module-03.md)
 - [Module 4: Multi-Agent Orchestration](Module-04.md)
 - [Module 5: Converting to Model Context Protocol (MCP)](Module-05.md)
-- [Module 6: Lessons Learned, Agent Futures, Q&A](Module-06.md)
+- [Module 6: Bonus - Build Your Own Multi-Agent App with AI](Module-06.md)
+- [Module 7: Lessons Learned, Agent Futures, Q&A](Module-07.md)
 
 ## Clean up
 

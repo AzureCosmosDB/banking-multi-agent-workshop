@@ -1,6 +1,6 @@
 # Module 05 - Converting to Model Context Protocol (MCP)
 
-**[< Multi-Agent Orchestration](./Module-04.md)** - **[Lessons Learned, Agent Futures, Q&A >](./Module-06.md)**
+**[< Multi-Agent Orchestration](./Module-04.md)** - **[Bonus: Build Your Own Multi-Agent App >](./Module-06.md)**
 
 ## Introduction
 

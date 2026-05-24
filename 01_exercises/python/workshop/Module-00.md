@@ -49,6 +49,105 @@ Complete the following tasks in order to prepare your environment for this works
    - [Manged Identity Contributor](https://learn.microsoft.com/azure/role-based-access-control/built-in-roles/identity#managed-identity-contributor)
    - [Cosmos DB Operator](https://learn.microsoft.com/azure/role-based-access-control/built-in-roles/databases#cosmos-db-operator)
    - [Cognitive Services OpenAI User](https://learn.microsoft.com/azure/role-based-access-control/built-in-roles/ai-machine-learning#cognitive-services-openai-user)
+ <details>
+  <summary><b>Option for Beginners: Creating a Custom Security Group (Recommended)</b></summary>
+
+  If you're new to Azure security or don't have direct role assignments, you can create a custom security group with the necessary permissions. This approach is recommended for workshop participants and follows Azure best practices for role-based access control (RBAC).
+
+  **Benefits of this approach:**
+  - Centralized permission management
+  - Easier onboarding for multiple workshop participants
+  - Follows principle of least privilege
+  - Clear audit trail
+  - Reusable for team members
+
+  **Step 1: Create a Security Group**
+
+  ```bash
+  # Set variables
+  GROUP_NAME="Banking-Workshop-Developers"
+  GROUP_DESCRIPTION="Developers for Banking Multi-Agent Workshop with minimal required permissions"
+
+  # Create the group
+  GROUP_ID=$(az ad group create \
+    --display-name "$GROUP_NAME" \
+    --mail-nickname "banking-workshop-devs" \
+    --description "$GROUP_DESCRIPTION" \
+    --query id -o tsv)
+
+  echo "Created Group ID: $GROUP_ID"
+  ```
+
+  **Step 2: Add Your User to the Group**
+
+  ```bash
+  # Get your user's Object ID
+  USER_OBJECT_ID=$(az ad signed-in-user show --query id -o tsv)
+
+  # Add yourself to the group
+  az ad group member add \
+    --group $GROUP_ID \
+    --member-id $USER_OBJECT_ID
+
+  echo "User added to group"
+  ```
+
+  **Step 3: Assign Required Roles at Subscription Level**
+
+  ```bash
+  # Get subscription ID
+  SUBSCRIPTION_ID=$(az account show --query id -o tsv)
+  SCOPE="/subscriptions/$SUBSCRIPTION_ID"
+
+  # Assign all required roles to the group
+  az role assignment create --assignee $GROUP_ID --role "Managed Identity Contributor" --scope $SCOPE
+  az role assignment create --assignee $GROUP_ID --role "Cosmos DB Operator" --scope $SCOPE
+  az role assignment create --assignee $GROUP_ID --role "Cognitive Services OpenAI User" --scope $SCOPE
+  az role assignment create --assignee $GROUP_ID --role "Contributor" --scope $SCOPE
+
+  echo "All roles assigned to group"
+  ```
+
+  **Step 4: Verify Role Assignments**
+
+  ```bash
+  az role assignment list \
+    --assignee $GROUP_ID \
+    --query "[].{Role:roleDefinitionName, Scope:scope}" \
+    -o table
+  ```
+
+  **Step 5: Refresh Your Credentials**
+
+  After adding yourself to the group, you need to refresh your Azure credentials to pick up the new permissions:
+
+  ```bash
+  # Log out completely
+  azd auth logout
+  az logout
+
+  # Log back in
+  az login
+  azd auth login
+
+  # Verify you're logged in
+  az account show
+  ```
+
+  > **Note:** Azure AD group membership changes can take 5-15 minutes to propagate. If you still get permission errors after logging back in, wait a few minutes and try again.
+
+  **Step 6: Verify Your Group Membership**
+
+  ```bash
+  # Check your group memberships
+  az rest --method GET \
+    --uri "https://graph.microsoft.com/v1.0/me/memberOf" \
+    --query 'value[].displayName' -o table
+  ```
+
+  You should see "Banking-Workshop-Developers" in the list.
+
+  </details>
 
 ### Get Started
 

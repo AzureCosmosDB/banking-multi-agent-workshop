@@ -160,12 +160,12 @@ Copy and paste this into your AI coding agent (the raw text below preserves all 
 ````text
 Build a complete multi-agent Python application with the following architecture. Use the rules in .skills/ to guide all Cosmos DB and LangGraph patterns.
 
-Tech Stack: Python 3.11+, LangGraph (StateGraph, create_react_agent, interrupt, Command), langchain-mcp-adapters (MultiServerMCPClient for tool access), FastAPI (API layer), Angular 19 + Angular Material (frontend), Azure Cosmos DB NoSQL (state, chat history, domain data), Azure OpenAI (gpt-4.1-mini).
+Tech Stack: Python 3.11+, LangGraph (StateGraph, create_react_agent, interrupt, Command), langchain-mcp-adapters (MultiServerMCPClient for tool access), FastAPI (API layer), Angular 20 + Angular Material (frontend), Azure Cosmos DB NoSQL (state, chat history, domain data), Azure OpenAI (gpt-4.1-mini).
 
 Architecture Overview: Three separate services:
 1. MCP Server (FastMCP, runs on port 8080) - exposes domain tools via @mcp.tool()
 2. Agent API (FastAPI, runs on port 8000) - LangGraph multi-agent orchestration + REST endpoints
-3. Frontend (Angular 19, runs on port 4200) - chat UI, session management, login, proxied to Agent API
+3. Frontend (Angular 20, runs on port 4200) - chat UI, session management, login, proxied to Agent API
 
 Agents (4 total):
 1. Coordinator Agent - entry point, routes to specialist agents using transfer_to_* tools
@@ -271,7 +271,7 @@ API Endpoints:
 - GET /health/ready - readiness probe
 
 File Structure:
-- frontend/ - Angular 19 application
+- frontend/ - Angular 20 application
   - src/app/components/main-content/ - Chat interface (send messages, display responses with markdown)
   - src/app/components/sidebar/ - Session list (create, select, delete sessions)
   - src/app/components/login/ - Login page (tenant + user selection)

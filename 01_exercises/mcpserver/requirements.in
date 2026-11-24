@@ -1,0 +1,12 @@
+azure-cosmos
+azure-identity
+colorama
+langchain-core>=1,<2
+langgraph>=1,<2
+langgraph-prebuilt>=1,<2
+langsmith
+# This server uses FastMCP from the v1 Python SDK.
+mcp>=1.24,<2
+openai
+python-dotenv
+requests

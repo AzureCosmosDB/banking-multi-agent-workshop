@@ -60,8 +60,8 @@ You can run this sample app using GitHub Codespaces (requires a GitHub account).
    - [Docker Desktop](https://docs.docker.com/desktop/)
    - [Git](https://git-scm.com/downloads)
    - [Azure Developer CLI (azd)](https://aka.ms/install-azd)
-   - [Node.js](https://nodejs.org/en/download/)
-   - [Angular CLI](https://angular.dev/installation#install-angular-cli)
+   - [Node.js 24 LTS](https://nodejs.org/en/download/)
+   - [Angular CLI 20](https://angular.dev/installation#install-angular-cli) (`npm install -g @angular/cli@20`)
    - [Python 3.12+](https://www.python.org/downloads/)
    - Your Python IDE or [VS Code](https://code.visualstudio.com/Download) with [Python Extension](https://marketplace.visualstudio.com/items?itemName=ms-python.python)
 
@@ -244,4 +244,4 @@ uvloop cannot run on Windows because libuv's full-featured event loop on Windows
 
 The application falls back to Python's built-in `asyncio` event loop (using `ProactorEventLoop` or `SelectorEventLoop`). This is fully functional but has higher per-event overhead since it's implemented in pure Python. For this workshop's workload (multi-agent chat with Azure OpenAI and Cosmos DB), the difference is negligible since the bottleneck is network latency to Azure services, not event loop throughput.
 
-The `requirements.txt` uses a PEP 508 environment marker (`uvloop==0.21.0; sys_platform != "win32"`) so that `pip install` automatically skips uvloop on Windows.
+The `requirements.txt` uses a platform marker so that `pip install` automatically skips uvloop on Windows.

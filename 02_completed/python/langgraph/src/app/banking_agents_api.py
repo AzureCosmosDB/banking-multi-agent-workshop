@@ -424,7 +424,7 @@ def _fetch_messages_for_session(sessionId: str, tenantId: str, userId: str) -> L
             timeStamp=msg.response_metadata.get("timestamp", "") if hasattr(msg, "response_metadata") else "",
             sender="User" if isinstance(msg, HumanMessage) else "Coordinator",
             senderRole="User" if isinstance(msg, HumanMessage) else "Assistant",
-            text=msg.content if hasattr(msg, "content") else msg.get("content", ""),
+            text=msg.text if hasattr(msg, "text") else msg.get("content", ""),
             debugLogId=str(uuid.uuid4()),
             tokensUsed=msg.response_metadata.get("token_usage", {}).get("total_tokens", 0) if hasattr(msg,
                                                                                                       "response_metadata") else 0,
@@ -638,7 +638,7 @@ def extract_relevant_messages(debug_lod_id, last_active_agent, response_data, te
             timeStamp=msg.response_metadata.get("timestamp", "") if hasattr(msg, "response_metadata") else "",
             sender="User" if isinstance(msg, HumanMessage) else last_active_agent,
             senderRole="User" if isinstance(msg, HumanMessage) else "Assistant",
-            text=msg.content if hasattr(msg, "content") else msg.get("content", ""),
+            text=msg.text if hasattr(msg, "text") else msg.get("content", ""),
             debugLogId=debug_lod_id,
             tokensUsed=msg.response_metadata.get("token_usage", {}).get("total_tokens", 0) if hasattr(msg,
                                                                                                       "response_metadata") else 0,
@@ -755,7 +755,7 @@ def summarize_chat_session_name(tenantId: str, userId: str, sessionId: str,
         )
 
         response = model.invoke(prompt)
-        summarized_name = response.content.strip()
+        summarized_name = response.text.strip()
 
         return summarized_name
 

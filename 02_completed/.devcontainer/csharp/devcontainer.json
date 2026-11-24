@@ -1,6 +1,6 @@
 {
   "name": "C# Development Container",
-  "image": "mcr.microsoft.com/devcontainers/dotnet:8.0",
+  "image": "mcr.microsoft.com/devcontainers/dotnet:10.0",
   "features": {
     "ghcr.io/devcontainers/features/azure-cli:1": {
       "version": "latest",
@@ -9,7 +9,7 @@
     "ghcr.io/azure/azure-dev/azd:latest": {},
     "ghcr.io/devcontainers/features/docker-in-docker:latest": {},
     "ghcr.io/devcontainers/features/node:1": {
-      "version": "20"
+      "version": "24"
     }
   },
   "customizations": {
@@ -22,7 +22,7 @@
       ]
     }
   },
-  "postCreateCommand": "npm install -g @angular/cli && echo \"Updating API URL in environment.ts...\" && if [ -n \"$CODESPACE_NAME\" ]; then sed -i \"s|http://localhost:63280/|https://$CODESPACE_NAME-63280.app.github.dev/|g\" /workspaces/banking-multi-agent-workshop/frontend/src/environments/environment.ts; fi",
+  "postCreateCommand": "npm install -g @angular/cli@21 && echo \"Updating API URL in environment.ts...\" && if [ -n \"$CODESPACE_NAME\" ]; then sed -i \"s|http://localhost:63280/|https://$CODESPACE_NAME-63280.app.github.dev/|g\" /workspaces/banking-multi-agent-workshop/frontend/src/environments/environment.ts; fi",
   "remoteUser": "vscode",
   "forwardPorts": [63280, 4200],
   "portsAttributes": {

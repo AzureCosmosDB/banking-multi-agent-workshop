@@ -11,6 +11,11 @@ This branch of the repo shows how to build a multi-tenant, multi-agent, banking 
 
 To explore the other scenarios showcased in this repository. [Go to main branch](https://github.com/AzureCosmosDB/banking-multi-agent-workshop/tree/main)
 
+## Local runtimes
+
+Use the .NET 10 SDK (including for the data loader), Node.js 24 LTS for the Angular 21 frontend, and Python 3.12 for the LangGraph and MCP services. In either frontend directory, run `npm ci` to install the checked-in lockfile.
+
+Each Python service installs from its own `requirements.txt`. To refresh its lock, edit the adjacent `requirements.in` and run `uv pip compile requirements.in --upgrade --python-version 3.12 --universal --no-header --no-annotate -o requirements.txt` in that directory. Keep the corresponding exercise and completed copies in sync.
 
 ## Architecture Diagram
 

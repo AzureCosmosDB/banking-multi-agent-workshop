@@ -5,7 +5,7 @@ import uuid
 import asyncio
 import json
 from langchain_core.messages import ToolMessage, SystemMessage
-from langchain.schema import AIMessage
+from langchain_core.messages import AIMessage
 from langchain_mcp_adapters.client import MultiServerMCPClient
 from langchain_mcp_adapters.tools import load_mcp_tools
 from typing import Literal
@@ -213,10 +213,10 @@ async def setup_agents():
     try:
         print("[DEBUG] Creating agents...")
         logging.info("Creating agents...")
-        coordinator_agent = create_react_agent(model, coordinator_tools, state_modifier=load_prompt("coordinator_agent"))
-        customer_support_agent = create_react_agent(model, support_tools, state_modifier=load_prompt("customer_support_agent"))
-        sales_agent = create_react_agent(model, sales_tools, state_modifier=load_prompt("sales_agent"))
-        transactions_agent = create_react_agent(model, transactions_tools, state_modifier=load_prompt("transactions_agent"))
+        coordinator_agent = create_react_agent(model, coordinator_tools, prompt=load_prompt("coordinator_agent"))
+        customer_support_agent = create_react_agent(model, support_tools, prompt=load_prompt("customer_support_agent"))
+        sales_agent = create_react_agent(model, sales_tools, prompt=load_prompt("sales_agent"))
+        transactions_agent = create_react_agent(model, transactions_tools, prompt=load_prompt("transactions_agent"))
         print("✅ [DEBUG] All agents created successfully")
         logging.info("✅ All agents created successfully")
     except Exception as e:
@@ -411,7 +411,7 @@ def get_active_agent(state: MessagesState, config) -> str:
             try:
                 print(f"[DEBUG] Found ToolMessage, parsing content...")
                 logging.info("Found ToolMessage, parsing content...")
-                content_json = json.loads(message.content)
+                content_json = json.loads(message.text)
                 activeAgent = content_json.get("goto")
                 if activeAgent:
                     print(f"[DEBUG] Extracted activeAgent from ToolMessage: {activeAgent}")
@@ -452,7 +452,7 @@ def get_active_agent(state: MessagesState, config) -> str:
 
 
 builder = StateGraph(MessagesState)
-builder.add_node("coordinator_agent", call_coordinator_agent)
+builder.add_node("coordinator_agent", call_coordinator_agent, destinations=("human",))
 builder.add_node("customer_support_agent", call_customer_support_agent)
 builder.add_node("sales_agent", call_sales_agent)
 builder.add_node("transactions_agent", call_transactions_agent)
@@ -471,7 +471,7 @@ builder.add_conditional_edges(
     }
 )
 
-checkpointer = CosmosDBSaver(database_name=DATABASE_NAME, container_name=checkpoint_container)
+checkpointer = CosmosDBSaver(database_name=DATABASE_NAME, container_name=checkpoint_container.id)
 graph = builder.compile(checkpointer=checkpointer)
 
 

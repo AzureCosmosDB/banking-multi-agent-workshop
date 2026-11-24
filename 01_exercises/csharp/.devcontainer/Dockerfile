@@ -1,4 +1,4 @@
-FROM mcr.microsoft.com/dotnet/sdk:8.0
+FROM mcr.microsoft.com/dotnet/sdk:10.0
 
 # Set working directory inside the container
 WORKDIR /workspace
@@ -7,10 +7,10 @@ WORKDIR /workspace
 COPY . .
 
 # Restore dependencies
-RUN dotnet restore src/ChatAPI.csproj
+RUN dotnet restore src/MultiAgentCopilot/MultiAgentCopilot.csproj
 
 # Build the project
-RUN dotnet build src/ChatAPI.csproj --configuration Release --no-restore
+RUN dotnet build src/MultiAgentCopilot/MultiAgentCopilot.csproj --configuration Release --no-restore
 
 # Run the application
-CMD ["dotnet", "run", "--project", "src/ChatAPI.csproj"]
+CMD ["dotnet", "run", "--project", "src/MultiAgentCopilot/MultiAgentCopilot.csproj"]

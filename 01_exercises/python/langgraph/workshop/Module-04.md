@@ -572,7 +572,7 @@ The following sections include the completed code for this Module. Copy and past
 import logging
 import os
 import uuid
-from langchain.schema import AIMessage
+from langchain_core.messages import AIMessage
 from typing import Literal
 from langgraph.graph import StateGraph, START, MessagesState
 from langgraph.prebuilt import create_react_agent
@@ -615,7 +615,7 @@ coordinator_agent_tools = [
 coordinator_agent = create_react_agent(
     model,
     tools=coordinator_agent_tools,
-    state_modifier=load_prompt("coordinator_agent"),
+    prompt=load_prompt("coordinator_agent"),
 )
 
 customer_support_agent_tools = [
@@ -625,7 +625,7 @@ customer_support_agent_tools = [
 customer_support_agent = create_react_agent(
     model,
     customer_support_agent_tools,
-    state_modifier=load_prompt("customer_support_agent"),
+    prompt=load_prompt("customer_support_agent"),
 )
 
 transactions_agent_tools = [
@@ -636,7 +636,7 @@ transactions_agent_tools = [
 transactions_agent = create_react_agent(
     model,
     transactions_agent_tools,
-    state_modifier=load_prompt("transactions_agent"),
+    prompt=load_prompt("transactions_agent"),
 )
 
 sales_agent_tools = [
@@ -647,7 +647,7 @@ sales_agent_tools = [
 sales_agent = create_react_agent(
     model,
     sales_agent_tools,
-    state_modifier=load_prompt("sales_agent"),
+    prompt=load_prompt("sales_agent"),
 )
 
 
@@ -754,7 +754,7 @@ builder.add_node("human", human_node)
 
 builder.add_edge(START, "coordinator_agent")
 
-checkpointer = CosmosDBSaver(database_name=DATABASE_NAME, container_name=checkpoint_container)
+checkpointer = CosmosDBSaver(database_name=DATABASE_NAME, container_name=checkpoint_container.id)
 graph = builder.compile(checkpointer=checkpointer)
 
 
@@ -1673,7 +1673,7 @@ def extract_relevant_messages(debug_lod_id, last_active_agent, response_data, te
             timeStamp=msg.response_metadata.get("timestamp", "") if hasattr(msg, "response_metadata") else "",
             sender="User" if isinstance(msg, HumanMessage) else last_active_agent,
             senderRole="User" if isinstance(msg, HumanMessage) else "Assistant",
-            text=msg.content if hasattr(msg, "content") else msg.get("content", ""),
+            text=msg.text if hasattr(msg, "text") else msg.get("content", ""),
             debugLogId=debug_lod_id,
             tokensUsed=msg.response_metadata.get("token_usage", {}).get("total_tokens", 0) if hasattr(msg,
                                                                                                       "response_metadata") else 0,
@@ -1788,7 +1788,7 @@ def summarize_chat_session_name(tenantId: str, userId: str, sessionId: str,
         )
 
         response = model.invoke(prompt)
-        summarized_name = response.content.strip()
+        summarized_name = response.text.strip()
 
         return summarized_name
 

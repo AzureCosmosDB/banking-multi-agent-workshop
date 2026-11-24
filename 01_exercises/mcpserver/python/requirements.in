@@ -1,0 +1,10 @@
+azure-cosmos
+azure-identity
+colorama
+langchain-core<2
+langgraph<2
+langsmith
+mcp>=1.24,<2
+openai
+python-dotenv
+requests

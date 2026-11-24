@@ -62,7 +62,7 @@ Copy the following code into it.
 import logging
 import os
 import uuid
-from langchain.schema import AIMessage
+from langchain_core.messages import AIMessage
 from typing import Literal
 from langgraph.graph import StateGraph, START, MessagesState
 from langgraph.prebuilt import create_react_agent
@@ -135,7 +135,7 @@ tools = []
 coordinator_agent = create_react_agent(
     model,
     tools=tools,
-    state_modifier=load_prompt("coordinator_agent"),
+    prompt=load_prompt("coordinator_agent"),
 )
 ```
 
@@ -315,7 +315,7 @@ Your coordinator agent should now look like this:
 coordinator_agent = create_react_agent(
     model,
     tools=coordinator_agent_tools,
-    state_modifier=load_prompt("coordinator_agent"),
+    prompt=load_prompt("coordinator_agent"),
 )
 ```
 
@@ -330,7 +330,7 @@ customer_support_agent_tools = []
 customer_support_agent = create_react_agent(
     model,
     customer_support_agent_tools,
-    state_modifier=load_prompt("customer_support_agent"),
+    prompt=load_prompt("customer_support_agent"),
 )
 ```
 
@@ -697,7 +697,7 @@ The following sections include the completed code for this Module. Copy and past
 import logging
 import os
 import uuid
-from langchain.schema import AIMessage
+from langchain_core.messages import AIMessage
 from typing import Literal
 from langgraph.graph import StateGraph, START, MessagesState
 from langgraph.prebuilt import create_react_agent
@@ -731,14 +731,14 @@ coordinator_agent_tools = [
 coordinator_agent = create_react_agent(
     model,
     tools=coordinator_agent_tools,
-    state_modifier=load_prompt("coordinator_agent"),
+    prompt=load_prompt("coordinator_agent"),
 )
 
 customer_support_agent_tools = []
 customer_support_agent = create_react_agent(
     model,
     customer_support_agent_tools,
-    state_modifier=load_prompt("customer_support_agent"),
+    prompt=load_prompt("customer_support_agent"),
 )
 
 

@@ -2,10 +2,10 @@
 
 ## PreRequisites
 
-Navigtate to frontend folder and do
+Install Node.js 24 LTS. In the frontend directory, install the locked dependencies:
 
 ```bash
-npm i
+npm ci
 ```
 
 Specify the relevant API endpoint in the src/environments/enviroment.ts file apiUrl
@@ -15,7 +15,7 @@ Specify the relevant API endpoint in the src/environments/enviroment.ts file api
 To start a local development server, run:
 
 ```bash
-ng serve
+npm start
 ```
 
 > Use `ng serve --host 0.0.0.0` if you are using devcontainer.

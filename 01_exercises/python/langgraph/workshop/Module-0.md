@@ -95,7 +95,8 @@ You can run this sample app and workshop virtually by using GitHub Codespaces. T
    - [Azure Developer CLI (azd)](https://aka.ms/install-azd)
    - [Python 3.12+](https://www.python.org/downloads/)
    - Your Python IDE or [VS Code](https://code.visualstudio.com/Download) with [Python Extension](https://marketplace.visualstudio.com/items?itemName=ms-python.python)
-   - To build and run the frontend component, install [Node.js](https://nodejs.org/en/download/) and [Angular CLI](https://angular.dev/installation#install-angular-cli)
+   - [.NET 10 SDK](https://dotnet.microsoft.com/download/dotnet/10.0) for the data loader
+   - To build and run the frontend, install [Node.js 24 LTS](https://nodejs.org/en/download/) and Angular CLI 21 (`npm install -g @angular/cli@21`).
 
 
    ⚠️ To complete the deployment from WSL into Azure you must first install PowerShell and Docker into WSL. You will also need to install the WSL extension into VS Code. You can then open a WSL session and type code . and follow the 

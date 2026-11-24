@@ -32,12 +32,10 @@ In this Module, you'll configure the lab resources then start the application to
 cd 01_exercises\csharp\src\MultiAgentCopilot
 
 ```
-1. Execute the below command in the Terminal to add the preview Nuget packages.
+1. Restore the Agent Framework packages pinned in the project with the .NET 10 SDK.
 
 ```shell
-dotnet add package Microsoft.Agents.AI --version 1.0.0 --source https://api.nuget.org/v3/index.json
-dotnet add package Microsoft.Agents.AI.OpenAI --version 1.0.0 --source https://api.nuget.org/v3/index.json
-dotnet add package Microsoft.Agents.AI.Workflows --version 1.0.0 --source https://api.nuget.org/v3/index.json
+dotnet restore
 ```
 
 1. Type  `dotnet run` to start the multi-agent service.

@@ -60,8 +60,8 @@ You can run this sample app using GitHub Codespaces (requires a GitHub account).
    - [Docker Desktop](https://docs.docker.com/desktop/)
    - [Git](https://git-scm.com/downloads)
    - [Azure Developer CLI (azd)](https://aka.ms/install-azd)
-   - [Node.js](https://nodejs.org/en/download/)
-   - [Angular CLI](https://angular.dev/installation#install-angular-cli)
+   - [.NET 10 SDK](https://dotnet.microsoft.com/download/dotnet/10.0) for the data loader
+   - [Node.js 24 LTS](https://nodejs.org/en/download/) and Angular CLI 21 (`npm install -g @angular/cli@21`)
    - [Python 3.12+](https://www.python.org/downloads/)
    - Your Python IDE or [VS Code](https://code.visualstudio.com/Download) with [Python Extension](https://marketplace.visualstudio.com/items?itemName=ms-python.python)
 

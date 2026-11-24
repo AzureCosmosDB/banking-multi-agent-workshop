@@ -100,7 +100,7 @@ import uuid
 import asyncio
 import json
 from langchain_core.messages import ToolMessage, SystemMessage
-from langchain.schema import AIMessage
+from langchain_core.messages import AIMessage
 from langchain_mcp_adapters.client import MultiServerMCPClient
 from langchain_mcp_adapters.tools import load_mcp_tools
 from typing import Literal
@@ -228,10 +228,10 @@ async def setup_agents():
     transactions_tools = filter_tools_by_prefix(all_tools, ["bank_transfer", "get_transaction_history", "bank_balance", "transfer_to_customer_support_agent"])
 
     # Create agents with their respective tools
-    coordinator_agent = create_react_agent(model, coordinator_tools, state_modifier=load_prompt("coordinator_agent"))
-    customer_support_agent = create_react_agent(model, support_tools, state_modifier=load_prompt("customer_support_agent"))
-    sales_agent = create_react_agent(model, sales_tools, state_modifier=load_prompt("sales_agent"))
-    transactions_agent = create_react_agent(model, transactions_tools, state_modifier=load_prompt("transactions_agent"))
+    coordinator_agent = create_react_agent(model, coordinator_tools, prompt=load_prompt("coordinator_agent"))
+    customer_support_agent = create_react_agent(model, support_tools, prompt=load_prompt("customer_support_agent"))
+    sales_agent = create_react_agent(model, sales_tools, prompt=load_prompt("sales_agent"))
+    transactions_agent = create_react_agent(model, transactions_tools, prompt=load_prompt("transactions_agent"))
 
 async def cleanup_persistent_session():
     """Clean up the persistent MCP session when the application shuts down"""
@@ -345,7 +345,7 @@ def get_active_agent(state: MessagesState, config) -> str:
     for message in reversed(state['messages']):
         if isinstance(message, ToolMessage):
             try:
-                content_json = json.loads(message.content)
+                content_json = json.loads(message.text)
                 activeAgent = content_json.get("goto")
                 if activeAgent:
                     print(f"DEBUG: Extracted activeAgent from ToolMessage: {activeAgent}")
@@ -371,7 +371,7 @@ def get_active_agent(state: MessagesState, config) -> str:
 
 
 builder = StateGraph(MessagesState)
-builder.add_node("coordinator_agent", call_coordinator_agent)
+builder.add_node("coordinator_agent", call_coordinator_agent, destinations=("human",))
 builder.add_node("customer_support_agent", call_customer_support_agent)
 builder.add_node("sales_agent", call_sales_agent)
 builder.add_node("transactions_agent", call_transactions_agent)
@@ -390,7 +390,7 @@ builder.add_conditional_edges(
     }
 )
 
-checkpointer = CosmosDBSaver(database_name=DATABASE_NAME, container_name=checkpoint_container)
+checkpointer = CosmosDBSaver(database_name=DATABASE_NAME, container_name=checkpoint_container.id)
 graph = builder.compile(checkpointer=checkpointer)
 
 
@@ -805,10 +805,10 @@ There were a lot of changes to banking_agents.py. Below is a concise diff-style 
 ### 4. Agents created the same way, but with MCP tools
 
 ```python
-coordinator_agent      = create_react_agent(model, coordinator_tools,      state_modifier=load_prompt("coordinator_agent"))
-customer_support_agent = create_react_agent(model, support_tools,          state_modifier=load_prompt("customer_support_agent"))
-sales_agent            = create_react_agent(model, sales_tools,            state_modifier=load_prompt("sales_agent"))
-transactions_agent     = create_react_agent(model, transactions_tools,     state_modifier=load_prompt("transactions_agent"))
+coordinator_agent      = create_react_agent(model, coordinator_tools,      prompt=load_prompt("coordinator_agent"))
+customer_support_agent = create_react_agent(model, support_tools,          prompt=load_prompt("customer_support_agent"))
+sales_agent            = create_react_agent(model, sales_tools,            prompt=load_prompt("sales_agent"))
+transactions_agent     = create_react_agent(model, transactions_tools,     prompt=load_prompt("transactions_agent"))
 ```
 
 ### 5. Async agent nodes

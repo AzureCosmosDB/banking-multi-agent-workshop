@@ -1,0 +1,10 @@
+# The local workshop runs both servers from this environment.
+-r ../../../mcpserver/requirements.in
+azure-monitor-opentelemetry
+fastapi[standard-no-fastapi-cloud-cli]
+langchain-azure-cosmosdb>=1,<2
+langchain-mcp-adapters>=0.2,<1
+langchain-openai>=1,<2
+pydantic
+starlette
+uvicorn[standard]
